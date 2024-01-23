@@ -21,7 +21,7 @@ function EventInMap() {
       <div className='row'>
         {/* Left Half (col-md-6) */}
         <div className='col-md-6'>
-          <MapContainer center={[12.58, 77.35]} zoom={13} style={{ height: '10vh' }}>
+          <MapContainer center={[12.58, 77.35]} zoom={13} style={{ height: '80vh' }}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
