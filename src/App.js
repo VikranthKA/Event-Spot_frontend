@@ -38,7 +38,9 @@ import EventInMap from './Event-Spot/client/components/Location/EventInMap'
 const App = () => {
   return (
     <div>
+      
       <ContextStore>
+      <Header/>
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/register' element={<Register/>}/>

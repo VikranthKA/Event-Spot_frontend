@@ -18,7 +18,7 @@ function Header() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           Event-Spot
@@ -41,11 +41,6 @@ function Header() {
                 <li className="nav-item">
                   <Link className="nav-link active" aria-current="page" to="/">
                     Home
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link disabled" aria-disabled="true">
-                    Disabled
                   </Link>
                 </li>
               </>
