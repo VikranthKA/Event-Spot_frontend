@@ -21,7 +21,6 @@ export default function Home() {
   return (
     <div>
       <div className="header">
-        <Header />
       </div>
       <div className="body">
         {role && role === "Admin" ? <Dashboard /> : <EventInMap />}
