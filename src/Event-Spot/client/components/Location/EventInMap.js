@@ -1,34 +1,53 @@
-import React from 'react'
-import {MapContainer,TileLayer} from 'react-leaflet'
-import './EventInMap.css'
-function EventInMap() {
-  const marker = [{
-    _id:"87uijhi789uijkio9880",
-    title:"TITLE_1",
-    coordinates:[21,89]
-    // coordinates: [location.coordinates[1],location.coordinates[0]]
-  },{
-    _id:"87uijhi789uijkio9880",
-    title:"TITLE_2",
-    coordinates:[21,88.9]
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
-  }
-]
+function EventInMap() {
+  const markers = [
+    {
+      _id: '87uijhi789uijkio9880',
+      title: 'TITLE_1',
+      coordinates: [21, 89]
+    },
+    {
+      _id: '87uijhi789uijkio9880',
+      title: 'TITLE_2',
+      coordinates: [21, 88.9]
+    }
+  ];
 
   return (
-    <div className='div-container'>
-<MapContainer center={[12.58,77.35]} zoom={13}>
-    <TileLayer
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          
-    />
-</MapContainer>
-</div>
-  )
+    <div className='container-fluid'>
+      <div className='row'>
+        {/* Left Half (col-md-6) */}
+        <div className='col-md-6'>
+          <MapContainer center={[12.58, 77.35]} zoom={13} style={{ height: '10vh' }}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            {/* Render Markers */}
+            {markers.map((marker) => (
+              <Marker key={marker._id} position={marker.coordinates}>
+                <Popup>{marker.title}</Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </div>
+
+        {/* Right Half (col-md-6) - Add any additional content here */}
+        <div className='col-md-6'>
+          {/* Add content for the right half if needed */}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default EventInMap
+export default EventInMap;
+
+
 
 
 
