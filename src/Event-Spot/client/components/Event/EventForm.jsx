@@ -3,38 +3,37 @@ import Select from 'react-select';
 import axios from "../Api_Resources/axios";
 import { config } from "../Api_Resources/config";
 import z from 'zod'
+import "./EventForm.css"
 
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 const EventForm = () => {
+  const [serverErrors,setServerErrors] = useState()
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({
     eventStartDateTime: "",
-    eventEndDateTime: "",
     title: " ",
     description: " ",
-
     categoryId: null,
     ticketType: [
       { ticketName: " ", ticketPrice: " ", ticketCount: '', remainingTickets: '' },
     ],
-    totalTickets: " ",
     venueName: "",
     ticketSaleStartTime: "",
     ticketSaleEndTime: "",
-
-
   })
 
-  const [poster, setPoster] = useState([{
-    title: '', file: null
-  }])
+  const [poster, setPoster] = useState({
+    Clip: { name: '', file: null },
+    Brochure: { name: '', file: null },
+  })
 
+  const [youTube, setYouTube] = useState({
+    title: " ", url: " ",
+
+  })
   const [actors, setActors] = useState([{
-    name: "",
-    image: null
+    name: " "
   }])
-
-
 
   const [allCategory, setAllCategory] = useState([]);
 
@@ -47,6 +46,61 @@ const EventForm = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const handleYouTubeChange = (e) => {
+    const { name, value } = e.target;
+    setYouTube((prevYouTube) => ({
+      ...prevYouTube,
+      [name]: value,
+    }));
+  };
+
+  const handleClipNameChange = (event) => {
+    setPoster((prevPoster) => ({
+      ...prevPoster,
+      Clip: { ...prevPoster.Clip, name: event.target.value },
+    }));
+  };
+
+  const handleClipFileChange = (event) => {
+    const { files } = event.target;
+    setPoster((prevPoster) => ({
+      ...prevPoster,
+      Clip: { ...prevPoster.Clip, file: files[0] },
+    }));
+  };
+
+  const handleBrochureNameChange = (event) => {
+    setPoster((prevPoster) => ({
+      ...prevPoster,
+      Brochure: { ...prevPoster.Brochure, name: event.target.value },
+    }));
+  };
+
+  const handleBrochureFileChange = (event) => {
+    const { files } = event.target;
+    setPoster((prevPoster) => ({
+      ...prevPoster,
+      Brochure: { ...prevPoster.Brochure, file: files[0] },
+    }));
+  }
+  
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3333/api/categoryall`)
+        const modifiedCategory = response.data.map((category) => ({
+          label: category.name,
+          value: category._id,
+        }));
+        setAllCategory(modifiedCategory);
+      } catch (err) {
+        console.log('Error fetching the Category', err);
+      }
+    };
+
+    fetchCategory();
+  }, []);
 
   const fetchAddresses = async () => {
     try {
@@ -85,7 +139,6 @@ const EventForm = () => {
 
   };
 
-
   const handleInputChange = (index, field, e) => {
     const updatedTicketTypes = [...form.ticketType];
     updatedTicketTypes[index][field] = e.target.value;
@@ -107,46 +160,13 @@ const EventForm = () => {
     }
   };
 
-  const handleRemoveActor = (i) => {
-    const updatedActors = [...actors]
-    updatedActors.splice(i, 1)
-    setActors(updatedActors)
-  }
-
-  const handleFileChange = () => {
-    console.log('handleFileChange');
-  };
-
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3311/api/categoryall`)
-        const modifiedCategory = response.data.map((category) => ({
-          label: category.name,
-          value: category._id,
-        }));
-        setAllCategory(modifiedCategory);
-      } catch (err) {
-        console.log('Error fetching the Category', err);
-      }
-    };
-
-    fetchCategory();
-  }, []);
-
   const handleCategoryChange = (selectedCategory) => {
     setForm((prevForm) => ({
       ...prevForm,
       categoryId: selectedCategory.value,
-    }));
-  };
-
-
-
-
-  const handleAddActors = () => {
-    setActors([...actors, { name: "", image: null }])
+    }))
   }
+
   const handleAddSlot = () => {
     setForm((prevForm) => ({
       ...prevForm,
@@ -162,28 +182,6 @@ const EventForm = () => {
     }));
   };
 
-  const handleTicketsSum = () => {
-    // setForm(form((prevForm) => ({
-    //   ...prevForm,
-    //   totalTickets: prevForm.ticketType.reduce((acc, cv) => {
-    //     acc += cv.ticketCount
-    //     return acc
-    //   }, 0)
-    // })))
-  };
-
-
-  const handleRemovePoster = (index) => {
-    const updatedPoster = [...poster]
-    updatedPoster.splice(index, 1)
-    setPoster(updatedPoster)
-  };
-
-  //Add the title and file
-  const handleAddPoster = () => {
-    setPoster([...poster, { title: "", file: null }])
-  };
-
   const nextStep = () => {
     setStep(step + 1)
   }
@@ -193,19 +191,24 @@ const EventForm = () => {
   }
 
 
-  // useEffect(() => {
-  //   const storedFormData = localStorage.getItem('eventFormData');
-  //   if (storedFormData) {
-  //     setForm(JSON.parse(storedFormData));
-  //   }
-  // }, []);
+  useEffect(() => {
+    const storedFormData = localStorage.getItem('eventFormData');
+    const LocationObj = localStorage.getItem('locObj')
+    const ActorsData = localStorage.getItem('actors')
+    if (storedFormData && LocationObj && ActorsData) {
+      setForm(JSON.parse(storedFormData));
+
+    }
+  }, []);
 
   // // Update localStorage whenever form data changes
-  // useEffect(() => {
-  //   localStorage.setItem('eventFormData', JSON.stringify(form));
-  // }, [form])
+  useEffect(() => {
+    localStorage.setItem('eventFormData', JSON.stringify(form));
+ 
 
+  }, [form])
 
+  // handle the form obj
   const handleNameValueChange = (name, value) => {
     setForm((prevForm) => ({
       ...prevForm,
@@ -213,33 +216,22 @@ const EventForm = () => {
     }));
   };
 
-
-  const handlePosterChange = (index, field, e) => {
-    const updatedPoster = [...poster]
-    if (e.target.type === 'file') {
-      updatedPoster[index][field] = e.target.files[0]
-    } else {
-      updatedPoster[index][field] = e.target.value
-    }
-
-    setPoster(updatedPoster)
-  };
-
-  const handleActorChange = (index, field, e) => {
-    const updatedActors = [...actors];
-
-    if (e.target.type === 'file') {
-      // Handle file input
-      updatedActors[index][field] = e.target.files[0]
-    } else {
-      // Handle non-file input
-      updatedActors[index][field] = e.target.value;
-    }
+  //handle the Actors name
+  const handleActorChange = (index, propertyName, value) => {
+    const updatedActors = [...actors]
+    updatedActors[index][propertyName] = value
     setActors(updatedActors)
+  }
+
+  const hanldeAddActors = () => {
+    setActors([...actors, { name: '' }])
+  }
+
+  const handleDeleteActor = (index) => {
+    const updatedActors = [...actors]
+    updatedActors.splice(index, 1);
+    setActors(updatedActors);
   };
-
-
-
 
 
   const renderFormSection = () => {
@@ -251,18 +243,37 @@ const EventForm = () => {
             <input type="text" value={form.title} name="title" id="title" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
 
             <label>Description :</label>
-            <input type="text" value={form.description} name="description" id="description" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
+            <textarea type="text" value={form.description} name="description" id="description" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
 
+            <label>Ticket SaleStart Time :</label>
+            <input type="datetime-local" value={form.ticketSaleStartTime} name="ticketSaleStartTime" id="ticketSaleStartTime" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
+            <h5>Ticket SaleStart Time  where user can start booking the event</h5>
 
             <label>Event Start Time :</label>
             <input type="datetime-local" value={form.eventStartDateTime} name="eventStartDateTime" id="eventStartDateTime" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
 
-            <label>Event End Time :</label>
-            <input type="datetime-local" value={form.eventEndDateTime} name="eventEndDateTime" id="eventEndDateTime" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
+
+            {/* <label>Event End Time :</label>
+            <input type="datetime-local" value={form.eventEndDateTime} name="eventEndDateTime" id="eventEndDateTime" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br /> */}
+
+
+            <label>Ticket SaleEnd Time :</label>
+            <input type="datetime-local" value={form.ticketSaleEndTime} name="ticketSaleEndTime" id="ticketSaleEndTime" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
+            <h5>Ticket SaleEnd Time  where user cannot buy the Tickets for u r event</h5>
 
             <label>venueName :</label>
             <input type="text" value={form.venueName} name="venueName" id="venueName" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
-            <label>Category:</label>
+
+
+
+            <button onClick={() => nextStep()}>Next</button>
+          </div>
+
+        )
+      case 2:
+        return (
+          <div>
+                        <label>Category:</label>
             <Select
               id="category"
               name="category"
@@ -273,14 +284,6 @@ const EventForm = () => {
               placeholder="Select Categories"
             /><br /><br />
 
-
-            <button onClick={() => nextStep()}>Next</button>
-          </div>
-
-        )
-      case 2:
-        return (
-          <div>
             <label>Ticket Info</label>
             {form.ticketType.map((ticket, index) => (
               <div key={index}>
@@ -314,15 +317,8 @@ const EventForm = () => {
             {<button onClick={handleAddSlot}>+ Add</button>}<br /><br />
 
 
-            <label>Total Tickets for this Event</label>
-            <input type="Number" name="totalTickets" value={form.totalTickets} onChange={handleTicketsSum} /> <br /><br />
-
-            <label>Ticket SaleStart Time :</label>
-            <input type="datetime-local" value={form.ticketSaleStartTime} name="ticketSaleStartTime" id="ticketSaleStartTime" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
-
-            <label>Ticket SaleEnd Time :</label>
-            <input type="datetime-local" value={form.ticketSaleEndTime} name="ticketSaleEndTime" id="ticketSaleEndTime" onChange={(e) => handleNameValueChange(e.target.name, e.target.value)} /><br /><br />
             <button onClick={() => prevStep()}>Prvious</button><button onClick={() => nextStep()}>Next</button>
+
 
           </div>
         )
@@ -330,36 +326,48 @@ const EventForm = () => {
       case 3:
         return (
           <div>
-            <label>Poster Info</label>
-            {poster.map((poster, index) => (
-              <div key={index}>
-                <label>Title:</label>
-                <input
-                  type="text"
-                  value={poster.title}
-                  onChange={(e) => handlePosterChange(index, 'title', e)}
-                />
+<label>Clip Name:</label>
+      <input
+        type="text"
+        value={poster.Clip.name}
+        onChange={handleClipNameChange}
+      />
 
-                <label>Upload:</label>
-                <input
-                  type="file"
-                  accept='image/*'
-                  onChange={(e) => handlePosterChange(index, 'file', e)}
-                />
+      <label>Upload Clip:</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleClipFileChange}
+      /><br/>
 
-                {index >= 2 && (
-                  <button type="button" onClick={() => handleRemovePoster(index)}>
-                    Remove Poster
-                  </button>
-                )}
-              </div>
-            ))}
+      <label>Brochure Name:</label>
+      <input
+        type="text"
+        value={poster.Brochure.name}
+        onChange={handleBrochureNameChange}
+      />
 
-            {poster.length < 5 && (
-              <button type="button" onClick={handleAddPoster}>
-                + Slot
-              </button>
-            )}<br /><br />
+      <label>Upload Brochure:</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleBrochureFileChange}
+      /><br/>
+            <label>Youtube Name :</label>
+            <input
+              type="text"
+              name="title"
+              value={youTube.title}
+              onChange={handleYouTubeChange}
+            />
+
+            <label>URL:</label>
+            <input
+              type="text"
+              name="url"
+              value={youTube.url}
+              onChange={handleYouTubeChange}
+            /><br/>
             <div className='AddressContainer'>
               <input
                 type="text"
@@ -391,18 +399,18 @@ const EventForm = () => {
                 {actors.map((actor, index) => (
                   <div className="actor" key={index}>
                     <label>Enter the Actor name :</label>
-                    <input type="text" value={actor.name} onChange={(e) => handleActorChange(index, "name", e)} /><br />
-                    <label>Uplaod the Actor's Image </label>
-                    <input type="file"
-                      accept='image/*'
-                      onChange={(e) => handleActorChange(index, "image", e)} />
-                    {index >= 1 && <button onClick={() => handleRemoveActor(index)}> Delete</button>}<br /><br />
+                    <input type="text" value={actor.name} onChange={(e) => handleActorChange(index, "name", e.target.value)} />
+                    {index >= 1 && <button onClick={() => handleDeleteActor(index)}>Delete</button>}<br />
                   </div>
                 ))}
+                {actors.length < 6 && <button onClick={hanldeAddActors}>+ Actors</button>}
 
-                {actors.length < 4 && <button onClick={handleAddActors}>+Add</button>}
+
 
               </div><br /><br />
+              <div className="serverErrors">
+                {serverErrors && <span className='i-am-error'>{serverErrors.data && JSON.stringify(serverErrors.data)}</span>}
+              </div>
             </div>
             <button onClick={() => prevStep()}>Previous</button><button onClick={handleSubmit}>Submit</button>
 
@@ -415,20 +423,18 @@ const EventForm = () => {
 
   const handleSubmit = async () => {
     const eventFormData = new FormData();
-  
+
     // Append individual fields
     eventFormData.append('eventStartDateTime', form.eventStartDateTime);
-    eventFormData.append('eventEndDateTime', form.eventEndDateTime);
+    // eventFormData.append('eventEndDateTime', form.eventEndDateTime);
     eventFormData.append('title', form.title);
     eventFormData.append('description', form.description);
     eventFormData.append('venueName', form.venueName);
     eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime);
     eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime);
-  
-    if (form.categoryId) {
+
       eventFormData.append('category', form.categoryId);
-    }
-  
+
     // Append ticketType array
     form.ticketType.forEach((ticket, index) => {
       eventFormData.append(`ticketType[${index}][ticketName]`, ticket.ticketName);
@@ -436,87 +442,48 @@ const EventForm = () => {
       eventFormData.append(`ticketType[${index}][ticketCount]`, ticket.ticketCount);
       eventFormData.append(`ticketType[${index}][remainingTickets]`, ticket.remainingTickets);
     });
-  
-    // Append poster array
-    form.poster.forEach((poster, index) => {
-      eventFormData.append(`poster[${index}][title]`, poster.title);
-      eventFormData.append(`poster[${index}][file]`, poster.file);
-    });
-  
-    // Append actors array
-    form.actors.forEach((actor, index) => {
-      eventFormData.append(`actors[${index}][name]`, actor.name);
-      eventFormData.append(`actors[${index}][image]`, actor.image);
-    });
-  
-    // Append addressInfo
-    eventFormData.append('addressInfo{{address}', locObj.address);
-    eventFormData.append('addressInfo{city}', locObj.city);
-  
-    // Append location coordinates
-    eventFormData.append(`location{coordinates}[]`, locObj.lonlat[0]);
-    eventFormData.append('location{coordinates}[]', locObj.lonlat[1]);
 
-    const formDataObject = {
-      eventStartDateTime: eventFormData.get('eventStartDateTime'),
-      eventEndDateTime: eventFormData.get('eventEndDateTime'),
-      title: eventFormData.get('title'),
-      description: eventFormData.get('description'),
-      poster: eventFormData.getAll('poster').map((poster, index) => ({
-        title: eventFormData.get(`poster[${index}][title]`),
-        file: poster.name, // Assuming you want the file name here
-      })),
-      categoryId: eventFormData.getAll('categoryId'),
-      ticketType: eventFormData.getAll('ticketType').map((ticket, index) => ({
-        ticketName: eventFormData.get(`ticketType[${index}][ticketName]`),
-        ticketPrice: parseFloat(eventFormData.get(`ticketType[${index}][ticketPrice]`)),
-        ticketCount: parseInt(eventFormData.get(`ticketType[${index}][ticketCount]`)),
-        remainingTickets: parseInt(eventFormData.get(`ticketType[${index}][remainingTickets]`)),
-      })),
-      totalTickets: parseInt(eventFormData.get('totalTickets')),
-      venueName: eventFormData.get('venueName'),
-      addressInfo: {
-        address: eventFormData.get('addressInfo[address]'),
-        city: eventFormData.get('addressInfo[city]'),
-      },
-      location: {
-        type: 'Point',
-        coordinates: [
-          parseFloat(eventFormData.get('location[coordinates][]')),
-          parseFloat(eventFormData.get('location[coordinates][]')),
-        ],
-      },
-      organiserId: eventFormData.get('organiserId'),
-      isApproved: eventFormData.get('isApproved') === 'true',
-      reviews: eventFormData.getAll('reviews').map((review, index) => ({
-        userId: eventFormData.get(`reviews[${index}][userId]`),
-        title: eventFormData.get(`reviews[${index}][title]`),
-        body: eventFormData.get(`reviews[${index}][body]`),
-        rating: eventFormData.get(`reviews[${index}][rating]`),
-      })),
-      actors: eventFormData.getAll('actors').map((actor, index) => ({
-        name: eventFormData.get(`actors[${index}][name]`),
-        image: actor.name, // Assuming you want the file name here
-      })),
-      ticketSaleStartTime: eventFormData.get('ticketSaleStartTime'),
-      ticketSaleEndTime: eventFormData.get('ticketSaleEndTime'),
-    };
-  
-    console.log(formDataObject);
-  
+    actors.forEach((actor, index) => {
+      eventFormData.append(`Actors[${index}][name]`, actor.name);
+    });
+    
+
+    eventFormData.append('ClipName', poster.Clip.name);
+    eventFormData.append('ClipFile', poster.Clip.file)
+
+    eventFormData.append('BrochureName', poster.Brochure.name)
+    eventFormData.append('BrochureFile', poster.Brochure.file)
+
+    eventFormData.append('youTube[title]', youTube.title);
+    eventFormData.append('youTube[url]', youTube.url);
+
+
+    // Append addressInfo
+    eventFormData.append(`addressInfo[address]`, locObj.address);
+    eventFormData.append(`addressInfo[city]`, locObj.city);
+
+    // Append location coordinates
+    eventFormData.append(`location[lon]`, locObj.lonlat[0])
+    eventFormData.append(`location[lat]`, locObj.lonlat[1])
+
+
+    console.log([...eventFormData], "i am event")
+    console.log(config)
     try {
-      const response = await axios.post('/api/event', formDataObject, config)
-      console.log(response.data, "I am data");
+      const response = await axios.post('/api/event', eventFormData, config)
+      
+      console.log(response.data)
     } catch (err) {
+      setServerErrors(err.response)
       console.log(err)
     }
-  
+
   };
-  
+
 
   return (
     <div>
-        {renderFormSection()}
+      {renderFormSection()}
     </div>
   );
 }
