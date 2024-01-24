@@ -7,6 +7,10 @@ import configureStore from './Event-Spot/client/store/configureStore';
 import { BrowserRouter } from 'react-router-dom';
 
 const store = configureStore()
+console.log('state',store.getState())
+store.subscribe(()=>{
+    console.log('state updated', store.getState())
+})
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
