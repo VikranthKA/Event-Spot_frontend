@@ -1,57 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../Api_Resources/axios';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { startRemoveCategory, addCategoryAsync, startGetCategory } from '../../react-redux/action/categoryAction';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
 
 function Create() {
-  const [category, setCategory] = useState('');
-  const [allCategory, setAllCategory] = useState([]);
+  const [name, setName] = useState('');
+  const [formErrors, setFormErrors] = useState([]);
+  const dispatch = useDispatch();
 
-  const handleCreateCategory = async () => {
-    if (category) {
-      try {
-        const token = localStorage.getItem('token')
-        const config = {
-          headers: {
-            Authorization: token
-          },
-        };
-  
-        const response = await axios.post('/api/category', { name: category }, config);
-        console.log(response.data);
-        setCategory(''); // Clear the input field after creating a category
-      } catch (err) {
-        console.log(err.response.data); // Log the response data to see details of the error
-      }
+  const runValidations = () => {
+    const errors = {};
+    if (name.trim() === '') {
+      errors.name = 'Category name is required';
+    }
+    setFormErrors(errors);
+    return errors;
+  };
+
+  const handleCreateCategory = async (e) => {
+    e.preventDefault();
+    const errors = runValidations();
+    if (Object.keys(errors).length === 0) {
+      const categoryData = {
+        name: name.trim(),
+      };
+      dispatch(addCategoryAsync(categoryData));
+      setName('');
     }
   };
-  
-  
 
-  const getAllCategories = async () => {
-    try {
-      const response = await axios.get('/api/categoryall');
-      setAllCategory(response.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const categories = useSelector((state) => state.category);
 
   useEffect(() => {
-    getAllCategories();
-  }, [category]);
+    dispatch(startGetCategory());
+  }, [dispatch]);
 
-  const handleCategoryDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
-      try {
-        const { data } = await axios.delete(`/api/category/${id}`);
-        if (data) {
-          const deleteCategory = allCategory.filter((category) => category._id !== id);
-          setAllCategory(deleteCategory);
-        } else {
-          console.log('Something Went Wrong');
-        }
-      } catch (err) {
-        console.log(err);
-      }
+  const handleCategoryDelete = (id) => {
+    const confirmDeletion = window.confirm('Are you sure you want to delete this category?');
+    if (confirmDeletion) {
+      dispatch(startRemoveCategory(id));
     }
   };
 
@@ -60,21 +48,46 @@ function Create() {
   };
 
   return (
-    <div>
-      <div>Create</div>
-      <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
-      <button onClick={handleCreateCategory}>Create</button>
-      <ul>
-        {allCategory.map((category) => (
-          <div key={category._id}>
-            <li>
-              {category.name}
-              <button onClick={() => handleCategoryEdit(category._id)}>Edit</button>
-              <button onClick={() => handleCategoryDelete(category._id)}>Delete</button>
-            </li>
-          </div>
-        ))}
-      </ul>
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col-md-6">
+          <div className="mb-3">Create</div>
+          <form onSubmit={handleCreateCategory}>
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className={`form-control ${formErrors.name ? 'is-invalid' : ''}`}
+                placeholder="Enter category name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button type="submit" className="btn btn-primary">
+                Create
+              </button>
+              {formErrors.name && <div className="invalid-feedback">{formErrors.name}</div>}
+            </div>
+          </form>
+          <ul className="list-group">
+            {categories.map((category) => (
+              <li className="list-group-item d-flex justify-content-between align-items-center" key={category._id}>
+                <span className="fw-bold">{category.name}</span>
+                <div>
+                  <button className="btn btn-warning ms-2" onClick={() => handleCategoryEdit(category._id)}>
+                    Edit
+                  </button>
+                  <button className="btn btn-danger ms-2" onClick={() => handleCategoryDelete(category._id)}>
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="col-md-6">
+          {/* Content for the right half */}
+          {/* Add any additional content or components you want in the right half */}
+        </div>
+      </div>
     </div>
   );
 }
