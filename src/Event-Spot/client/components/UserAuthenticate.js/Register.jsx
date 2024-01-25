@@ -32,9 +32,9 @@ export default function Register() {
         const response = await axios.post('/api/user/register', values);
         console.log(response);
         navigate('/login')
-      } catch (e) {
-        setServerErrors(e.response.data.errors.join(', ')); // Corrected how serverErrors are displayed
-        console.error(e)
+      } catch (err) {
+        console.error(err)
+        setServerErrors(err.response.data.error)
       }
     },
   });
@@ -122,6 +122,8 @@ export default function Register() {
               </select>
               <div className="invalid-feedback">{formik.errors.role}</div>
             </div>
+
+            <div className="server-error"></div>
 
             <button type="submit" className="btn btn-dark">
               Signup

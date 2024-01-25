@@ -59,7 +59,7 @@ const EventForm = () => {
     setPoster((prevPoster) => ({
       ...prevPoster,
       Clip: { ...prevPoster.Clip, name: event.target.value },
-    }));
+    }))
   };
 
   const handleClipFileChange = (event) => {
