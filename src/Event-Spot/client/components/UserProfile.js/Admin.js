@@ -1,10 +1,15 @@
 import Create from "../Category/Create";
+import Profile from "./DisplayUser";
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
 
-export default function Admin(){
-    return(
-        <div>
-            <h1>Admin profile</h1>
-            <Create/>
-        </div>
-    )
+export default function Admin() {
+  return (
+    <div className="container mt-5">
+      <div className="card text-center bg-light p-3"> {/* Add 'bg-light' class for a greyish background, and 'p-3' for padding */}
+        <h1 className="card-title">Admin Profile</h1>
+      </div>
+      <Profile />
+      <Create />
+    </div>
+  );
 }
