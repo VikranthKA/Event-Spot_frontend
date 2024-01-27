@@ -11,7 +11,7 @@
 // }
 
 // export default App
-import React from 'react'
+import React, { useEffect } from 'react'
 import {Routes,Route,Link} from 'react-router-dom' 
 // import 'leaflet/dist/leaflet.css';
 
@@ -36,6 +36,9 @@ import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
 
 const App = () => {
+  useEffect(()=>{
+
+  },[])
   return (
     <div>
       

@@ -388,7 +388,7 @@ console.log(err)
   eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime);
   eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime);
 
-  eventFormData.append('category', form.categoryId);
+  eventFormData.append('categoryId', form.categoryId);
 
   // Append ticketType array
   form.ticketType.forEach((ticket, index) => {

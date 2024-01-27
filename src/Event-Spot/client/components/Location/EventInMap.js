@@ -6,27 +6,26 @@ import userImage from "../Utils/userIcon.png"
 import { Icon ,DivIcon, divIcon} from 'leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import axios from '../Api_Resources/axios'
+import { UseSelector,useDispatch, useSelector } from 'react-redux'
+import { startGetEvents } from '../../react-redux/action/eventAction'
 
 
 function EventInMap() {
+const eventData = useSelector((state)=>{
+  return state.events
+})
 
-  const [eventData,setEventData] = useState([{
-location: {type: 'Point', coordinates: [12,37]},
-title: " i am title"
-}])
+//   const [eventData,setEventData] = useState([{
+// location: {type: 'Point', coordinates: [12,37]},
+// title: " i am title"
+// }])
+
+const [location,setLocation] =useState([12,89])
+const  dispatch = useDispatch()
   useEffect(()=>{
-    (async()=>{
+    dispatch(startGetEvents())
+  },[location])
 
-      try{
-  
-        const response =await axios.get("/api/event")
-        console.log(response.data)
-        setEventData(response.data)
-      }catch(err){
-        console.log(err)
-      }
-    })()
-  },[])
   const user = {
     name:"Selva",
     coordinates:[20,89]
@@ -41,18 +40,7 @@ title: " i am title"
     iconUrl:userImage,
     iconSize:[38,38]
     })
-  const marker = [{
-    _id:"87uijhi789uijkio9880",
-    title:"TITLE_1",
-    coordinates:[21,89]
-    // coordinates: [location.coordinates[1],location.coordinates[0]]
-  },{
-    _id:"87uijhi789uijkio9880",
-    title:"TITLE_2",
-    coordinates:[21,70.9]
 
-  }
-]
 
 const createCustomCluster = (cluster)=>{
   return new divIcon({
@@ -62,10 +50,14 @@ const createCustomCluster = (cluster)=>{
   })
 }
 
+function reverselatlon(arr){
+  return [arr[1],arr[0]]
+}
+
   return (
     <div className='div-container'>
       <ul>
-        {eventData.map(ele=><li>{ele.location.coordinates}</li>)}
+        {eventData.map(ele=><li>{reverselatlon(ele.location.coordinates)}</li>)}
       </ul>
 <MapContainer center={[12.58,77.35]} zoom={13}>
     <TileLayer
@@ -73,16 +65,18 @@ const createCustomCluster = (cluster)=>{
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           
     />
+    {/* <Circle center={lonlat.length > 0 ? latLng(lonlat) : [0, 0]} radius={radius} /> */}
+
     <Marker position={user.coordinates} icon={userIcon}>
       <Popup>
         {user.name}
       </Popup>
 
     </Marker>
-    <MarkerClusterGroup
+    {/* <MarkerClusterGroup
     chunkedLoading
     iconCreateFunction={createCustomCluster}
-    >
+    > */}
 
     {eventData?.map(event=>(
       
@@ -92,7 +86,7 @@ const createCustomCluster = (cluster)=>{
       </Popup>
     </Marker>
     ))}
-</MarkerClusterGroup>
+{/* </MarkerClusterGroup> */}
 </MapContainer>
 </div>
   )
