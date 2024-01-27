@@ -1,5 +1,6 @@
 import React from 'react'
 import {useState,useEffect} from 'react'
+import { Container ,Card} from 'react-bootstrap'
 
 function TicketBook() {
     
@@ -53,9 +54,9 @@ const renderSelectedTickets=()=>{
 }
 
   return (
-    <div className="ticketBooking">
+    <Container className="ticketBooking">
         <h2>Ticket Booking</h2>
-        <div className="ticketTypes">
+        <Card className="ticketTypes">
             {eventDetails.ticketType.map((ticket)=>(
                 <div className="ticket">
                     <h3>{ticket.ticketName}</h3>
@@ -83,9 +84,9 @@ const renderSelectedTickets=()=>{
                 {renderSelectedTickets()}
             </div>
 
-        </div>
+        </Card>
 
-    </div>
+    </Container>
   )
 }
 

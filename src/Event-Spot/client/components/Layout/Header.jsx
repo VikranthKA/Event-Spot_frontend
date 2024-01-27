@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import Context from '../../ContextApi/Context';
+import Darkmode from '../Z_Dark_Mode/Darkmode';
+
 
 function Header() {
   const { isLogin, handleLogout } = useContext(Context);
@@ -23,6 +25,8 @@ function Header() {
         <Link className="navbar-brand" to="/">
           Event-Spot
         </Link>
+        <Darkmode/>
+
         <button
           className="navbar-toggler"
           type="button"

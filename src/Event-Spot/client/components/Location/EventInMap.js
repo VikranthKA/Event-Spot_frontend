@@ -1,53 +1,104 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import React, { useEffect,useState } from 'react'
+import {MapContainer,TileLayer,Marker,Popup} from 'react-leaflet'
+import './EventInMap.css'
+import eventImage from "../Utils/icon.png"
+import userImage from "../Utils/userIcon.png"
+import { Icon ,DivIcon, divIcon} from 'leaflet'
+import MarkerClusterGroup from 'react-leaflet-cluster'
+import axios from '../Api_Resources/axios'
+
 
 function EventInMap() {
-  const markers = [
-    {
-      _id: '87uijhi789uijkio9880',
-      title: 'TITLE_1',
-      coordinates: [21, 89]
-    },
-    {
-      _id: '87uijhi789uijkio9880',
-      title: 'TITLE_2',
-      coordinates: [21, 88.9]
-    }
-  ];
 
-  return (
-    <div className='container-fluid'>
-      <div className='row'>
-        {/* Left Half (col-md-6) */}
-        <div className='col-md-6'>
-          <MapContainer center={[12.58, 77.35]} zoom={13} style={{ height: '80vh' }}>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+  const [eventData,setEventData] = useState([{
+location: {type: 'Point', coordinates: [12,37]},
+title: " i am title"
+}])
+  useEffect(()=>{
+    (async()=>{
 
-            {/* Render Markers */}
-            {markers.map((marker) => (
-              <Marker key={marker._id} position={marker.coordinates}>
-                <Popup>{marker.title}</Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-        </div>
+      try{
+  
+        const response =await axios.get("/api/event")
+        console.log(response.data)
+        setEventData(response.data)
+      }catch(err){
+        console.log(err)
+      }
+    })()
+  },[])
+  const user = {
+    name:"Selva",
+    coordinates:[20,89]
+  }
 
-        {/* Right Half (col-md-6) - Add any additional content here */}
-        <div className='col-md-6'>
-          {/* Add content for the right half if needed */}
-        </div>
-      </div>
-    </div>
-  );
+  const eventIcon = new Icon({ 
+  iconUrl:eventImage,
+  iconSize:[38,38]
+  })
+
+  const userIcon = new Icon({ 
+    iconUrl:userImage,
+    iconSize:[38,38]
+    })
+  const marker = [{
+    _id:"87uijhi789uijkio9880",
+    title:"TITLE_1",
+    coordinates:[21,89]
+    // coordinates: [location.coordinates[1],location.coordinates[0]]
+  },{
+    _id:"87uijhi789uijkio9880",
+    title:"TITLE_2",
+    coordinates:[21,70.9]
+
+  }
+]
+
+const createCustomCluster = (cluster)=>{
+  return new divIcon({
+    html:`<div class="cluster-icon">${cluster.getChildCount()}</div>`,
+    // iconSize:point(33,33,true),
+    className:"custom-marker-cluster"
+  })
 }
 
-export default EventInMap;
+  return (
+    <div className='div-container'>
+      <ul>
+        {eventData.map(ele=><li>{ele.location.coordinates}</li>)}
+      </ul>
+<MapContainer center={[12.58,77.35]} zoom={13}>
+    <TileLayer
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          
+    />
+    <Marker position={user.coordinates} icon={userIcon}>
+      <Popup>
+        {user.name}
+      </Popup>
 
+    </Marker>
+    <MarkerClusterGroup
+    chunkedLoading
+    iconCreateFunction={createCustomCluster}
+    >
 
+    {eventData?.map(event=>(
+      
+    <Marker position={event.location.coordinates} icon={eventIcon}>
+      <Popup >
+        {event.title}
+      </Popup>
+    </Marker>
+    ))}
+</MarkerClusterGroup>
+</MapContainer>
+</div>
+  )
+}
+
+export default EventInMap
 
 
 
