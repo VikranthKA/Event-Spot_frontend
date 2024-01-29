@@ -1,87 +1,105 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import axios from "../Api_Resources/axios";
-import Select from 'react-select'
+import Select from 'react-select';
 import { ProfileContext } from "../../ContextApi/Context";
 
-const UserForm = () =>{
-    const {dispatch} = useContext(ProfileContext)
-    const [searchTerm, setSearchTerm] = useState('');
-    const [locObj, setLocObj] = useState({
-      address: '',
-      place_id: '',
-      lonlat: ['', ''],
-      city: '',
-    });
-    const [searchResults, setSearchResults] = useState([]);
-    const [selectedAddress, setSelectedAddress] = useState(null);
-    const [profilePic, setProfilePic] = useState(null);
-    const [description, setDescription] = useState('');
-    const [displayPic, setDisplayPic] = useState('');
-    const [userDetails, setUserDetails] = useState({});
+const UserForm = () => {
+  const { dispatch } = useContext(ProfileContext);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [locObj, setLocObj] = useState({
+    address: '',
+    place_id: '',
+    lonlat: ['', ''],
+    city: '',
+  });
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [profilePic, setProfilePic] = useState(null);
+  const [description, setDescription] = useState('');
+  const [displayPic, setDisplayPic] = useState('');
+  const [userDetails, setUserDetails] = useState('');
 
-    const fetchAddresses = async () => {
-        try {
-          const GEO_CODE_API_KEY = '659f7b557feb5653368044xyz79cdbd';
-          const response = await axios.get(
-            `https://geocode.maps.co/search?q=${searchTerm}&api_key=${GEO_CODE_API_KEY}`
-          );
-    
-          setSearchResults(response.data);
-          if (response.data.length === 0) {
-            setSearchResults([
-              {
-                place_id: '404',
-                display_name: 'Try typing different or check typo',
-              },
-            ]);
-          }
-        } catch (error) {
-          console.error('Error fetching addresses:', error);
-        }
-      };
-    
-      const handleAddressSelect = (selectedOption) => {
-        setSelectedAddress(selectedOption);
-    
-        const selectedResult = searchResults.find(
-          (result) => result.place_id === selectedOption.value
-        );
-    
-        setLocObj((prev) => ({
-          ...prev,
-          address: selectedResult.display_name,
-          place_id: selectedResult.place_id,
-          lonlat: [selectedResult.lon, selectedResult.lat],
-          city: prev.city,
-        }));
-      };
-    
-      const handleFileChange = (e) => {
-        setProfilePic(e.target.files[0]);
-      };
-    
-      const handleDescriptionChange = (e) => {
-        setDescription(e.target.value);
-      };
-  
-      const formSubmit = () =>{
-        const formData = new FormData();
-        formData.append('profilePic', profilePic);
-        formData.append('description', description);
-        formData.append('address', locObj.address);
-        formData.append('place_id', locObj.place_id);
-        formData.append('lonlat', locObj.lonlat.join(','));
-        formData.append('city', locObj.city);
+  useEffect(() => {
+    fetchAddresses(); // Call fetchAddresses when the component mounts
+  }, []);
 
-        console.log(formData)
-        dispatch({type: "SHOW_TASK", payload: formData})
+  const fetchAddresses = async () => {
+    try {
+      const GEO_CODE_API_KEY = '659f7b557feb5653368044xyz79cdbd';
+      const response = await axios.get(
+        `https://geocode.maps.co/search?q=${searchTerm}&api_key=${GEO_CODE_API_KEY}`
+      );
+
+      setSearchResults(response.data);
+      if (response.data.length === 0) {
+        setSearchResults([
+          {
+            place_id: '404',
+            display_name: 'Try typing different or check typo',
+          },
+        ]);
       }
-    return(
-        <div className="container mt-5">
+    } catch (error) {
+      console.error('Error fetching addresses:', error);
+    }
+  };
+
+  const handleAddressSelect = (selectedOption) => {
+    setSelectedAddress(selectedOption);
+
+    const selectedResult = searchResults.find(
+      (result) => result.place_id === selectedOption.value
+    );
+
+    setLocObj((prev) => ({
+      ...prev,
+      address: selectedResult.display_name,
+      place_id: selectedResult.place_id,
+      lonlat: [selectedResult.lon, selectedResult.lat],
+      city: prev.city,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setProfilePic(e.target.files[0]);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const formSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('profilePic', profilePic);
+      formData.append('description', description);
+      formData.append('address', locObj.address);
+      formData.append('place_id', locObj.place_id);
+      formData.append('lonlat', locObj.lonlat.join(','));
+      formData.append('city', locObj.city);
+      dispatch({ type: "SHOW_TASK", payload: formData });
+
+      const response = await axios.post('/api/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Backend response:', response.data);
+
+      // Handle additional actions based on the response if needed
+    } catch (error) {
+      console.error('Error sending data to the backend:', error);
+      // Handle error scenarios
+    }
+  };
+
+  return (
+    <div className="container mt-5">
       <div className="text-center mb-3">
         <img
           className="rounded-circle"
-          src={`http://localhost:3999/uploads/${displayPic}`}
+          src={`http://localhost:3333/Uploads/images/${displayPic}`}
           alt="Profile"
           width="100"
           height="100"
@@ -110,8 +128,8 @@ const UserForm = () =>{
         </div>
 
         <label htmlFor="address" className="form-label">
-            Address
-          </label>
+          Address
+        </label>
         <div className="mb-3">
           <input
             type="text"
@@ -169,8 +187,8 @@ const UserForm = () =>{
           <strong>City:</strong> {locObj.city}
         </p>
       </div>
-    </div>        
-    )
+    </div>
+  );
 }
 
 export default UserForm;
