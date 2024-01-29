@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react'
 import axios from '../components/Api_Resources/axios'
-import Context from './Context' 
+import {Context} from './Context' 
 import {useNavigate} from 'react-router-dom'
 import {jwtDecode} from 'jwt-decode'
 

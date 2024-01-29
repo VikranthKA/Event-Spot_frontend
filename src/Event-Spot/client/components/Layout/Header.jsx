@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import Context from '../../ContextApi/Context';
+import {Context} from '../../ContextApi/Context';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
 
 

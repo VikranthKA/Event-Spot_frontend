@@ -4,7 +4,7 @@ import Header from "../components/Layout/Header";
 import EventInMap from '../components/Location/EventInMap';
 import {jwtDecode} from "jwt-decode"; // Correct import
 import Dashboard from "../components/Dashboard/Dashboard";
-import Context from "../ContextApi/Context";
+import {Context} from "../ContextApi/Context";
 
 export default function Home() {
   const { isLogin } = useContext(Context);
