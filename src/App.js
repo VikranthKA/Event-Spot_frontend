@@ -60,23 +60,11 @@ const App = () => {
            <Route path='/' element={</>}/> */}
 
           {/*  <Route path='/' element={</>}/> */}
-
-
-
-          
-
-          
-
-
-
         </Routes>
-      </ContextStore>
-
-     
+      </ContextStore>     
     </div>
   )
 }
-
 export default App
 
 // our project

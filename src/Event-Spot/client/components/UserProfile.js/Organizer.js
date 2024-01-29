@@ -9,7 +9,6 @@ export default function Admin() {
         <h1 className="card-title">Organiser Profile</h1>
       </div>
       <Profile />
-      <Create />
     </div>
   );
 }

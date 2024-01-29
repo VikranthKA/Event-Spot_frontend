@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useContext, useState, useEffect } from "react";
+import axios from "../Api_Resources/axios";
 import Select from 'react-select';
-import axios from '../Api_Resources/axios'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { ProfileContext } from "../../ContextApi/Context";
 
-
-
-export default function Profile() {
-  const { id } = useParams();
+const UserForm = () => {
+  const { dispatch } = useContext(ProfileContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -20,32 +17,11 @@ export default function Profile() {
   const [profilePic, setProfilePic] = useState(null);
   const [description, setDescription] = useState('');
   const [displayPic, setDisplayPic] = useState('');
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState('');
 
   useEffect(() => {
-    // Fetch saved details from local storage
-    const savedDetails = JSON.parse(localStorage.getItem('profileDetails')) || {};
-    setLocObj(savedDetails);
-
-    if (id) {
-      // Fetch user details
-      axios
-        .get(`/api/user/${id}`)
-        .then((response) => {
-          setUserDetails(response.data);
-        })
-        .catch((error) => {
-          console.error('Error fetching user details:', error);
-        });
-    }
-
-    // Fetch description and displayPic from local storage
-    const savedDescription = localStorage.getItem('description') || '';
-    setDescription(savedDescription);
-
-    const savedDisplayPic = localStorage.getItem('displayPic') || '';
-    setDisplayPic(savedDisplayPic);
-  }, [id]);
+    fetchAddresses(); // Call fetchAddresses when the component mounts
+  }, []);
 
   const fetchAddresses = async () => {
     try {
@@ -92,55 +68,42 @@ export default function Profile() {
     setDescription(e.target.value);
   };
 
-  const confirmAddress = () => {
-    const formData = new FormData();
-    formData.append('profilePic', profilePic);
-    formData.append('description', description);
-    formData.append('address', locObj.address);
-    formData.append('place_id', locObj.place_id);
-    formData.append('lonlat', locObj.lonlat.join(','));
-    formData.append('city', locObj.city);
+  const formSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('profilePic', profilePic);
+      formData.append('description', description);
+      formData.append('address', locObj.address);
+      formData.append('place_id', locObj.place_id);
+      formData.append('lonlat', locObj.lonlat.join(','));
+      formData.append('city', locObj.city);
+      dispatch({ type: "SHOW_TASK", payload: formData });
 
-    axios
-      .post('/api/profile', formData)
-      .then((response) => {
-        console.log('Backend response:', response.data);
-
-        // Update locObj with response data
-        const updatedLocObj = {
-          ...locObj,
-          address: response.data.address,
-          place_id: response.data.place_id,
-          lonlat: response.data.lonlat.split(','),
-          city: response.data.city,
-        };
-
-        // Update and save locObj, description, and displayPic
-        localStorage.setItem('profileDetails', JSON.stringify(updatedLocObj));
-        setLocObj(updatedLocObj);
-
-        localStorage.setItem('description', response.data.description);
-        setDescription(response.data.description);
-
-        localStorage.setItem('displayPic', response.data.profilePic);
-        setDisplayPic(response.data.profilePic);
-      })
-      .catch((error) => {
-        console.error('Error sending data to the backend:', error);
+      const response = await axios.post('/api/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
+
+      console.log('Backend response:', response.data);
+
+      // Handle additional actions based on the response if needed
+    } catch (error) {
+      console.error('Error sending data to the backend:', error);
+      // Handle error scenarios
+    }
   };
 
   return (
     <div className="container mt-5">
       <div className="text-center mb-3">
-      <img
-            className="rounded-circle profile-image me-3"
-            src={`http://localhost:3333/Uploads/images/${displayPic}`}
-            alt="Profile"
-            width="200"
-            height="200"
-          />
-
+        <img
+          className="rounded-circle"
+          src={`http://localhost:3333/Uploads/images/${displayPic}`}
+          alt="Profile"
+          width="100"
+          height="100"
+        />
       </div>
 
       <form encType="multipart/form-data">
@@ -165,8 +128,8 @@ export default function Profile() {
         </div>
 
         <label htmlFor="address" className="form-label">
-            Address
-          </label>
+          Address
+        </label>
         <div className="mb-3">
           <input
             type="text"
@@ -206,7 +169,7 @@ export default function Profile() {
         </div>
 
         <div className="mb-3">
-          <button type="button" className="btn btn-dark" onClick={confirmAddress}>
+          <button type="button" className="btn btn-dark" onClick={formSubmit}>
             Submit
           </button>
         </div>
@@ -224,7 +187,8 @@ export default function Profile() {
           <strong>City:</strong> {locObj.city}
         </p>
       </div>
-      
     </div>
   );
 }
+
+export default UserForm;
