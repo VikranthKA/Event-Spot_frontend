@@ -4,7 +4,7 @@ import axios from "../Api_Resources/axios";
 import { config } from "../Api_Resources/config";
 import z from 'zod'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container, Carousel, Spinner, Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText ,ProgressBar} from 'react-bootstrap';
+import { Container, Carousel, Spinner, Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText ,ProgressBar,Alert} from 'react-bootstrap';
 
 import "./EventForm.css"
 import NotFound from '../Utils/NotFound/NotFound';
@@ -851,7 +851,13 @@ console.log(err)
                 </div>
 
                 <div className="serverErrors">
-                  {serverErrors && <span className='i-am-error'>{serverErrors.data && JSON.stringify(serverErrors.data)}</span>}
+
+                {serverErrors && (
+        <Alert variant="danger" onClose={() => setServerErrors(null)} dismissible>
+          <Alert.Heading>Error</Alert.Heading>
+          <p>{serverErrors.data && JSON.stringify(serverErrors.data)}</p>
+        </Alert>
+      )}
                 </div>
 
                 <Row className="mb-3">
