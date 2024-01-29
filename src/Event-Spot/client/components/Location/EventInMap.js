@@ -1,15 +1,14 @@
+import './EventInMap.css'
 import React, { useEffect,useState } from 'react'
 import {MapContainer,TileLayer,Marker,Popup,Circle} from 'react-leaflet'
-import './EventInMap.css'
+import { Icon ,DivIcon, divIcon,latLng} from 'leaflet'
+import MarkerClusterGroup from 'react-leaflet-cluster'
+import {useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import eventImage from "../Utils/icon.png"
 import userImage from "../Utils/userIcon.png"
-import { Icon ,DivIcon, divIcon} from 'leaflet'
-import MarkerClusterGroup from 'react-leaflet-cluster'
 import axios from '../Api_Resources/axios'
-import { UseSelector,useDispatch, useSelector } from 'react-redux'
-import { startGetEvents } from '../../react-redux/action/eventAction'
-import { useNavigate } from 'react-router-dom'
-import { latLng } from 'leaflet';
+import { startGetEvents ,startRaduisEvents} from '../../react-redux/action/eventAction'
 
 
 
@@ -21,7 +20,6 @@ const eventData = useSelector((state)=>{
 const [location,setLocation] =useState([12,89])
 const [radius, setRadius] = useState(500); // Initial radius in meters
 const [lonlat, setLonLat] = useState([]);
-const [center, setCenter] = useState([]); // Initial map center
 
 const handleRadiusChange = (event) => {
   setRadius(parseInt(event.target.value, 10));
@@ -39,7 +37,7 @@ useEffect(() => {
 
   const error = (error) => {
     console.error(error);
-  };
+  }
 
   // Check if the Geolocation API is supported by the browser
   if ('geolocation' in navigator) {
@@ -48,6 +46,9 @@ useEffect(() => {
     console.error('Geolocation is not supported by your browser');
   }
 }, []);
+  useEffect(()=>{
+    dispatch(startRaduisEvents(radius,lon,lat))
+  },[radius])
   useEffect(()=>{
     dispatch(startGetEvents())
   },[location])
@@ -68,13 +69,13 @@ useEffect(() => {
     })
 
 
-const createCustomCluster = (cluster)=>{
-  return new divIcon({
-    html:`<div class="cluster-icon">${cluster.getChildCount()}</div>`,
-    // iconSize:point(33,33,true),
-    className:"custom-marker-cluster"
-  })
-}
+// const createCustomCluster = (cluster)=>{
+//   return new divIcon({
+//     html:`<div class="cluster-icon">${cluster.getChildCount()}</div>`,
+//     // iconSize:point(33,33,true),
+//     className:"custom-marker-cluster"
+//   })
+// }
 
 function reverselatlon(arr){
   return [arr[1],arr[0]]
@@ -85,7 +86,7 @@ function reverselatlon(arr){
       <input type="range" min="100" max="500000"  step="50" value={radius} onChange={handleRadiusChange}/>
         <p>Radius: {radius} meters</p>
 
-<MapContainer center={[12.58,77.35]} zoom={13}>
+<MapContainer center={[55,55]} zoom={13}>
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

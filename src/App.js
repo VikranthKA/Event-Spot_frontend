@@ -50,8 +50,8 @@ const App = () => {
           <Route path='/login' element={<Login/>}/>
           <Route path='/user-profile' element={<UserProfile/>}/>
           <Route path='/event-form' element={<EventForm/>}/>
-          <Route path='/event/:id' element={<EventInMap/>}/>
-          {/* // <Route path='/' element={</>}/> */}
+          <Route path='/jkhkjhl' element={<EventInMap/>}/>
+          <Route path='/event-info/:eventId' element={<EventInfo/>}/>
 
           {/*  <Route path='/' element={</>}/> */}
           {/*  <Route path='/' element={</>}/> */}
