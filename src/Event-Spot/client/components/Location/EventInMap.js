@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react'
-import {MapContainer,TileLayer,Marker,Popup} from 'react-leaflet'
+import {MapContainer,TileLayer,Marker,Popup,Circle} from 'react-leaflet'
 import './EventInMap.css'
 import eventImage from "../Utils/icon.png"
 import userImage from "../Utils/userIcon.png"
@@ -8,6 +8,9 @@ import MarkerClusterGroup from 'react-leaflet-cluster'
 import axios from '../Api_Resources/axios'
 import { UseSelector,useDispatch, useSelector } from 'react-redux'
 import { startGetEvents } from '../../react-redux/action/eventAction'
+import { useNavigate } from 'react-router-dom'
+import { latLng } from 'leaflet';
+
 
 
 function EventInMap() {
@@ -15,13 +18,36 @@ const eventData = useSelector((state)=>{
   return state.events
 })
 
-//   const [eventData,setEventData] = useState([{
-// location: {type: 'Point', coordinates: [12,37]},
-// title: " i am title"
-// }])
-
 const [location,setLocation] =useState([12,89])
+const [radius, setRadius] = useState(500); // Initial radius in meters
+const [lonlat, setLonLat] = useState([]);
+const [center, setCenter] = useState([]); // Initial map center
+
+const handleRadiusChange = (event) => {
+  setRadius(parseInt(event.target.value, 10));
+};
+const navigate =useNavigate()
 const  dispatch = useDispatch()
+
+useEffect(() => {
+  const success = (position) => {
+    const { latitude, longitude } = position.coords;
+    console.log(latitude, longitude);
+    setCenter([latitude, longitude]); // Use an array to set the center
+    setLonLat([latitude, longitude]); // Use an array to set lonlat
+  };
+
+  const error = (error) => {
+    console.error(error);
+  };
+
+  // Check if the Geolocation API is supported by the browser
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+    console.error('Geolocation is not supported by your browser');
+  }
+}, []);
   useEffect(()=>{
     dispatch(startGetEvents())
   },[location])
@@ -56,16 +82,16 @@ function reverselatlon(arr){
 
   return (
     <div className='div-container'>
-      <ul>
-        {eventData.map(ele=><li>{reverselatlon(ele.location.coordinates)}</li>)}
-      </ul>
+      <input type="range" min="100" max="500000"  step="50" value={radius} onChange={handleRadiusChange}/>
+        <p>Radius: {radius} meters</p>
+
 <MapContainer center={[12.58,77.35]} zoom={13}>
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           
     />
-    {/* <Circle center={lonlat.length > 0 ? latLng(lonlat) : [0, 0]} radius={radius} /> */}
+    <Circle center={lonlat.length > 0 ? latLng(lonlat) : [0, 0]} radius={radius} />
 
     <Marker position={user.coordinates} icon={userIcon}>
       <Popup>
@@ -80,8 +106,8 @@ function reverselatlon(arr){
 
     {eventData?.map(event=>(
       
-    <Marker position={event.location.coordinates} icon={eventIcon}>
-      <Popup >
+    <Marker position={event.location.coordinates} icon={eventIcon} onClick={() => navigate(`/event-info/${event._id}`)} >
+      <Popup onClick={() => navigate(`/event-info/${event._id}`)}>
         {event.title}
       </Popup>
     </Marker>

@@ -16,7 +16,7 @@ function ContextStore({children}) {
 
     const handleLogout=()=>{
         setIsLogin(true)
-        localStorage.removeItem('token')
+        localStorage.clear()
         navigate('/login')
     }
 

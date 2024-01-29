@@ -70,15 +70,7 @@ function EventInfo() {
           ))}
           {event.youTube && (
             <Carousel.Item>
-              <iframe
-                title="YouTube Video"
-                width="100%"
-                height="315"
-                src={event.youTube.url}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+            <iframe width="100%" height="100%" src={event.youTube.url} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> 
               <Carousel.Caption>
                 <h3>{event.youTube.title}</h3>
                 {/* Additional captions if needed */}

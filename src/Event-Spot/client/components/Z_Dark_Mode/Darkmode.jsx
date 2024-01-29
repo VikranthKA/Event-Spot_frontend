@@ -21,7 +21,7 @@ const Darkmode = () => {
 
   return (
     <div>
-      <button onClick={toggleDarkMode}>Dark</button>
+      <button onClick={toggleDarkMode} >Dark</button>
     </div>
   );
 };
