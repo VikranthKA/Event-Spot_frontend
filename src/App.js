@@ -1,23 +1,9 @@
-
-// import React from 'react'
-// import EventInMap from './Event-Spot/client/components/Location/EventInMap'
-// import 'leaflet/dist/leaflet.css';
-
-
-// function App() {
-//   return (
-//     <div style={{height:"100vh"}}><EventInMap/></div>
-//   )
-// }
-
-// export default App
 import React, { useEffect } from 'react'
 import {Routes,Route,Link} from 'react-router-dom' 
-// import 'leaflet/dist/leaflet.css';
-
+import './App.css'
+import { MyContext } from './Event-Spot/client/ContextApi/Context'
 import DisplayUser from './Event-Spot/client/components/UserProfile.js/DisplayUser'
 import Darkmode from './Event-Spot/client/components/Z_Dark_Mode/Darkmode'
-import './App.css'
 import Map from './Event-Spot/client/components/Location/Map'
 import CreateBookingInfo from './Event-Spot/client/components/Booking/CreateBookingInfo'
 import Test from './Event-Spot/client/components/Location/Test'
@@ -25,24 +11,21 @@ import MapWithPolyline from './Event-Spot/client/components/Location/MapWithPoly
 import EventInfo from './Event-Spot/client/components/Event/EventInfo'
 import TicketBook from './Event-Spot/client/components/Event/TicketBook'
 import Create from './Event-Spot/client/components/Category/Create'
-import ContextStore from './Event-Spot/client/ContextApi/ContextStore'
 import Header from './Event-Spot/client/components/Layout/Header'
 import Home from './Event-Spot/client/pages/Home'
 import Register from './Event-Spot/client/components/UserAuthenticate.js/Register'
 import Login from './Event-Spot/client/components/UserAuthenticate.js/Login'
 import UserProfile from './Event-Spot/client/components/UserProfile.js/UserProfile'
-
 import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
 
 const App = () => {
-  useEffect(()=>{
-
-  },[])
+  
   return (
     <div>
+
       
-      <ContextStore>
+    <MyContext.Provider value={{}}>
       <Header/>
         <Routes>
           <Route path='/' element={<Home/>}/>
@@ -50,21 +33,15 @@ const App = () => {
           <Route path='/login' element={<Login/>}/>
           <Route path='/user-profile' element={<UserProfile/>}/>
           <Route path='/event-form' element={<EventForm/>}/>
-          <Route path='/jkhkjhl' element={<EventInMap/>}/>
+          <Route path='/event-in-map' element={<EventInMap style={{ height: '100vh' }}/>}/>
+              {/* <div style={{height:"100vh"}}><EventInMap/></div> */}
           <Route path='/event-info/:eventId' element={<EventInfo/>}/>
-
-          {/*  <Route path='/' element={</>}/> */}
-          {/*  <Route path='/' element={</>}/> */}
-
-          {/*  <Route path='/' e/>}/>
-           <Route path='/' element={</>}/> */}
-
-          {/*  <Route path='/' element={</>}/> */}
-        </Routes>
-      </ContextStore>     
+          <Route path='/event-booking/:eventId' element={<TicketBook/>}/>
+          <Route path='/show-QrCode' element={<CreateBookingInfo/>}/>
+      </Routes>
+    </MyContext.Provider>
     </div>
   )
 }
 export default App
 
-// our project

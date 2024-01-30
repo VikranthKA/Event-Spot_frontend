@@ -1,6 +1,7 @@
 import React from 'react';
 import {Provider} from "react-redux"
 import ReactDOM from 'react-dom/client';
+import { MyContext } from './Event-Spot/client/ContextApi/Context';
 
 import App from './App';
 import configureStore from './Event-Spot/client/store/configureStore';

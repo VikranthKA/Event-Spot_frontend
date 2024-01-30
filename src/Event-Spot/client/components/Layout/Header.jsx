@@ -1,22 +1,23 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import {Context} from '../../ContextApi/Context';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
+import profieIcon from "../../Z_images/profile-icon.png"
+
+
 
 
 function Header() {
-  const { isLogin, handleLogout } = useContext(Context);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');//useRef
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
-    handleLogout();
+    //add the react toastify
     alert('Logout Successfully');
   };
 
   const handleSearch = () => {
-    console.log(searchQuery);
+    
   };
 
   return (
@@ -42,7 +43,7 @@ function Header() {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            {isLogin && (
+            {localStorage.getItem("token") && (
               <>
                 <li className="nav-item">
                   <Link className="nav-link active" aria-current="page" to="/">
@@ -70,12 +71,11 @@ function Header() {
             </button>
           </form>
           <ul className="navbar-nav ml-auto">
-            {isLogin ? (
+            {localStorage.getItem("token") ? (
               <>
                 <li className="nav-item">
-                  <button className="btn btn-outline-dark" onClick={() => navigate('/user-profile')}>
-                    Profile
-                  </button>
+                  <Link to="/user-profile">Profile</Link>
+
                 </li>
                 <li className="nav-item">
                   <button className="btn btn-outline-danger" onClick={handleChangeLogout}>

@@ -275,10 +275,13 @@ const validateActorName = (name)=>{
         }
         if (!form.venueName.trim()) {
           step1Errors.venueName = "Venue Name is required";
+        }if(form.ticketSaleEndTime &&  form.eventStartDateTime ){
+          if(form.ticketSaleEndTime > form.eventStartDateTime)
+          step1Errors.ticketSaleEndTime = "Ticket sale should be greater than Event start time"
         }
         try{
 
-          setErrors({ ...step1Errors });
+          await setErrors({ ...step1Errors });
           return Object.keys(step1Errors).length === 0;
         }catch(err){
 console.log(err)
@@ -298,7 +301,7 @@ console.log(err)
         }))
         try{
 
-          setTicketErrors(errors)
+          await setTicketErrors({...step2Errors})
   
           return !step2Errors.category && !ticketErrors.some((error) => Object.values(error).some((value) => value));
         }catch(err){
@@ -344,9 +347,9 @@ console.log(err)
 
         try{
 
-          setErrors({ ...step3Errors })
+          await setErrors({ ...step3Errors })
           console.log("in try catch")
-          return Object.keys(step3Errors).length === 0;
+           return Object.keys(step3Errors).length === 0;
         }catch(err){
           console.log(err)
         }
@@ -889,8 +892,11 @@ console.log(err)
  return (
     <div>
       <Container>
-        <h1 style={{textAlign:'center'}}> Event-Form</h1>
-        <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} style={{marginTop:"70px"}}/>
+        <h1 style={{textAlign:'center',marginTop:"30px"}}> Event-Form</h1>
+        <div style={{display:"inline",display:"flex",justifyContent:'center',textAlign:"center"}}>
+
+        <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} style={{marginTop:"70px",width:"450px"}} />
+        </div>
       </Container>
       <Container style={{marginTop:"70px"}}>
 

@@ -1,10 +1,9 @@
 import { useContext, useState, useEffect } from "react";
 import axios from "../Api_Resources/axios";
 import Select from 'react-select';
-import { ProfileContext } from "../../ContextApi/Context";
+import { useDispatch } from "react-redux";
 
 const UserForm = () => {
-  const { dispatch } = useContext(ProfileContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -18,7 +17,7 @@ const UserForm = () => {
   const [description, setDescription] = useState('');
   const [displayPic, setDisplayPic] = useState('');
   const [userDetails, setUserDetails] = useState('');
-
+    const dispatch = useDispatch()
   useEffect(() => {
     fetchAddresses(); // Call fetchAddresses when the component mounts
   }, []);
