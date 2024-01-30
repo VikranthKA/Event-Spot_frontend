@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 
-const Context = createContext();
-const ProfileContext = createContext();
+const MyContext = createContext();
 
-export { Context, ProfileContext };
+export { MyContext }

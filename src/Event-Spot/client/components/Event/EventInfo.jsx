@@ -1,57 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import CountDown from '../Utils/CountDown/CountDown';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { Container, Carousel, Spinner, Row, Col, Card, ListGroup, Badge, Button,Form, CardText } from 'react-bootstrap';
 import axios from '../Api_Resources/axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { startRaduisEvents } from '../../react-redux/action/eventAction';
 
 function EventInfo() {
-  const [event, setEvent] = useState(null);
-  const eventId = "65b293e5932dd82cc5ca521b";
-
+  const {eventId} = useParams()
+  const dispatch = useDispatch()
+  const events = useSelector((state)=>{
+    return state.events
+  })
+  const [event,setEvent] = useState(null)
   useEffect(() => {
-    const fetchEventData = async () => {
-      try {
-        const { data } = await axios.get(`/api/event/${eventId}`);
-        setEvent(data);
-      } catch (err) {
-        console.error(err);
-        // Handle errors here
-      }
-    };
-
-    fetchEventData();
+    const eventData= events.find(ele=>ele._id === eventId)
+    setEvent(eventData)
   }, [eventId]);
 
-  const reviews = [
-    {
-      _id: "879uijkji78uijki87",
-      userId: "89ouijkl98080809",
-      title: "i am title",
-      body: "i am body",
-      rating: 5,
-    },
-    {
-      _id: "oijknbjiouyiouh",
-      userId: "9878oijkhui7897uyijh",
-      title: "i am title",
-      body: "i am body",
-      rating: 5,
-    },
-  ];
+
 
   function readableDate(inputDateString) {
     const momentObject = moment(inputDateString);
     return momentObject.format('LLLL');
   }
-
+  const navigate = useNavigate()
+  
   const handleBookTickets = () => {
-    // Placeholder for booking tickets logic
-    alert('Booking tickets logic goes here!');
+    navigate(`/event-booking/${eventId}`)
   };
 
   return (
     <Container className="my-5">
+      {console.log(event)}
       {event ? (
         <Carousel style={{ height: "400px", width: "100%", margin: "auto" }}>
           {event.posters.map((poster) => (
@@ -70,8 +52,13 @@ function EventInfo() {
           ))}
           {event.youTube && (
             <Carousel.Item>
-            <iframe width="100%" height="100%" src={event.youTube.url} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> 
-              <Carousel.Caption>
+<iframe
+            width="100%"
+            height="500px"
+            src={event.youTube.url}
+            title="youTube-video-player"
+            allowFullScreen
+  ></iframe>              <Carousel.Caption>
                 <h3>{event.youTube.title}</h3>
                 {/* Additional captions if needed */}
               </Carousel.Caption>
@@ -120,7 +107,7 @@ function EventInfo() {
       </Row>
       <ListGroup as="ol" numbered className="my-4">
         <ListGroup.Item className="fw-bold">Reviews</ListGroup.Item>
-        {reviews.map((review) => (
+        {event?.reviews.map((review) => (
           <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
               <div className="fw-bold">{review.title}</div>

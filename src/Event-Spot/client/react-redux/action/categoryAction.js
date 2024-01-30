@@ -56,11 +56,12 @@ export const startRemoveCategory = (id) => {
     }
 
     try {
-      await axios.delete(`/api/category/${id}`, {
+      const response = await axios.delete(`/api/category/${id}`, {
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       });
+    console.log(response.data)
       dispatch(removeCategory(id));
     } catch (e) {
       console.log(e);

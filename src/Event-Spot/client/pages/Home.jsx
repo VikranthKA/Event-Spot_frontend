@@ -7,7 +7,6 @@ import Dashboard from "../components/Dashboard/Dashboard";
 import {Context} from "../ContextApi/Context";
 
 export default function Home() {
-  const { isLogin } = useContext(Context);
   const [role, setRole] = useState("");
 
   useEffect(() => {
@@ -16,7 +15,7 @@ export default function Home() {
       const { role } = jwtDecode(token);
       setRole(role);
     }
-  }, [isLogin]);
+  }, []);
 
   return (
     <div>

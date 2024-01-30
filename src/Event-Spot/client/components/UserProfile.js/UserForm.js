@@ -1,13 +1,9 @@
 import { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "../Api_Resources/axios";
 import Select from 'react-select';
-import { ProfileContext } from "../../ContextApi/Context";
-import { config } from "../Api_Resources/config";
+import { useDispatch } from "react-redux";
 
 const UserForm = () => {
-  const navigate = useNavigate() 
-  const { dispatch } = useContext(ProfileContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -21,7 +17,7 @@ const UserForm = () => {
   const [description, setDescription] = useState('');
   const [displayPic, setDisplayPic] = useState('');
   const [userDetails, setUserDetails] = useState('');
-
+    const dispatch = useDispatch()
   useEffect(() => {
     fetchAddresses(); // Call fetchAddresses when the component mounts
   }, []);
@@ -82,14 +78,13 @@ const UserForm = () => {
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
 
-      const response = await axios.post('/api/profile', formData, config);
+      const response = await axios.post('/api/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       console.log('Backend response:', response.data);
-      console.log(response.data._id)
-      if(response){
-        navigate(`/ActualProfile/${response.data._id}`)
-      }
-      
 
       // Handle additional actions based on the response if needed
     } catch (error) {
@@ -174,12 +169,23 @@ const UserForm = () => {
 
         <div className="mb-3">
           <button type="button" className="btn btn-dark" onClick={formSubmit}>
-            Create
+            Submit
           </button>
-
-          <button type="button" className="btn btn-dark">Update</button>
         </div>
       </form>
+
+      <div className="mt-4">
+        <h2>Entered Details:</h2>
+        <p>
+          <strong>Description:</strong> {description}
+        </p>
+        <p>
+          <strong>Address:</strong> {locObj.address}
+        </p>
+        <p>
+          <strong>City:</strong> {locObj.city}
+        </p>
+      </div>
     </div>
   );
 }
