@@ -12,7 +12,6 @@ function Header() {
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
-    //add the react toastify
     alert('Logout Successfully');
   };
 
