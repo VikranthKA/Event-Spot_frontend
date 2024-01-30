@@ -18,6 +18,7 @@ import Login from './Event-Spot/client/components/UserAuthenticate.js/Login'
 import UserProfile from './Event-Spot/client/components/UserProfile.js/UserProfile'
 import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
+import ActualProfile from './Event-Spot/client/components/UserProfile.js/ActualProfile'
 
 const App = () => {
   
@@ -38,6 +39,7 @@ const App = () => {
           <Route path='/event-info/:eventId' element={<EventInfo/>}/>
           <Route path='/event-booking/:eventId' element={<TicketBook/>}/>
           <Route path='/show-QrCode' element={<CreateBookingInfo/>}/>
+          <Route path='/profile' element={<ActualProfile/>}/>
       </Routes>
     </MyContext.Provider>
     </div>

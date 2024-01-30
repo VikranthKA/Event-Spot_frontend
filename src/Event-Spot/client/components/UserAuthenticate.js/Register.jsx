@@ -3,7 +3,7 @@ import axios from '../Api_Resources/axios';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import {useNavigate,Link} from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,7 +17,7 @@ const registerValidationSchema = yup.object({
 
 export default function Register() {
   const [serverErrors, setServerErrors] = useState('');
-  const navigate  = useNavigate()
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -31,19 +31,18 @@ export default function Register() {
     validationSchema: registerValidationSchema,
     onSubmit: async (values) => {
       try {
-        setServerErrors("")
-        const response = await axios.post('/api/user/register', values)
+        setServerErrors('');
+        const response = await axios.post('/api/user/register', values);
         toast.success(`Hello ${response.data}! Successfully registered your Account!`);
-        setTimeout(()=>{
-          navigate('/login')
-
-        },2000)
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       } catch (err) {
-        console.error(err)
-        setServerErrors(err.response.data.error)
-        toast.error(err.response.data.error[0].msg)
-        
-        console.log(serverErrors)
+        console.error(err);
+        setServerErrors(err.response.data.error);
+        toast.error(err.response.data.error[0].msg);
+
+        console.log(serverErrors);
       }
     },
   });
@@ -129,23 +128,26 @@ export default function Register() {
                 value={formik.values.role}
                 onChange={formik.handleChange}
               >
-                <option value="" disabled>Select a role</option>
+                <option value="" disabled>
+                  Select a role
+                </option>
                 <option value="Customer">Customer</option>
                 <option value="Organiser">Organiser</option>
               </select>
               <div className="invalid-feedback">{formik.errors.role}</div>
             </div>
             <div className="serverError">
-            <ToastContainer />
-
-              {/* {serverErrors && serverErrors.map((ele)=><span style={{color:"red"}}>{ele.msg}</span>)} */}
+              <ToastContainer />
+              {/* {serverErrors && serverErrors.map((ele) => <span style={{ color: 'red' }}>{ele.msg}</span>)} */}
             </div>
 
-            <div style={{display:"flex",justifyContent:"space-between"}}>
-            <div>Already Registerd <Link to="/login">Login</Link></div>
-            <button type="submit" className="btn btn-dark">
-              Signup
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>
+                Already Registered <Link to="/login">Login</Link>
+              </div>
+              <button type="submit" className="btn btn-dark">
+                Signup
+              </button>
             </div>
           </form>
         </div>

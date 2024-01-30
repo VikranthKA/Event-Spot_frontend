@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
-import profieIcon from "../../Z_images/profile-icon.png"
+import profieIcon from "../../Z_images/profile-icon.png";
 
 
 
@@ -13,6 +13,8 @@ function Header() {
 
   const handleChangeLogout = () => {
     alert('Logout Successfully');
+    localStorage.removeItem('token')
+    navigate('/login')
   };
 
   const handleSearch = () => {
