@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 import axios from '../Api_Resources/axios';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -128,9 +129,12 @@ export default function Register() {
             <button type="submit" className="btn btn-dark">
               Signup
             </button>
-            <button className="btn btn-dark" onClick={()=>navigate('/login')}>
+            <br/>
+            <br/>
+            <span>Already a user? then </span>
+            <Link to='/login'>
              SignIn
-            </button>
+            </Link>
           </form>
         </div>
       </div>

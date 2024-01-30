@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from '../Api_Resources/axios';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
+import Snackbar from './Snackbar';
 
 const loginValidationSchema = yup.object({
   email: yup.string().required().email(),
@@ -13,22 +14,27 @@ const loginValidationSchema = yup.object({
 export default function Login() {
   const navigate = useNavigate();
   const [serverErrors, setServerErrors] = useState('');
+  const snackbarRef = useRef(null);
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    validateOnChange: false, // Corrected the property name
+    validateOnChange: false,
     validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
       try {
         const response = await axios.post('api/user/login', values);
         localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
-        navigate('/user-profile')
+        setTimeout(() => {
+          navigate('/ActualProfile/:profileId');
+        }, 2000);
+        snackbarRef.current.show("Login Successful!", "success");
       } catch (e) {
-        setServerErrors(e.response.data.errors); // Corrected how serverErrors are displayed
+        setServerErrors(e.response.data.errors);
+        snackbarRef.current.show("Login Failed. Check your credentials and try again.", "fail");
         console.error(e);
       }
     },
@@ -46,7 +52,7 @@ export default function Login() {
               </label>
               <input
                 type="text"
-                className={`form-control ${formik.errors.email ? 'is-invalid' : ''}`} // Corrected the template string
+                className={`form-control ${formik.errors.email ? 'is-invalid' : ''}`}
                 id="email"
                 name="email"
                 value={formik.values.email}
@@ -61,7 +67,7 @@ export default function Login() {
               </label>
               <input
                 type="password"
-                className={`form-control ${formik.errors.password ? 'is-invalid' : ''}`} // Corrected the template string
+                className={`form-control ${formik.errors.password ? 'is-invalid' : ''}`}
                 id="password"
                 name="password"
                 value={formik.values.password}
@@ -70,17 +76,24 @@ export default function Login() {
               <div className="invalid-feedback">{formik.errors.password}</div>
             </div>
 
-            <button type="submit" className="btn btn-dark">
+            <button
+              type="submit"
+              className="btn btn-primary"
+            >
               Login
             </button>
-            <button className="btn btn-dark" onClick={()=>navigate('/register')}>
-             Register
-            </button>
+
+            <br />
+            <br />
+            <span>Not a user?</span>
+            <Link to="/register">Register</Link>
           </form>
         </div>
       </div>
 
       {serverErrors && <div className="alert alert-danger mt-3">{serverErrors}</div>}
+
+      <Snackbar ref={snackbarRef} />
     </div>
   );
 }

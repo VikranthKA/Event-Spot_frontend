@@ -2,12 +2,13 @@ import React from 'react'
 import { useReducer } from 'react'
 import { ProfileContext } from '../../ContextApi/Context'
 import UserForm from './UserForm'
+import ActualProfile from './ActualProfile';
 
   const reducer = (state, action) =>{
     switch (action.type) {
       case "SHOW_PROFILE":
         return { ...state, data: [state.data, action.payload]};
-        default: 
+      default: 
         return { ...state }
     }
   };

@@ -31,6 +31,7 @@ import Home from './Event-Spot/client/pages/Home'
 import Register from './Event-Spot/client/components/UserAuthenticate.js/Register'
 import Login from './Event-Spot/client/components/UserAuthenticate.js/Login'
 import UserProfile from './Event-Spot/client/components/UserProfile.js/UserProfile'
+import ActualProfile from './Event-Spot/client/components/UserProfile.js/ActualProfile'
 
 import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
@@ -52,8 +53,7 @@ const App = () => {
           <Route path='/event-form' element={<EventForm/>}/>
           <Route path='/jkhkjhl' element={<EventInMap/>}/>
           <Route path='/event-info/:eventId' element={<EventInfo/>}/>
-
-          {/*  <Route path='/' element={</>}/> */}
+          <Route path='/ActualProfile/:profileId' element={<ActualProfile/>}/>
           {/*  <Route path='/' element={</>}/> */}
 
           {/*  <Route path='/' e/>}/>
