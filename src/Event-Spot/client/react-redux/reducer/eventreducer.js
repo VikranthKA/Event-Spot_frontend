@@ -7,6 +7,9 @@ const eventReducer = (state=eventInitialState,action)=>{
         case "GET_ALL_RADIUSEVENT_BY_API_TRUE":{
             return [...action.payload]
         }
+        case "CREATE_NEW_EVENT":{
+            return [...action.payload,...state]
+        }
         default:{
             return [...state]
         }

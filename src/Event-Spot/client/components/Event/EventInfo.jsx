@@ -6,14 +6,16 @@ import { Container, Carousel, Spinner, Row, Col, Card, ListGroup, Badge, Button,
 import axios from '../Api_Resources/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { startRaduisEvents } from '../../react-redux/action/eventAction';
+import ReviewForm from '../Review/ReviewForm';
 
 function EventInfo() {
   const {eventId} = useParams()
+  const [event,setEvent] = useState(null)
+  const [reviewToggle,setReviewToggle] = useState(false)
   const dispatch = useDispatch()
   const events = useSelector((state)=>{
     return state.events
   })
-  const [event,setEvent] = useState(null)
   useEffect(() => {
     const eventData= events.find(ele=>ele._id === eventId)
     setEvent(eventData)
@@ -118,6 +120,12 @@ function EventInfo() {
             </Badge>
           </ListGroup.Item>
         ))}
+        <div style={{display:"block"}}>
+          {reviewToggle ?<Button onClick={()=>setReviewToggle(!reviewToggle)}>cancel</Button> :<Button onClick={()=>setReviewToggle(!reviewToggle)}>create</Button> }
+        
+        <Button>Edit</Button><Button>delete</Button>
+        </div>
+        {reviewToggle && <ReviewForm/>}
       </ListGroup>
 
     </Container>

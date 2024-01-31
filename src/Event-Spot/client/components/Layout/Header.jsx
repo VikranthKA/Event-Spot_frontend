@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
 import profieIcon from "../../Z_images/profile-icon.png";
+import { MyContext } from '../../ContextApi/Context';
 
 
 
 
 function Header() {
-  const [searchQuery, setSearchQuery] = useState('');//useRef
+  const {searchQuery,setSearchQuery} = useContext(MyContext)
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
@@ -19,7 +20,7 @@ function Header() {
 
   const handleSearch = () => {
     
-  };
+  }
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">

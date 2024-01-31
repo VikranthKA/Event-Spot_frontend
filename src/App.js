@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect ,useReducer,useState} from 'react'
 import {Routes,Route,Link} from 'react-router-dom' 
 import './App.css'
 import { MyContext } from './Event-Spot/client/ContextApi/Context'
@@ -20,13 +20,35 @@ import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
 import ActualProfile from './Event-Spot/client/components/UserProfile.js/ActualProfile'
 
+function geoWithin(state,action){
+  switch(action.type){
+    case "GET_ALL_RADIUSEVENT_BY_API_TRUE" :{
+      return action.payload
+    }
+    default :{
+      return [...state]
+    }
+  }
+}
+
 const App = () => {
-  
+  const [raduisEvents,dispatch] = useReducer(geoWithin,[])
+  const [searchQuery,setSearchQuery] = useState("")
+
+  const handleGeoWithinEvents = (radiusEvents) =>{
+    dispatch(
+      {
+        type:"GET_ALL_RADIUSEVENT_BY_API_TRUE",
+        payload:radiusEvents
+      }
+    )
+  }
+
   return (
     <div>
 
       
-    <MyContext.Provider value={{}}>
+    <MyContext.Provider value={{raduisEvents,handleGeoWithinEvents,searchQuery,setSearchQuery}}>
       <Header/>
         <Routes>
           <Route path='/' element={<Home/>}/>

@@ -9,7 +9,7 @@ const configureStore = ()=>{
 
         user: userReducer,
         category: categoryReducer,
-        events:eventReducer
+        events:eventReducer,
         
     }),applyMiddleware(thunk))
     return store

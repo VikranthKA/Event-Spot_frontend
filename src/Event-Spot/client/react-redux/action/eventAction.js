@@ -1,5 +1,5 @@
-//  import axios from "../../axios"
 import axios from "../../components/Api_Resources/axios"
+import { fileConfig } from "../../components/Api_Resources/config"
 
 export const startGetEvents = ()=>{
     return async(dispatch)=>{
@@ -10,7 +10,6 @@ export const startGetEvents = ()=>{
                 console.log(response.data)
             }catch(err){
                 console.log(err)
-            
                 alert(err)
             }
         
@@ -25,23 +24,23 @@ const setEvents = (data)=>{
     }
 }
 
-export const startRaduisEvents = (radius,lon,lat)=>{
+//Creating the event and updating in the event store
+export const startCreateEvent = (eventFormData)=>{
     return async(dispatch)=>{
         try{
-            const response = await axios.get(`/api/event/${radius}/${lon}/${lat}`)
-            dispatch(setRadiusEvents(response.data))
+            const response = await axios.post('/api/event', eventFormData, fileConfig)
+            dispatch(setCreateEvents(response.data))
 
         }catch(err){
-
+            console.log(err)
+            alert(err,"Cannot create a Event")
         }
     }
 }
 
-const setRadiusEvents = (data)=>{
-    console.log(data,"in action with radius data")
-    return{
-        type:"GET_ALL_RADIUSEVENT_BY_API_TRUE",
+const setCreateEvents =(data)=>{
+    return {
+        type:"CREATE_NEW_EVENT",
         payload:data
-
     }
 }

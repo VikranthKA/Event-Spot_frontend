@@ -66,6 +66,8 @@ const TicketBook = () => {
       return updatedTickets;
     });
   };
+
+
   
 
   const incrementTicket = (index) => {
@@ -93,7 +95,7 @@ const TicketBook = () => {
       const bookedTicket = bookedTickets.find((booked) => booked.ticket._id === ticket._id);
       const bookedCount = bookedTicket ? bookedTicket.count : 0;
       const remainingCount = ticket.ticketCount - bookedCount;
-      return { ...ticket, remainingTickets: remainingCount, Quantity: remainingCount };
+      return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount };
     });
 
     console.log(updatedEventTickets);

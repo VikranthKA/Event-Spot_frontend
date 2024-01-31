@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from "../Api_Resources/axios";
-import { config } from "../Api_Resources/config";
+import { fileConfig } from "../Api_Resources/config";
 import z from 'zod'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container, Carousel, Spinner, Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText ,ProgressBar,Alert} from 'react-bootstrap';
+import { Container, Carousel, Spinner, Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText, ProgressBar, Alert } from 'react-bootstrap';
 
 import "./EventForm.css"
 import NotFound from '../Utils/NotFound/NotFound';
-
+import { startCreateEvent } from "../../react-redux/action/eventAction"
+import { useDispatch } from 'react-redux';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 const EventForm = () => {
   const [errors, setErrors] = useState({});
-
   const [serverErrors, setServerErrors] = useState()
-
   const [ticketErrors, setTicketErrors] = useState([])
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({
@@ -29,22 +28,15 @@ const EventForm = () => {
     ticketSaleStartTime: "",
     ticketSaleEndTime: "",
   })
-
   const [poster, setPoster] = useState({
     Clip: { name: '', file: null },
     Brochure: { name: '', file: null },
   })
-
   const [youTube, setYouTube] = useState({
     title: " ", url: " ",
-
   })
-  const [actors, setActors] = useState([{
-    name: " "
-  }])
-
+  const [actors, setActors] = useState([{ name: " " }])
   const [allCategory, setAllCategory] = useState([]);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -54,6 +46,8 @@ const EventForm = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const dispatch = useDispatch()
 
   const handleYouTubeChange = (e) => {
     const { name, value } = e.target;
@@ -113,11 +107,9 @@ const EventForm = () => {
   const fetchAddresses = async () => {
     try {
       const GEO_CODE_API_KEY = '659f7b557feb5653368044xyz79cdbd';
-
       const response = await axios.get(
         `https://geocode.maps.co/search?q=${searchTerm}&api_key=${GEO_CODE_API_KEY}`
       );
-
       setSearchResults(response.data);
       if (response.data.length === 0) {
         setSearchResults([
@@ -196,24 +188,18 @@ const EventForm = () => {
     }));
   };
 
-
-
-
   useEffect(() => {
     const storedFormData = localStorage.getItem('eventFormData');
     const LocationObj = localStorage.getItem('locObj')
     const ActorsData = localStorage.getItem('actors')
     if (storedFormData && LocationObj && ActorsData) {
       setForm(JSON.parse(storedFormData));
-
     }
   }, []);
 
   // // Update localStorage whenever form data changes
   useEffect(() => {
     localStorage.setItem('eventFormData', JSON.stringify(form));
-
-
   }, [form])
 
   // handle the form obj
@@ -224,24 +210,23 @@ const EventForm = () => {
     }));
   };
 
-const validateActorName = (name)=>{
-  if(!name || name.trim()===" "){
-    return "Actor name is Required"
+  const validateActorName = (name) => {
+    if (!name || name.trim() === " ") {
+      return "Actor name is Required"
+    }
   }
-}
   //handle the Actors name
   const handleActorChange = (index, propertyName, value) => {
     const updatedActors = [...actors]
     updatedActors[index][propertyName] = value
-    
+
     const actorNameError = validateActorName(value)
-    const updatedErrors = {...errors}
-    updatedErrors[ `actorName${index}`] = actorNameError
+    const updatedErrors = { ...errors }
+    updatedErrors[`actorName${index}`] = actorNameError
     setActors(updatedActors)
     setErrors(updatedErrors)
   }
 
-  
   const hanldeAddActors = () => {
     setActors([...actors, { name: '' }])
   }
@@ -252,9 +237,7 @@ const validateActorName = (name)=>{
     setActors(updatedActors);
   };
 
-
-
-  const validateStep= async()=> {
+  const validateStep = async () => {
     switch (step) {
       case 1:
         let step1Errors = {}
@@ -275,16 +258,16 @@ const validateActorName = (name)=>{
         }
         if (!form.venueName.trim()) {
           step1Errors.venueName = "Venue Name is required";
-        }if(form.ticketSaleEndTime &&  form.eventStartDateTime ){
-          if(form.ticketSaleEndTime > form.eventStartDateTime)
-          step1Errors.ticketSaleEndTime = "Ticket sale should be greater than Event start time"
+        } if (form.ticketSaleEndTime && form.eventStartDateTime) {
+          if (form.ticketSaleEndTime > form.eventStartDateTime)
+            step1Errors.ticketSaleEndTime = "Ticket sale should be greater than Event start time"
         }
-        try{
+        try {
 
           await setErrors({ ...step1Errors });
           return Object.keys(step1Errors).length === 0;
-        }catch(err){
-console.log(err)
+        } catch (err) {
+          console.log(err)
         }
 
       case 2:
@@ -299,12 +282,10 @@ console.log(err)
           ticketPrice: !ticket.ticketPrice.trim(),
           ticketCount: !ticket.ticketCount.trim()
         }))
-        try{
-
-          await setTicketErrors({...step2Errors})
-  
+        try {
+          await setTicketErrors({ ...step2Errors })
           return !step2Errors.category && !ticketErrors.some((error) => Object.values(error).some((value) => value));
-        }catch(err){
+        } catch (err) {
           console.log(err)
         }
 
@@ -338,105 +319,95 @@ console.log(err)
         if (!selectedAddress) {
           step3Errors.selectedAddress = "Select an Address is required";
         }
-
         actors.forEach((actor, index) => {
           if (!actor.name.trim()) {
             step3Errors[`actorName${index}`] = `Actor ${index + 1} Name is required`
           }
         })
 
-        try{
-
+        try {
           await setErrors({ ...step3Errors })
           console.log("in try catch")
-           return Object.keys(step3Errors).length === 0;
-        }catch(err){
+          return Object.keys(step3Errors).length === 0;
+        } catch (err) {
           console.log(err)
         }
-
-
       default:
         return true;
     };
-
-
-
   }
-  const nextStep =async () => {
+
+  const nextStep = async () => {
     const isValid = await validateStep()
     if (isValid) {
       setStep(step + 1)
     }
   }
 
-
-
-
   const prevStep = () => {
     setStep(step - 1)
   }
   const handleSubmit = async () => {
-    const isValid =await validateStep()
+    const isValid = await validateStep()
     // const  = Object.keys(stepErrors).length === 0;
     if (isValid) {
 
-  const eventFormData = new FormData();
+      const eventFormData = new FormData();
 
-  // Append individual fields
-  eventFormData.append('eventStartDateTime', form.eventStartDateTime);
-  // eventFormData.append('eventEndDateTime', form.eventEndDateTime);
-  eventFormData.append('title', form.title);
-  eventFormData.append('description', form.description);
-  eventFormData.append('venueName', form.venueName);
-  eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime);
-  eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime);
+      // Append individual fields
+      eventFormData.append('eventStartDateTime', form.eventStartDateTime);
+      // eventFormData.append('eventEndDateTime', form.eventEndDateTime);
+      eventFormData.append('title', form.title);
+      eventFormData.append('description', form.description);
+      eventFormData.append('venueName', form.venueName);
+      eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime);
+      eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime);
 
-  eventFormData.append('categoryId', form.categoryId);
+      eventFormData.append('categoryId', form.categoryId);
+      // Append ticketType array
+      form.ticketType.forEach((ticket, index) => {
+        eventFormData.append(`ticketType[${index}][ticketName]`, ticket.ticketName);
+        eventFormData.append(`ticketType[${index}][ticketPrice]`, ticket.ticketPrice);
+        eventFormData.append(`ticketType[${index}][ticketCount]`, ticket.ticketCount);
+        eventFormData.append(`ticketType[${index}][remainingTickets]`, ticket.remainingTickets);
+      });
 
-  // Append ticketType array
-  form.ticketType.forEach((ticket, index) => {
-    eventFormData.append(`ticketType[${index}][ticketName]`, ticket.ticketName);
-    eventFormData.append(`ticketType[${index}][ticketPrice]`, ticket.ticketPrice);
-    eventFormData.append(`ticketType[${index}][ticketCount]`, ticket.ticketCount);
-    eventFormData.append(`ticketType[${index}][remainingTickets]`, ticket.remainingTickets);
-  });
+      actors.forEach((actor, index) => {
+        eventFormData.append(`Actors[${index}][name]`, actor.name);
+      });
+      eventFormData.append('ClipName', poster.Clip.name);
+      eventFormData.append('ClipFile', poster.Clip.file)
 
-  actors.forEach((actor, index) => {
-    eventFormData.append(`Actors[${index}][name]`, actor.name);
-  });
+      eventFormData.append('BrochureName', poster.Brochure.name)
+      eventFormData.append('BrochureFile', poster.Brochure.file)
 
+      eventFormData.append('youTube[title]', youTube.title);
+      eventFormData.append('youTube[url]', youTube.url);
+      // Append addressInfo
+      eventFormData.append(`addressInfo[address]`, locObj.address);
+      eventFormData.append(`addressInfo[city]`, locObj.city);
+      // Append location coordinates
+      eventFormData.append(`location[lon]`, locObj.lonlat[0])
+      eventFormData.append(`location[lat]`, locObj.lonlat[1])
+      console.log([...eventFormData], "i am event")
 
-  eventFormData.append('ClipName', poster.Clip.name);
-  eventFormData.append('ClipFile', poster.Clip.file)
+      try {
+        dispatch(startCreateEvent(eventFormData))
+        setForm("")
+        setActors("")
+        setPoster("")
+        setLocObj("")
+        setSelectedAddress("")
+        setSearchTerm("")
+        setActors("")
+        setYouTube("")
+        setErrors("")
+        setServerErrors("")
+        setTicketErrors("")
+      } catch (err) {
 
-  eventFormData.append('BrochureName', poster.Brochure.name)
-  eventFormData.append('BrochureFile', poster.Brochure.file)
-
-  eventFormData.append('youTube[title]', youTube.title);
-  eventFormData.append('youTube[url]', youTube.url);
-
-
-  // Append addressInfo
-  eventFormData.append(`addressInfo[address]`, locObj.address);
-  eventFormData.append(`addressInfo[city]`, locObj.city);
-
-  // Append location coordinates
-  eventFormData.append(`location[lon]`, locObj.lonlat[0])
-  eventFormData.append(`location[lat]`, locObj.lonlat[1])
-
-
-  console.log([...eventFormData], "i am event")
-  console.log(config)
-  try {
-    const response = await axios.post('/api/event', eventFormData, config)
-
-    console.log(response.data)
-  } catch (err) {
-    setServerErrors(err.response)
-    console.log(err)
-  }
-
-};
+      }
+    };
   }
 
   const totalSteps = 3; // Update this if you have more steps
@@ -456,36 +427,36 @@ console.log(err)
               <Form>
 
 
-              <Row>
-                <Col>
-                <Form.Group className="mb-3" controlId="title">
-                  <Form.Label>Title:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={form.title}
-                    name="title"
-                    onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
-                    isInvalid={!!errors.title}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.title && <div>{errors.title}</div>}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                </Col>
+                <Row>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="title">
+                      <Form.Label>Title:</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={form.title}
+                        name="title"
+                        onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
+                        isInvalid={!!errors.title}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.title && <div>{errors.title}</div>}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
                   <Col><Form.Group className="mb-3" controlId="eventStartDateTime">
-                  <Form.Label>Event Start Time:</Form.Label>
-                  <Form.Control
-                    type="datetime-local"
-                    value={form.eventStartDateTime}
-                    name="eventStartDateTime"
-                    onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
-                    isInvalid={!!errors.eventStartDateTime}
+                    <Form.Label>Event Start Time:</Form.Label>
+                    <Form.Control
+                      type="datetime-local"
+                      value={form.eventStartDateTime}
+                      name="eventStartDateTime"
+                      onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
+                      isInvalid={!!errors.eventStartDateTime}
 
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.eventStartDateTime && <div>{errors.eventStartDateTime}</div>}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.eventStartDateTime && <div>{errors.eventStartDateTime}</div>}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                   </Col>
                 </Row>
 
@@ -510,36 +481,36 @@ console.log(err)
 
                 <Row>
                   <Col>                <Form.Group className="mb-3" controlId="ticketSaleStartTime">
-                  <Form.Label>Ticket Sale Start Time:</Form.Label>
-                  <Form.Control
-                    type="datetime-local"
-                    value={form.ticketSaleStartTime}
-                    name="ticketSaleStartTime"
-                    onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
-                    isInvalid={!!errors.ticketSaleStartTime}
+                    <Form.Label>Ticket Sale Start Time:</Form.Label>
+                    <Form.Control
+                      type="datetime-local"
+                      value={form.ticketSaleStartTime}
+                      name="ticketSaleStartTime"
+                      onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
+                      isInvalid={!!errors.ticketSaleStartTime}
 
-                  />
-                  <Form.Text muted>Ticket Sale Start Time where users can start booking the event.</Form.Text>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.ticketSaleStartTime && <div>{errors.ticketSaleStartTime}</div>}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                    />
+                    <Form.Text muted>Ticket Sale Start Time where users can start booking the event.</Form.Text>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.ticketSaleStartTime && <div>{errors.ticketSaleStartTime}</div>}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                   </Col>
                   <Col>                <Form.Group className="mb-3" controlId="ticketSaleEndTime">
-                  <Form.Label>Ticket Sale End Time:</Form.Label>
-                  <Form.Control
-                    type="datetime-local"
-                    value={form.ticketSaleEndTime}
-                    name="ticketSaleEndTime"
-                    onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
-                    isInvalid={!!errors.ticketSaleEndTime}
+                    <Form.Label>Ticket Sale End Time:</Form.Label>
+                    <Form.Control
+                      type="datetime-local"
+                      value={form.ticketSaleEndTime}
+                      name="ticketSaleEndTime"
+                      onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
+                      isInvalid={!!errors.ticketSaleEndTime}
 
-                  />
-                  <Form.Text muted>Ticket Sale End Time where users cannot buy tickets for your event.</Form.Text>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.ticketSaleEndTime && <div>{errors.ticketSaleEndTime}</div>}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                    />
+                    <Form.Text muted>Ticket Sale End Time where users cannot buy tickets for your event.</Form.Text>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.ticketSaleEndTime && <div>{errors.ticketSaleEndTime}</div>}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                   </Col>
                 </Row>
                 <Form.Group className="mb-3" controlId="venueName">
@@ -557,7 +528,7 @@ console.log(err)
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Button variant="primary" onClick={async() =>await nextStep()}>
+                <Button variant="primary" onClick={async () => await nextStep()}>
                   Next
                 </Button>
               </Form>
@@ -649,7 +620,7 @@ console.log(err)
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={async() =>await nextStep()}>
+                    <Button variant="primary" onClick={async () => await nextStep()}>
                       Next
                     </Button>
                   </Col>
@@ -771,7 +742,7 @@ console.log(err)
                   </Col>
                 </Row>
 
-                 <Row className="mb-3">
+                <Row className="mb-3">
                   <Col>
                     <Form.Group controlId="searchAddress">
                       <Form.Label>Search Addresses:</Form.Label>
@@ -855,12 +826,12 @@ console.log(err)
 
                 <div className="serverErrors">
 
-                {serverErrors && (
-        <Alert variant="danger" onClose={() => setServerErrors(null)} dismissible>
-          <Alert.Heading>Error</Alert.Heading>
-          <p>{serverErrors.data && JSON.stringify(serverErrors.data)}</p>
-        </Alert>
-      )}
+                  {serverErrors && (
+                    <Alert variant="danger" onClose={() => setServerErrors(null)} dismissible>
+                      <Alert.Heading>Error</Alert.Heading>
+                      <p>{serverErrors.data && JSON.stringify(serverErrors.data)}</p>
+                    </Alert>
+                  )}
                 </div>
 
                 <Row className="mb-3">
@@ -883,24 +854,24 @@ console.log(err)
         return "Not found"
     }
   }
-  useEffect(()=>{
-    console.log(errors,"i am error")
-  },[errors])
+  useEffect(() => {
+    console.log(errors, "i am error")
+  }, [errors])
 
 
 
- return (
+  return (
     <div>
       <Container>
-        <h1 style={{textAlign:'center',marginTop:"30px"}}> Event-Form</h1>
-        <div style={{display:"inline",display:"flex",justifyContent:'center',textAlign:"center"}}>
+        <h1 style={{ textAlign: 'center', marginTop: "30px" }}> Event-Form</h1>
+        <div style={{ display: "inline", display: "flex", justifyContent: 'center', textAlign: "center" }}>
 
-        <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} style={{marginTop:"70px",width:"450px"}} />
+          <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} style={{ marginTop: "70px", width: "450px" }} />
         </div>
       </Container>
-      <Container style={{marginTop:"70px"}}>
+      <Container style={{ marginTop: "70px" }}>
 
-      {renderFormSection()}
+        {renderFormSection()}
       </Container>
     </div>
   );
