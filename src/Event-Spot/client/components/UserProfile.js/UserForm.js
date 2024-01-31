@@ -74,12 +74,14 @@ const UserForm = () => {
       formData.append('description', description);
       formData.append('address', locObj.address);
       formData.append('place_id', locObj.place_id);
-      formData.append('lonlat', locObj.lonlat.join(','));
+      formData.append('lonlat[lon]', locObj.lonlat[0]);
+      formData.append('lonlat[lat]', locObj.lonlat[1])
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
 
       const response = await axios.post('/api/profile', formData, {
         headers: {
+          Authorization: localStorage.getItem('token'),
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -173,19 +175,6 @@ const UserForm = () => {
           </button>
         </div>
       </form>
-
-      <div className="mt-4">
-        <h2>Entered Details:</h2>
-        <p>
-          <strong>Description:</strong> {description}
-        </p>
-        <p>
-          <strong>Address:</strong> {locObj.address}
-        </p>
-        <p>
-          <strong>City:</strong> {locObj.city}
-        </p>
-      </div>
     </div>
   );
 }

@@ -41,16 +41,17 @@ export default function Login() {
   });
 
   return (
-    <div className="container mt-6 position-relative">
-      <h2 className="fs-1">Log in</h2>
+    <div className="container position-relative">
+      <h2 className="fs-1 mt-20" style={{marginTop:"40px"}}>Log in</h2>
       <div className="row">
         <div className="col-md-6">
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formik.handleSubmit} style={{marginTop:"20px", border:"2px solid black", width:"550px" }}>
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">
+              <label htmlFor="email" className="form-label" >
                 Email:
               </label>
               <input
+                style={{width:"100"}}
                 type="text"
                 className={`form-control ${formik.errors.email ? 'is-invalid' : ''}`}
                 id="email"
@@ -88,6 +89,14 @@ export default function Login() {
             <span>Not a user?</span>
             <Link to="/register">Register</Link>
           </form>
+        </div>
+        <div className="col-md-6 img-container">
+          <img
+            src="https://images.pexels.com/photos/976866/pexels-photo-976866.jpeg?cs=srgb&dl=pexels-josh-sorenson-976866.jpg&fm=jpg"
+            alt="Login Image"
+            className="img-fluid w-100 h-1000"
+            style={{ objectFit: 'cover' }}
+          />
         </div>
       </div>
 

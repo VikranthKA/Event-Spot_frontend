@@ -15,10 +15,11 @@ export default function Admin() {
         <h1 className="card-title">Admin Profile</h1>
       </div>
       <Container/>
+      <Create />
+      <button className="btn btn-warning ms-2">Approve or disapprove events</button>
+      <br/>
+      <br/>
       
-      <br/>
-      <br/>
-      <button className="btn btn-warning ms-2" onClick={onClick}>Approve or disapprove events</button>
     </div>
   );
 }
