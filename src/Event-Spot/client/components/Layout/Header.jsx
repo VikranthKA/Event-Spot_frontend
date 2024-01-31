@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -97,7 +97,7 @@ function Header() {
             {localStorage.getItem("token") ? (
               <>
                 <li className="nav-item">
-                  <Link to="/user-profile">
+                  <Link to="/profile">
                     <FontAwesomeIcon icon={faUser} />
                   </Link>
                 </li>

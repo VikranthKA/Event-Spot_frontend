@@ -5,6 +5,8 @@ import * as yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import { Link, useNavigate } from 'react-router-dom';
 import Snackbar from './Snackbar';
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import './register.css'
 
 const loginValidationSchema = yup.object({
   email: yup.string().required().email(),
@@ -41,68 +43,78 @@ export default function Login() {
   });
 
   return (
-    <div className="container position-relative">
-      <h2 className="fs-1 mt-20" style={{marginTop:"40px"}}>Log in</h2>
-      <div className="row">
-        <div className="col-md-6">
-          <form onSubmit={formik.handleSubmit} style={{marginTop:"20px", border:"2px solid black", width:"550px" }}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label" >
-                Email:
-              </label>
-              <input
-                style={{width:"100"}}
-                type="text"
-                className={`form-control ${formik.errors.email ? 'is-invalid' : ''}`}
-                id="email"
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-              />
-              <div className="invalid-feedback">{formik.errors.email}</div>
-            </div>
+    <div>
+      <Row className='maxi'>
+        <Col md={6}>
+          <div>
+            <h1 style={{ marginLeft: '60px', marginTop: '15px' }}>Login</h1>
+            <Form onSubmit={formik.handleSubmit} style={{ marginLeft: '60px', marginTop: '20px' }}>
 
-            <div className="mb-4">
-              <label htmlFor="password" className="form-label">
-                Password:
-              </label>
-              <input
-                type="password"
-                className={`form-control ${formik.errors.password ? 'is-invalid' : ''}`}
-                id="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-              />
-              <div className="invalid-feedback">{formik.errors.password}</div>
-            </div>
+              <FormGroup>
+                <strong for='email' className="form-label">Email:</strong>
+                <Input
+                  style={{width:"500px"}}
+                  type='text'
+                  id='email'
+                  name='email'
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  className={`form-control ${formik.errors.email ? 'is-invalid' : ''}`}
+                />
+                <div className='invalid-feedback'>{formik.errors.email}</div>
+              </FormGroup>
 
-            <button
-              type="submit"
-              className="btn btn-primary"
-            >
-              Login
-            </button>
 
-            <br />
-            <br />
-            <span>Not a user?</span>
-            <Link to="/register">Register</Link>
-          </form>
-        </div>
-        <div className="col-md-6 img-container">
-          <img
-            src="https://images.pexels.com/photos/976866/pexels-photo-976866.jpeg?cs=srgb&dl=pexels-josh-sorenson-976866.jpg&fm=jpg"
-            alt="Login Image"
-            className="img-fluid w-100 h-1000"
-            style={{ objectFit: 'cover' }}
-          />
-        </div>
-      </div>
+              <FormGroup>
+                <strong for='password'>Password:</strong>
+                <Input
+                  style={{width:"500px"}}
+                  type='password'
+                  id='password'
+                  name='password'
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  className={formik.errors.password ? 'is-invalid' : ''}
+                />
+                <div className='invalid-feedback'>{formik.errors.password}</div>
+              </FormGroup>
 
-      {serverErrors && <div className="alert alert-danger mt-3">{serverErrors}</div>}
+              <div>
+              </div>
 
-      <Snackbar ref={snackbarRef} />
+              <div>
+                
+                <button type='submit' className='btn btn-dark'>
+                  Login
+                </button>
+                <br/>
+                <br/>
+                <div>
+                  Already Registered ?<Link to='/register'>Register</Link>
+                </div>
+              </div>
+            </Form>
+          </div>
+        </Col>
+        <Col md={6}>
+          <div>
+            <img
+              className='image'
+              src='https://images.pexels.com/photos/976866/pexels-photo-976866.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+              alt='Login Image'
+              style={{ objectFit: 'cover', width: '800px', height: '585px' }}
+            />
+          </div>
+          <div className="image-background">
+            <img
+              src='https://images.pexels.com/photos/976866/pexels-photo-976866.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+              alt='Login Image'
+              style={{ objectFit: 'cover', maxWidth: '110%', width: '102%', height: '585px' }}
+            />
+          </div>
+        </Col>
+      </Row>
+        <Snackbar ref={snackbarRef} />
     </div>
   );
 }
