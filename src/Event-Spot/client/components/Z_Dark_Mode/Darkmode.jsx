@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 const Darkmode = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
   const toggleDarkMode = () => {
     // Function to toggle between dark mode and light mode
     const body = document.body;
     body.classList.toggle('dark-mode');
 
     // Save the user's preference in localStorage
-    const isDarkMode = body.classList.contains('dark-mode');
-    localStorage.setItem('dark-mode', isDarkMode);
+    const newIsDarkMode = body.classList.contains('dark-mode');
+    setIsDarkMode(newIsDarkMode);
+    localStorage.setItem('dark-mode', newIsDarkMode);
   };
 
   useEffect(() => {
@@ -16,12 +21,15 @@ const Darkmode = () => {
     const savedDarkMode = localStorage.getItem('dark-mode');
     if (savedDarkMode) {
       document.body.classList.toggle('dark-mode', savedDarkMode === 'true');
+      setIsDarkMode(savedDarkMode === 'true');
     }
   }, []);
 
   return (
     <div>
-      <button onClick={toggleDarkMode} >Dark</button>
+      <button className="btn text-white" onClick={toggleDarkMode}>
+        <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
+      </button>
     </div>
   );
 };
