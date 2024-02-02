@@ -21,6 +21,8 @@ import EventInMap from './Event-Spot/client/components/Location/EventInMap'
 import ActualProfile from './Event-Spot/client/components/UserProfile.js/ActualProfile'
 import Success from './Event-Spot/client/components/Booking/Payment/Success'
 import Cancel from './Event-Spot/client/components/Booking/Payment/Cancel'
+import axios from './Event-Spot/client/components/Api_Resources/axios'
+import { ToastContainer, toast } from 'react-toastify'
 
 function geoWithin(state,action){
   switch(action.type){
@@ -37,13 +39,21 @@ const App = () => {
   const [raduisEvents,dispatch] = useReducer(geoWithin,[])
   const [searchQuery,setSearchQuery] = useState("")
 
-  const handleGeoWithinEvents = (radiusEvents) =>{
-    dispatch(
-      {
-        type:"GET_ALL_RADIUSEVENT_BY_API_TRUE",
-        payload:radiusEvents
-      }
-    )
+  const handleGeoWithinEvents = async(radius,lon,lat) =>{
+    try{
+        const response = await axios.get(`/api/event/${radius}/${lon}/${lat}`)
+        console.log(response.data)
+        dispatch(
+          {
+            type:"GET_ALL_RADIUSEVENT_BY_API_TRUE",
+            payload:response.data
+          }
+        )
+        
+    }catch(err){
+      console.log(err)
+        toast.error(err.response.data.err)
+    }
   }
 
   return (
@@ -68,6 +78,7 @@ const App = () => {
           <Route path="/cancel" element={<Cancel/>}/>
 
       </Routes>
+      <ToastContainer/>
     </MyContext.Provider>
     </div>
   )
