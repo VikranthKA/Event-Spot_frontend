@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Organizer from './Organizer';
 import Admin from './Admin';
 import Customer from './Customer';
-import Create from '../Category/Create';
 export default function UserProfile(){
   const navigate = useNavigate();
   const token = localStorage.getItem("token")
@@ -35,14 +34,16 @@ export default function UserProfile(){
       {role==="Admin" ? (
         <Admin/>
       ): null}
-
+    <div>
       {role==="Organiser" ? (
         <Organizer/>
       ): null}
-
+    <div>
       {role==="Customer" ? (
         <Customer/>
       ): null}
+    </div>
+    </div>
     </div>
   )
 }

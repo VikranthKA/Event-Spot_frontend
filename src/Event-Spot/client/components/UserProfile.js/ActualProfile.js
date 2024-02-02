@@ -12,13 +12,14 @@ const ActualProfile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`api/profile/${profileId}`, {
+        const response = await axios.get(`api/profile`, {
           headers: {
             Authorization: localStorage.getItem('token'),
           },
         });
 
         if (response.data) {
+          console.log(response.data)
           setProfileData(response.data);
         } else {
           setError('User profile not found');
@@ -92,13 +93,21 @@ const ActualProfile = () => {
             width="100"
             height="100"
           />
-          <p className="card-text">
-            <strong>Description:</strong> {profileData.description}
-          </p>
-          <p className="card-text">
-            <strong>Address:</strong> {profileData.address}
-          </p>
-          {/* Add other fields as needed */}
+            <p className="card-text">
+        <strong>Username:</strong> {profileData.userId.username}
+    </p>
+    <p className="card-text">
+        <strong>Role:</strong> {profileData.userId.role}
+    </p>
+    <p className="card-text">
+        <strong>Email:</strong> {profileData.userId.email}
+    </p>
+    <p className="card-text">
+        <strong>Description:</strong> {profileData.description}
+    </p>
+    <p className="card-text">
+        <strong>Address:</strong> {profileData.addressInfo.address}
+    </p>
         </div>
       </div>
     </div>

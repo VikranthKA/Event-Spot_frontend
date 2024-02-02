@@ -2,10 +2,22 @@ import { useContext, useState, useEffect } from "react";
 import axios from "../Api_Resources/axios";
 import Select from 'react-select';
 import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+
+import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+
+
+
 
 const UserForm = () => {
   const navigate = useNavigate()
+  const {profileId} = useParams()
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -19,6 +31,7 @@ const UserForm = () => {
   const [description, setDescription] = useState('');
   const [displayPic, setDisplayPic] = useState('');
   const [userDetails, setUserDetails] = useState('');
+  const [filePondFiles, setFilePondFiles] = useState([]);
     const dispatch = useDispatch()
   useEffect(() => {
     fetchAddresses(); // Call fetchAddresses when the component mounts
@@ -61,9 +74,9 @@ const UserForm = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setProfilePic(e.target.files[0]);
-  };
+  // const handleFileChange = (e) => {
+  //   setProfilePic(e.target.files[0]);
+  // };
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
@@ -72,7 +85,7 @@ const UserForm = () => {
   const formSubmit = async () => {
     try {
       const formData = new FormData();
-      formData.append('profilePic', profilePic);
+      formData.append('profilePic', filePondFiles[0]);
       formData.append('description', description);
       formData.append('address', locObj.address);
       formData.append('place_id', locObj.place_id);
@@ -98,16 +111,51 @@ const UserForm = () => {
     }
   };
 
+  const updateForm = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('profilePic', filePondFiles[0]);
+      formData.append('description', description);
+      formData.append('address', locObj.address);
+      formData.append('place_id', locObj.place_id);
+      formData.append('lonlat[lon]', locObj.lonlat[0]);
+      formData.append('lonlat[lat]', locObj.lonlat[1])
+      formData.append('city', locObj.city);
+      dispatch({ type: "SHOW_TASK", payload: formData });
+
+      const response = await axios.put(`/api/profile/${profileId}`, formData, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Backend response:', response.data);
+      navigate('/profile')
+
+      // Handle additional actions based on the response if needed
+    } catch (error) {
+      console.error('Error sending data to the backend:', error);
+      // Handle error scenarios
+    }
+  };
+
   return (
     <div className="container mt-5">
 
       <form encType="multipart/form-data">
-        <div className="mb-3">
-          <label htmlFor="profilePic" className="form-label">
-            Change Profile Picture
-          </label>
-          <input type="file" className="form-control" name="profilePic" onChange={handleFileChange} />
-        </div>
+      <div className="mb-3">
+  <label htmlFor="profilePic" className="form-label">
+    Change Profile Picture
+  </label>
+  <FilePond
+    files={filePondFiles}
+    allowMultiple={true} // Set to true if you want to allow multiple files
+    onupdatefiles={(fileItems) => {
+      setFilePondFiles(fileItems.map((fileItem) => fileItem.file));
+    }}
+  />
+</div>
 
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
@@ -167,6 +215,7 @@ const UserForm = () => {
           <button type="button" className="btn btn-dark" onClick={formSubmit}>
             Submit
           </button>
+          <button type="button" className="btn btn-dark" onClick={updateForm}>Update</button>
         </div>
       </form>
     </div>
