@@ -35,7 +35,6 @@ function EventInfo() {
 
   return (
     <Container className="my-5">
-      {console.log(event)}
       {event ? (
         <Carousel style={{ height: "400px", width: "100%", margin: "auto" }}>
           {event.posters.map((poster) => (
@@ -56,7 +55,7 @@ function EventInfo() {
             <Carousel.Item>
 <iframe
             width="100%"
-            height="500px"
+            height="400px"
             src={event.youTube.url}
             title="youTube-video-player"
             allowFullScreen
@@ -76,7 +75,7 @@ function EventInfo() {
         <Col>
         
       <h2 className="my-3">{event?.title}</h2>
-      <h5>{event?.category}</h5>
+      <h5>{event?.categoryId.name}</h5>
       <h5>Venue: {event?.venueName}</h5>
       <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
         </Col>
@@ -89,7 +88,7 @@ function EventInfo() {
       <Row className="my-4">
         <Col>
           <p>
-            <strong>Organiser:</strong> {event?.organiserId}
+            <strong>Organiser:</strong> {event?.organiserId.username}
           </p>
           <Card className='mt-4'>
             <Card.Title className="mt-2">Description</Card.Title>

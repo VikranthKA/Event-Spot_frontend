@@ -8,11 +8,14 @@ export const fileConfig = {
 export const config = {
   headers: {
     Authorization: localStorage.getItem('token'),
+    "Content-Type":"application/json"
   },
 }
 
 export const paymentConfig = {
   headers: {
-    Authorization: localStorage.getItem('token')
+    Authorization: localStorage.getItem('token'),
+    "Content-Type":"application/json"
+
   },
 }

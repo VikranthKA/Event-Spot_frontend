@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import QrGenerator from './QrGenerator'
+import QrGenerator from "./QrGenerator"
 
 const ExpiryTime = ({ detailsInfo, expiryTime }) => {
   const [qrData, setQrData] = useState('')

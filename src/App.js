@@ -5,7 +5,7 @@ import { MyContext } from './Event-Spot/client/ContextApi/Context'
 import DisplayUser from './Event-Spot/client/components/UserProfile.js/DisplayUser'
 import Darkmode from './Event-Spot/client/components/Z_Dark_Mode/Darkmode'
 import Map from './Event-Spot/client/components/Location/Map'
-import CreateBookingInfo from './Event-Spot/client/components/Booking/CreateBookingInfo'
+import CreateBookingInfo from './Event-Spot/client/components/Booking/Qr-Component/CreateBookingInfo'
 import Test from './Event-Spot/client/components/Location/Test'
 import MapWithPolyline from './Event-Spot/client/components/Location/MapWithPolyline'
 import EventInfo from './Event-Spot/client/components/Event/EventInfo'
@@ -19,6 +19,8 @@ import UserProfile from './Event-Spot/client/components/UserProfile.js/UserProfi
 import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
 import ActualProfile from './Event-Spot/client/components/UserProfile.js/ActualProfile'
+import Success from './Event-Spot/client/components/Booking/Payment/Success'
+import Cancel from './Event-Spot/client/components/Booking/Payment/Cancel'
 
 function geoWithin(state,action){
   switch(action.type){
@@ -62,6 +64,9 @@ const App = () => {
           <Route path='/event-booking/:eventId' element={<TicketBook/>}/>
           <Route path='/show-QrCode' element={<CreateBookingInfo/>}/>
           <Route path='/profile' element={<ActualProfile/>}/>
+          <Route path="/success" element={<Success/>}/>
+          <Route path="/cancel" element={<Cancel/>}/>
+
       </Routes>
     </MyContext.Provider>
     </div>
