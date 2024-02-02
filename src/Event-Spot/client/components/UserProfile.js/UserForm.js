@@ -2,8 +2,10 @@ import { useContext, useState, useEffect } from "react";
 import axios from "../Api_Resources/axios";
 import Select from 'react-select';
 import { useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-dom'
 
 const UserForm = () => {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -87,6 +89,7 @@ const UserForm = () => {
       });
 
       console.log('Backend response:', response.data);
+      navigate('/profile')
 
       // Handle additional actions based on the response if needed
     } catch (error) {
@@ -97,15 +100,6 @@ const UserForm = () => {
 
   return (
     <div className="container mt-5">
-      <div className="text-center mb-3">
-        <img
-          className="rounded-circle"
-          src={`http://localhost:3333/Uploads/images/${displayPic}`}
-          alt="Profile"
-          width="100"
-          height="100"
-        />
-      </div>
 
       <form encType="multipart/form-data">
         <div className="mb-3">

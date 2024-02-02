@@ -97,7 +97,7 @@ function Header() {
             {localStorage.getItem("token") ? (
               <>
                 <li className="nav-item">
-                  <Link to="/user-profile">
+                  <Link to="/profile">
                     <FontAwesomeIcon icon={faUser} />
                   </Link>
                 </li>

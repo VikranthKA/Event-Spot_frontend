@@ -14,12 +14,9 @@ export default function Admin() {
       <div className="card text-center bg-light p-3"> {/* Add 'bg-light' class for a greyish background, and 'p-3' for padding */}
         <h1 className="card-title">Admin Profile</h1>
       </div>
-      <Container/>
-      <Create />
-      <button className="btn btn-warning ms-2">Approve or disapprove events</button>
+      <Container/>      
       <br/>
-      <br/>
-      
+      <br/>  
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import Create from "../Category/Create";
+
 import Profile from "./DisplayUser";
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
 

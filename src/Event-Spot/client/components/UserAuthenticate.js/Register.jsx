@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import './register.css';
 
 const registerValidationSchema = yup.object({
   email: yup.string().required().email(),
@@ -41,121 +43,135 @@ export default function Register() {
         console.error(err);
         setServerErrors(err.response.data.error);
         toast.error(err.response.data.error[0].msg);
-
         console.log(serverErrors);
       }
     },
   });
 
   return (
-    <div className="container mt-6 position-relative">
-      <div className="row">
-        <div className="col-md-6">
-          <h2 className="fs-1">Sign Up</h2>
-          <form onSubmit={formik.handleSubmit}>
-            {/* Username */}
-            <div className="mb-3">
-              <label htmlFor="username" className="form-label">
-                Username:
-              </label>
-              <input
-                type="text"
-                className={`form-control ${formik.errors.username ? 'is-invalid' : ''}`}
-                id="username"
-                name="username"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-              />
-              <div className="invalid-feedback">{formik.errors.username}</div>
-            </div>
+    <div>
+      <Row className='maxi'>
+        <Col md={6}>
+          <div>
+            <h1 style={{ marginLeft: '60px', marginTop: '15px' }}>Sign Up</h1>
+            <Form onSubmit={formik.handleSubmit} style={{ marginLeft: '60px', marginTop: '20px' }}>
+              <FormGroup>
+                <strong for='username'>Username:</strong>
+                <Input
+                  style={{width:"500px"}}
+                  type='text'
+                  id='username'
+                  name='username'
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  className={formik.errors.username ? 'is-invalid' : ''}
+                />
+                <div className='invalid-feedback'>{formik.errors.username}</div>
+              </FormGroup>
 
-            {/* Email */}
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email:
-              </label>
-              <input
-                type="text"
-                className={`form-control ${formik.errors.email ? 'is-invalid' : ''}`}
-                id="email"
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-              />
-              <div className="invalid-feedback">{formik.errors.email}</div>
-            </div>
+              <FormGroup>
+                <strong for='email'>Email:</strong>
+                <Input
+                  style={{width:"500px"}}
+                  type='text'
+                  id='email'
+                  name='email'
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  className={formik.errors.email ? 'is-invalid' : ''}
+                />
+                <div className='invalid-feedback'>{formik.errors.email}</div>
+              </FormGroup>
 
-            {/* Number */}
-            <div className="mb-3">
-              <label htmlFor="number" className="form-label">
-                Number:
-              </label>
-              <input
-                type="text"
-                className={`form-control ${formik.errors.number ? 'is-invalid' : ''}`}
-                id="number"
-                name="number"
-                value={formik.values.number}
-                onChange={formik.handleChange}
-              />
-              <div className="invalid-feedback">{formik.errors.number}</div>
-            </div>
+              <Row form>
+                <Col>
+                  <FormGroup>
+                    <strong for='number'>Number:</strong>
+                    <Input
+                    style={{width:"240px"}}
+                      type='text'
+                      id='number'
+                      name='number'
+                      value={formik.values.number}
+                      onChange={formik.handleChange}
+                      className={formik.errors.number ? 'is-invalid' : ''}
+                    />
+                    <div className='invalid-feedback'>{formik.errors.number}</div>
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup>
+                    <strong for='role'>Role:</strong>
+                    <Input
+                    style={{width:"170px"}}
+                      type='select'
+                      id='role'
+                      name='role'
+                      value={formik.values.role}
+                      onChange={formik.handleChange}
+                      className={formik.errors.role ? 'is-invalid' : ''}
+                    >
+                      <option value='' disabled>
+                        Select a role
+                      </option>
+                      <option value='Customer'>Customer</option>
+                      <option value='Organiser'>Organiser</option>
+                    </Input>
+                    <div className='invalid-feedback'>{formik.errors.role}</div>
+                  </FormGroup>
+                </Col>
+              </Row>
 
-            {/* Password */}
-            <div className="mb-4">
-              <label htmlFor="password" className="form-label">
-                Password:
-              </label>
-              <input
-                type="password"
-                className={`form-control ${formik.errors.password ? 'is-invalid' : ''}`}
-                id="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-              />
-              <div className="invalid-feedback">{formik.errors.password}</div>
-            </div>
+              <FormGroup>
+                <strong for='password'>Password:</strong>
+                <Input
+                  style={{width:"500px"}}
+                  type='password'
+                  id='password'
+                  name='password'
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  className={formik.errors.password ? 'is-invalid' : ''}
+                />
+                <div className='invalid-feedback'>{formik.errors.password}</div>
+              </FormGroup>
 
-            <div className="mb-3">
-              <label htmlFor="role" className="form-label">
-                Role:
-              </label>
-              <select
-                className={`form-select ${formik.errors.role ? 'is-invalid' : ''}`}
-                id="role"
-                name="role"
-                value={formik.values.role}
-                onChange={formik.handleChange}
-              >
-                <option value="" disabled>
-                  Select a role
-                </option>
-                <option value="Customer">Customer</option>
-                <option value="Organiser">Organiser</option>
-              </select>
-              <div className="invalid-feedback">{formik.errors.role}</div>
-            </div>
-            <div className="serverError">
-              <ToastContainer />
-              {/* {serverErrors && serverErrors.map((ele) => <span style={{ color: 'red' }}>{ele.msg}</span>)} */}
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>
-                Already Registered <Link to="/login">Login</Link>
+                <ToastContainer />
               </div>
-              <button type="submit" className="btn btn-dark">
-                Signup
-              </button>
-            </div>
-          </form>
-        </div>
 
-        <div className="col-md-6 ">
-          <img src="" alt="Registration" className="img-fluid" />
-        </div>
-      </div>
+              <div>
+                
+                <button type='submit' className='btn btn-dark'>
+                  Signup
+                </button>
+                <br/>
+                <br/>
+                <div>
+                  Already Registered ?<Link to='/login'>Login</Link>
+                </div>
+              </div>
+            </Form>
+          </div>
+        </Col>
+        <Col md={6}>
+          <div>
+            <img
+              className='image'
+              src='https://images.pexels.com/photos/1378866/pexels-photo-1378866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+              alt='Login Image'
+              style={{ objectFit: 'cover', width: '800px', height: '585px' }}
+            />
+          </div>
+          <div className="image-background">
+            <img
+              src='https://images.pexels.com/photos/1378866/pexels-photo-1378866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+              alt='Login Image'
+              style={{ objectFit: 'cover', maxWidth: '110%', width: '102%', height: '585px' }}
+            />
+          </div>
+        </Col>
+      </Row>
     </div>
-  )
+  );
 }
