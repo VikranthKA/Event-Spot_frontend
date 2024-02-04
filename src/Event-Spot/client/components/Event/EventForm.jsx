@@ -28,6 +28,19 @@ const EventForm = () => {
     ticketSaleStartTime: "",
     ticketSaleEndTime: "",
   })
+  // useEffect(() => {
+  //   // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
+  //   localStorage.setItem('form', JSON.stringify(form));
+  //   localStorage.setItem('youTube', JSON.stringify(youTube));
+  //   localStorage.setItem('actors', JSON.stringify(actors));
+  //   localStorage.setItem('allCategory', JSON.stringify(allCategory));
+  //   localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
+  //   localStorage.setItem('locObj', JSON.stringify(locObj));
+  //   localStorage.setItem('searchResults', JSON.stringify(searchResults));
+  //   localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+  // }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
+
+
   const [poster, setPoster] = useState({
     Clip: { name: '', file: null },
     Brochure: { name: '', file: null },
@@ -188,19 +201,7 @@ const EventForm = () => {
     }));
   };
 
-  useEffect(() => {
-    const storedFormData = localStorage.getItem('eventFormData');
-    const LocationObj = localStorage.getItem('locObj')
-    const ActorsData = localStorage.getItem('actors')
-    if (storedFormData && LocationObj && ActorsData) {
-      setForm(JSON.parse(storedFormData));
-    }
-  }, []);
 
-  // // Update localStorage whenever form data changes
-  useEffect(() => {
-    localStorage.setItem('eventFormData', JSON.stringify(form));
-  }, [form])
 
   // handle the form obj
   const handleNameValueChange = (name, value) => {
@@ -236,6 +237,63 @@ const EventForm = () => {
     updatedActors.splice(index, 1);
     setActors(updatedActors);
   };
+
+  // useEffect(() => {
+  //   // Retrieve form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress from localStorage
+  //   const storedForm = localStorage.getItem('form');
+  //   if (storedForm) {
+  //     setForm(JSON.parse(storedForm));
+  //   }
+
+  //   const storedYouTube = localStorage.getItem('youTube');
+  //   if (storedYouTube) {
+  //     setYouTube(JSON.parse(storedYouTube));
+  //   }
+
+  //   const storedActors = localStorage.getItem('actors');
+  //   if (storedActors) {
+  //     setActors(JSON.parse(storedActors));
+  //   }
+
+  //   const storedAllCategory = localStorage.getItem('allCategory');
+  //   if (storedAllCategory) {
+  //     setAllCategory(JSON.parse(storedAllCategory));
+  //   }
+
+  //   const storedSearchTerm = localStorage.getItem('searchTerm');
+  //   if (storedSearchTerm) {
+  //     setSearchTerm(JSON.parse(storedSearchTerm));
+  //   }
+
+  //   const storedLocObj = localStorage.getItem('locObj');
+  //   if (storedLocObj) {
+  //     setLocObj(JSON.parse(storedLocObj));
+  //   }
+
+  //   const storedSearchResults = localStorage.getItem('searchResults');
+  //   if (storedSearchResults) {
+  //     setSearchResults(JSON.parse(storedSearchResults));
+  //   }
+
+  //   const storedSelectedAddress = localStorage.getItem('selectedAddress');
+  //   if (storedSelectedAddress) {
+  //     setSelectedAddress(JSON.parse(storedSelectedAddress));
+  //   }
+  // }, []); // Empty dependency array ensures this effect runs only once on mount
+
+  // useEffect to save to localStorage
+  // useEffect(() => {
+  //   // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
+  //  if(form && youTube&& actors&& allCategory&& searchTerm&& locObj, searchResults, selectedAddress) {localStorage.setItem('form', JSON.stringify(form));
+  //   // localStorage.setItem('youTube', JSON.stringify(youTube));
+  //   localStorage.setItem('actors', JSON.stringify(actors));
+  //   localStorage.setItem('allCategory', JSON.stringify(allCategory));
+  //   localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
+  //   localStorage.setItem('locObj', JSON.stringify(locObj));
+  //   localStorage.setItem('searchResults', JSON.stringify(searchResults));
+  //   localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));}
+  // }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
+
 
   const validateStep = async () => {
     switch (step) {
@@ -393,17 +451,17 @@ const EventForm = () => {
 
       try {
         dispatch(startCreateEvent(eventFormData))
-        setForm("")
-        setActors("")
-        setPoster("")
-        setLocObj("")
-        setSelectedAddress("")
-        setSearchTerm("")
-        setActors("")
-        setYouTube("")
-        setErrors("")
-        setServerErrors("")
-        setTicketErrors("")
+        // setForm("")
+        // setActors("")
+        // setPoster("")
+        // setLocObj("")
+        // setSelectedAddress("")
+        // setSearchTerm("")
+        // setActors("")
+        // setYouTube("")
+        // setErrors("")
+        // setServerErrors("")
+        // setTicketErrors("")
       } catch (err) {
 
       }

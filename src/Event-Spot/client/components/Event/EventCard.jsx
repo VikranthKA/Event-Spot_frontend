@@ -1,17 +1,23 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import {Link} from 'react-router-dom'
+import moment from 'moment'
 
-function BasicExample({title,poster,description}) {
+function readableDate(inputDateString) {
+  const momentObject = moment(inputDateString);
+  return momentObject.format('LLLL');
+}
+function BasicExample({title,image,start,categoryName,id}) {
+
   return (
     <Card style={{ width: '18rem' }}>
-        add the localhost thing
-      <Card.Img variant="top" src={`poster[0].clipfile`} />
+      <img src={image} style={{backgroundSize:"cover"}} />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text>
-        {description}
+          {readableDate(start)}<br/>{categoryName}
         </Card.Text>
-        <Link to={`/event-info/${eventId}`}></Link>
+        <Link to={`/event-info/${id}`}></Link>
       </Card.Body>
     </Card>
   );

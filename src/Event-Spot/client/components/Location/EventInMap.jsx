@@ -166,7 +166,6 @@ function EventInMap() {
   };
 
   const handleRadiusChange = ()=>{
-    //add set time out
     handleGeoWithinEvents(radius, lonlat[1], lonlat[0])
 
   }
@@ -184,7 +183,7 @@ function EventInMap() {
         onBlur={handleRadiusChange}
         onChange={(e) => setRadius(parseInt(e.target.value, 10))}
       />
-      <p>Radius: {radius} meters</p>
+      <p>Radius: {radius} Meters</p>
 
       {center.length > 0 ? (
         <MapContainer center={[20.593684, 78.96288]} zoom={3} style={{ height: '400px' }}>

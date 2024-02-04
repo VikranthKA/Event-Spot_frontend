@@ -1,3 +1,4 @@
+import { toast } from "react-toastify"
 import axios from "../../components/Api_Resources/axios"
 import { config, paymentConfig } from "../../components/Api_Resources/config"
 
@@ -26,35 +27,45 @@ export const startPayment = (bookingId,card)=>{
     return async(dispatch)=>{
         try{
             const response = await axios.post(`/api/booking/${bookingId}/payment`,{card},paymentConfig)
-            dispatch(setStartBooking(response.data))   
+            console.log(response.data.id)
+            dispatch(setStartBooking(response.data)) 
+  
         }catch(err){
             console.log(err)
         }
     }
 }
 const setStartBooking = (data)=>{
-    return{
-        type:"CREATE_PAYMENT_TRUE",
-        paylaod:data
+    if(data){
+        localStorage.setItem("stripeId",data.id)
+        window.location = data.url
     }
+    // return{
+    //     type:"CREATE_PAYMENT_TRUE",
+    //     paylaod:data
+    // }
 
 }
 export const startPaymentStatus = (bookingId,card)=>{
     return async(dispatch)=>{
         try{
             const response = await axios.post()
-            console.log(response.data)
             dispatch(setUpadateStatus(response.data))   
         }catch(err){
+            toast.error(JSON.stringify(err.response.data.error))
+
             console.log(err)
         }
     }
 }
 const setUpadateStatus = (data)=>{
-    return{
-        type:"UPDATE_PAYMENT_TRUE",
-        paylaod:data
-    }
+
+        //add the logic of the dont know
+    
+    // return{
+    //     type:"UPDATE_PAYMENT_TRUE",
+    //     paylaod:data
+    // }
 
 }
 export const startPaymentDelete = (eventId,bookingId,card)=>{
@@ -70,6 +81,24 @@ export const startPaymentDelete = (eventId,bookingId,card)=>{
 const setPaymentDelate = (data)=>{
     return{
         type:"DELTE_PAYMENT_TRUE",
+        paylaod:data
+    }
+
+}
+export const startCancelPayment = (eventId,bookingId,card)=>{
+    return async(dispatch)=>{
+        try{
+            const response = await axios.delete(`/api/booking/${bookingId}`,paymentConfig)
+            dispatch(setCancelPayment(response.data))   
+        }catch(err){
+            toast.error(err.response.data.error)
+            console.log(err)
+        }
+    }
+}
+const setCancelPayment = (data)=>{
+    return{
+        type:"DELTE_BOOKING_TRUE",
         paylaod:data
     }
 

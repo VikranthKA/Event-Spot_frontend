@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { startGetEvents } from '../../react-redux/action/eventAction';
 import { startCreateBooking, startPayment } from "../../react-redux/action/bookingAction";
+import { config } from '../Api_Resources/config';
+import axios from '../Api_Resources/axios';
 
 // Action to update remaining ticket count in the Redux store
 const updateRemainingTickets = (eventId, updatedTickets) => ({
@@ -41,8 +43,25 @@ const TicketBook = () => {
     fetchData();
   }, [])
 
+  useEffect(()=>{
+    (async ()=>{
+      try{
+        const stripeId = localStorage.getItem("stripeId") 
+        const response = await axios.delete(`/api/delete-payment/${stripeId}`,config)
+        if(response) localStorage.removeItem("stripeId")
+
+
+      }catch(err){
+        console.log(err)
+      }
+    })()
+  })
+
   const handlePayment =()=>{
       dispatch(startPayment(bookedTicket._id,card))   
+  }
+  const handleCancelPayment = ()=>{
+    dispatch(startCreateBooking(bookedTicket._id))
   }
 
   const updateTicketsAndRemaining = (index, updateCount) => {
@@ -66,7 +85,7 @@ const TicketBook = () => {
         }),
       };
 
-      setEventDetails(updatedEventDetails);
+      setEventDetails(updatedEventDetails)
       return updatedTickets;
     });
   };
@@ -109,7 +128,7 @@ const TicketBook = () => {
       // Calculate the total amount for the current ticket
       const totalAmountForTicket = bookedTicket ? bookedTicket.count * ticket.ticketPrice : 0;
 
-      return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount, totalAmount: totalAmountForTicket };
+      return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount,ticketPrice:ticket.ticketPrice   }; //
     });
 
     dispatch(startCreateBooking(eventId, updatedEventTickets));
@@ -163,7 +182,7 @@ const TicketBook = () => {
           <Button color="primary" onClick={handlePayment}>
             Confirm Payment
           </Button>{' '}
-          <Button color="secondary" onClick={() => setModalVisible(false)}>
+          <Button color="secondary" onClick={handleCancelPayment}>
             Cancel
           </Button>
         </Modal.Footer>
