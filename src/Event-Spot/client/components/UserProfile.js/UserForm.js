@@ -17,7 +17,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const UserForm = () => {
   const navigate = useNavigate()
-  const {profileId} = useParams()
+  // const {profileId} = useParams()
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -122,7 +122,7 @@ const UserForm = () => {
       formData.append('lonlat[lat]', locObj.lonlat[1])
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
-
+      const profileId = "65bcdb6560b7e035c0987dc6"
       const response = await axios.put(`/api/profile/${profileId}`, formData, {
         headers: {
           Authorization: localStorage.getItem('token'),

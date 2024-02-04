@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import { Link, useNavigate } from 'react-router-dom';
 import Snackbar from './Snackbar';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
-import { ToastContainer, toast } from 'react-toastify';
 import './register.css'
 
 const loginValidationSchema = yup.object({
