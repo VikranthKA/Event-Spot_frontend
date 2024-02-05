@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import { Link, useNavigate } from 'react-router-dom';
 import Snackbar from './Snackbar';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
-import { ToastContainer, toast } from 'react-toastify';
 import './register.css'
 
 const loginValidationSchema = yup.object({
@@ -32,7 +31,7 @@ export default function Login() {
         localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
         setTimeout(() => {
-          navigate('/profile');
+          navigate('/user-profile');
         }, 2000);
         snackbarRef.current.show("Login Successful!", "success");
       } catch (e) {

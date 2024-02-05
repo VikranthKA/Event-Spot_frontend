@@ -18,10 +18,11 @@ import Login from './Event-Spot/client/components/UserAuthenticate.js/Login'
 import UserProfile from './Event-Spot/client/components/UserProfile.js/UserProfile'
 import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
-import ActualProfile from './Event-Spot/client/components/UserProfile.js/ActualProfile'
 import Success from './Event-Spot/client/components/Booking/Payment/Success'
 import Cancel from './Event-Spot/client/components/Booking/Payment/Cancel'
 import axios from './Event-Spot/client/components/Api_Resources/axios'
+import UserForm from './Event-Spot/client/components/UserProfile.js/UserForm'
+import AllEvents from './Event-Spot/client/components/Event/AllEvents'
 import { ToastContainer, toast } from 'react-toastify'
 
 function geoWithin(state,action){
@@ -73,9 +74,10 @@ const App = () => {
           <Route path='/event-info/:eventId' element={<EventInfo/>}/>
           <Route path='/event-booking/:eventId' element={<TicketBook/>}/>
           <Route path='/show-QrCode' element={<CreateBookingInfo/>}/>
-          <Route path='/profile' element={<ActualProfile/>}/>
           <Route path="/success" element={<Success/>}/>
           <Route path="/cancel" element={<Cancel/>}/>
+          <Route path="/edit-profile" element={<UserForm/>}/>
+          <Route path="/all-events" element={<AllEvents/>}/>
 
       </Routes>
       <ToastContainer/>

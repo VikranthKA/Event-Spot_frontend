@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode'
 import {useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
-import Organizer from './Organizer';
 import Admin from './Admin';
+import Organizer from './Organizer';
 import Customer from './Customer';
 export default function UserProfile(){
   const navigate = useNavigate();

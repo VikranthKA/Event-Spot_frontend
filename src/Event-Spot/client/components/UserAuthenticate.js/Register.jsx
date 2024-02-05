@@ -14,7 +14,7 @@ const registerValidationSchema = yup.object({
   password: yup.string().required().min(8).max(16),
   role: yup.string().required(),
   username: yup.string().required(),
-  number: yup.string().required(),
+  number: yup.number().required(),
 });
 
 export default function Register() {

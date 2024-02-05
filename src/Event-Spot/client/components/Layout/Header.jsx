@@ -99,9 +99,9 @@ function Header() {
           </form>
           <ul className="navbar-nav ml-auto">
             {localStorage.getItem("token") ? (
-              <div style={{display:"flex",justifyContent:"space-evenly"}}>
-                <li className="nav-item " style={{marginTop:"5px"}}>
-                  <Link to="/profile">
+              <>
+                <li className="nav-item">
+                  <Link to="/user-profile">
                     <FontAwesomeIcon icon={faUser} />
                   </Link>
                 </li>
