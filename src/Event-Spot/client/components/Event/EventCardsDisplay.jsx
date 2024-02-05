@@ -8,7 +8,11 @@ function EventCardsDisplay() {
     return state.events
   })
   return (
-    <div className='cards-display'>
+    <div className="containter">
+      <div className="head">
+        
+      </div>
+      <div className='cards-display'>
 
         {events?.map(ele=><EventCard
           image={ele.posters[0].image}
@@ -19,6 +23,7 @@ function EventCardsDisplay() {
 
         
         />)}
+      </div>
     </div>
   )
 }

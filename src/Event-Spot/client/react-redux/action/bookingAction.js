@@ -7,11 +7,14 @@ export const startCreateBooking = (eventId,tickets)=>{
         try{
             const response = await axios.post(`/api/event/${eventId}/booking`,{ tickets} ,config)
             console.log(response.data,"i action")
-            dispatch(setTicketBooked(response.data))
-
+            dispatch(setTicketBooked(response.data.booking))
+            dispatch(updateEventAfterBooking(response.data.updatedEvent))
         }catch(err){
             console.log(err)
             alert(err)
+            return{
+                type:"CLEAR_BOOKING_IN_STATE"
+            }
             
         }
     }
@@ -22,6 +25,19 @@ const setTicketBooked =(data)=>{
         type:"SET_TICKET_BOOKED_TRUE",
         payload:data
     }
+}
+export const setClearTicket =()=>{
+    return{
+        type:"CLEAR_BOOKING_IN_STATE"
+    }
+}
+
+const updateEventAfterBooking = (data)=>{
+    return {
+        type:"UPDATE_EVENT_AFTER_BOOKING",
+        payload:data
+    }
+
 }
 export const startPayment = (bookingId,card)=>{
     return async(dispatch)=>{

@@ -186,7 +186,7 @@ function EventInMap() {
       <p>Radius: {radius} Meters</p>
 
       {center.length > 0 ? (
-        <MapContainer center={[20.593684, 78.96288]} zoom={3} style={{ height: '400px' }}>
+        <MapContainer center={lonlat} zoom={7} style={{ height: '400px' }}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

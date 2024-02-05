@@ -1,5 +1,6 @@
 import axios from "../../components/Api_Resources/axios"
 import { fileConfig } from "../../components/Api_Resources/config"
+import {toast} from 'react-toastify'
 
 export const startGetEvents = ()=>{
     return async(dispatch)=>{
@@ -24,7 +25,6 @@ const setEvents = (data)=>{
     }
 }
 
-//Creating the event and updating in the event store
 export const startCreateEvent = (eventFormData)=>{
     return async(dispatch)=>{
         try{
@@ -44,3 +44,44 @@ const setCreateEvents =(data)=>{
         payload:data
     }
 }
+
+export const startUpdateEvent = (eventId,eventFormData)=>{
+    return async(dispatch)=>{
+        try{
+            const response = await axios.post(`/api/event/${eventId}`, eventFormData, fileConfig)
+            dispatch(setUpdateEvents(response.data))
+
+        }catch(err){
+            console.log(err)
+            alert(err,"Cannot create a Event")
+        }
+    }
+}
+
+const setUpdateEvents =(data)=>{
+    return {
+        type:"UPDATE_EVENT_AFTER_BOOKING",
+        payload:data
+    }
+}
+export const startDeleteEvent = (eventId,eventFormData)=>{
+    return async(dispatch)=>{
+        try{
+            const response = await axios.post(`/api/event/${eventId}`, eventFormData, fileConfig)
+            dispatch(setDeleteEvents(response.data))
+            toast.success("Event Created Successfully")
+
+        }catch(err){
+            console.log(err)
+            alert(err,"Cannot create a Event")
+        }
+    }
+}
+
+const setDeleteEvents =(data)=>{
+    return {
+        type:"DELETE_EVENT",
+        payload:data
+    }
+}
+
