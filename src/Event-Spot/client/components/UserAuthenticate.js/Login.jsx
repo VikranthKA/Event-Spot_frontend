@@ -31,7 +31,7 @@ export default function Login() {
         localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
         setTimeout(() => {
-          navigate('/profile');
+          navigate('/user-profile');
         }, 2000);
         snackbarRef.current.show("Login Successful!", "success");
       } catch (e) {

@@ -131,7 +131,7 @@ const UserForm = () => {
       });
 
       console.log('Backend response:', response.data);
-      navigate('/profile')
+      navigate('/user-profile')
 
       // Handle additional actions based on the response if needed
     } catch (error) {
@@ -223,3 +223,5 @@ const UserForm = () => {
 }
 
 export default UserForm;
+
+
