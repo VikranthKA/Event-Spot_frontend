@@ -23,6 +23,7 @@ import Cancel from './Event-Spot/client/components/Booking/Payment/Cancel'
 import axios from './Event-Spot/client/components/Api_Resources/axios'
 import UserForm from './Event-Spot/client/components/UserProfile.js/UserForm'
 import AllEvents from './Event-Spot/client/components/Event/AllEvents'
+import ApprovedList from './Event-Spot/client/components/Event/ApprovedList'
 import { ToastContainer, toast } from 'react-toastify'
 
 function geoWithin(state,action){
@@ -57,6 +58,10 @@ const App = () => {
     }
   }
 
+  useEffect(()=>{
+    console.log("radius",raduisEvents)
+  },[raduisEvents])
+
   return (
     <div>
 
@@ -78,6 +83,7 @@ const App = () => {
           <Route path="/cancel" element={<Cancel/>}/>
           <Route path="/edit-profile" element={<UserForm/>}/>
           <Route path="/all-events" element={<AllEvents/>}/>
+          <Route path="/approved-list" element={<ApprovedList/>}/>
 
       </Routes>
       <ToastContainer/>

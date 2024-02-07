@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from "../Api_Resources/axios";
-import { fileConfig } from "../Api_Resources/config";
-import z from 'zod'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Carousel, Spinner, Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText, ProgressBar, Alert } from 'react-bootstrap';
 
 import "./EventForm.css"
 import NotFound from '../Utils/NotFound/NotFound';
-import { startCreateEvent } from "../../react-redux/action/eventAction"
-import { useDispatch } from 'react-redux';
+import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eventAction"
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 const EventForm = () => {
+  const { eventId } = useParams()
+
   const [errors, setErrors] = useState({});
   const [serverErrors, setServerErrors] = useState()
   const [ticketErrors, setTicketErrors] = useState([])
+  const [ticketStartHelp, setTicketStartHelp] = useState(false)
+  const [ticketEndHelp, setTicketEndHelp] = useState(false)
+
   const [step, setStep] = useState(1)
+
   const [form, setForm] = useState({
     eventStartDateTime: "",
     title: " ",
@@ -28,18 +33,6 @@ const EventForm = () => {
     ticketSaleStartTime: "",
     ticketSaleEndTime: "",
   })
-  // useEffect(() => {
-  //   // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
-  //   localStorage.setItem('form', JSON.stringify(form));
-  //   localStorage.setItem('youTube', JSON.stringify(youTube));
-  //   localStorage.setItem('actors', JSON.stringify(actors));
-  //   localStorage.setItem('allCategory', JSON.stringify(allCategory));
-  //   localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
-  //   localStorage.setItem('locObj', JSON.stringify(locObj));
-  //   localStorage.setItem('searchResults', JSON.stringify(searchResults));
-  //   localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
-  // }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
-
 
   const [poster, setPoster] = useState({
     Clip: { name: '', file: null },
@@ -59,6 +52,58 @@ const EventForm = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const events = useSelector((state) => {
+    return state.events
+  })
+  const [event, setEvent] = useState([])
+  useEffect(() => {
+    (async () => {
+      if (events) {
+        const foundEvent = await events.find((ele) => ele._id === eventId)
+        setEvent(foundEvent)
+      }
+    }
+
+    )()
+  }, [])
+
+  useEffect(() => {
+
+    (async () => {
+      if (eventId && event) {
+        setForm({
+          eventStartDateTime: await event.eventStartDateTime && event.eventStartDateTime,
+          title: await event.title && event.title,
+          description: await event.description && event.description,
+          categoryId: "", ///i am not keeping the track of the name but i have the name of the category
+          ticketType: await event.ticketType.map((ticket) => ({
+            ticketName: ticket.tikcetName && ticket.tikcetName,
+            ticketPrice: ticket.tikcetPrice && parseInt(ticket.tikcetPrice),
+            ticketCount: ticket.tikcetCount && parseInt(ticket.tikcetCount)
+
+          })),
+          venueName: await event.venueName && event.venueName,
+          ticketSaleStartTime: await event.ticketSaleStartTime && event.ticketSaleStartTime,
+          ticketSaleEndTime: await event.ticketSaleEndTime && event.ticketSaleEndTime,
+        })
+        setPoster({
+          Clip: { name: await event.posters.ClipName && event.posters.ClipName, file: null },
+          Brochure: { name: await event.posters.Brochure && event.posters.Brochure, file: null }, ///Brochure name is not defined
+        })
+
+
+        setYouTube({
+          title: await event.youTube.title && event.youTube.title, url: event.youTube.url && event.youTube.url,
+        })
+        setLocObj((prevState) => ({
+          ...prevState,
+          address: event.addressInfo.address && event.addressInfo.address, city: event.addressInfo.city && event.addressInfo.city
+        }))
+
+      }
+    })()
+  }, [eventId])
 
   const dispatch = useDispatch()
 
@@ -103,7 +148,7 @@ const EventForm = () => {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await axios.get(`http://localhost:3333/api/categoryall`)
+        const response = await axios.get(`/api/categoryall`)
         const modifiedCategory = response.data.map((category) => ({
           label: category.name,
           value: category._id,
@@ -122,7 +167,7 @@ const EventForm = () => {
       const GEO_CODE_API_KEY = '659f7b557feb5653368044xyz79cdbd';
       const response = await axios.get(
         `https://geocode.maps.co/search?q=${searchTerm}&api_key=${GEO_CODE_API_KEY}`
-      );
+      );//add this in the .env webpack
       setSearchResults(response.data);
       if (response.data.length === 0) {
         setSearchResults([
@@ -200,9 +245,6 @@ const EventForm = () => {
       ],
     }));
   };
-
-
-
   // handle the form obj
   const handleNameValueChange = (name, value) => {
     setForm((prevForm) => ({
@@ -238,61 +280,63 @@ const EventForm = () => {
     setActors(updatedActors);
   };
 
-  // useEffect(() => {
-  //   // Retrieve form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress from localStorage
-  //   const storedForm = localStorage.getItem('form');
-  //   if (storedForm) {
-  //     setForm(JSON.parse(storedForm));
-  //   }
+  useEffect(() => {
+    // Retrieve form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress from localStorage
+    const storedForm = localStorage.getItem('form');
+    if (storedForm) {
+      setForm(JSON.parse(storedForm));
+    }
 
-  //   const storedYouTube = localStorage.getItem('youTube');
-  //   if (storedYouTube) {
-  //     setYouTube(JSON.parse(storedYouTube));
-  //   }
+    const storedYouTube = localStorage.getItem('youTube');
+    if (storedYouTube) {
+      setYouTube(JSON.parse(storedYouTube));
+    }
 
-  //   const storedActors = localStorage.getItem('actors');
-  //   if (storedActors) {
-  //     setActors(JSON.parse(storedActors));
-  //   }
+    const storedActors = localStorage.getItem('actors');
+    if (storedActors) {
+      setActors(JSON.parse(storedActors));
+    }
 
-  //   const storedAllCategory = localStorage.getItem('allCategory');
-  //   if (storedAllCategory) {
-  //     setAllCategory(JSON.parse(storedAllCategory));
-  //   }
+    const storedAllCategory = localStorage.getItem('allCategory');
+    if (storedAllCategory) {
+      setAllCategory(JSON.parse(storedAllCategory));
+    }
 
-  //   const storedSearchTerm = localStorage.getItem('searchTerm');
-  //   if (storedSearchTerm) {
-  //     setSearchTerm(JSON.parse(storedSearchTerm));
-  //   }
+    const storedSearchTerm = localStorage.getItem('searchTerm');
+    if (storedSearchTerm) {
+      setSearchTerm(JSON.parse(storedSearchTerm));
+    }
 
-  //   const storedLocObj = localStorage.getItem('locObj');
-  //   if (storedLocObj) {
-  //     setLocObj(JSON.parse(storedLocObj));
-  //   }
+    const storedLocObj = localStorage.getItem('locObj');
+    if (storedLocObj) {
+      setLocObj(JSON.parse(storedLocObj));
+    }
 
-  //   const storedSearchResults = localStorage.getItem('searchResults');
-  //   if (storedSearchResults) {
-  //     setSearchResults(JSON.parse(storedSearchResults));
-  //   }
+    const storedSearchResults = localStorage.getItem('searchResults');
+    if (storedSearchResults) {
+      setSearchResults(JSON.parse(storedSearchResults));
+    }
 
-  //   const storedSelectedAddress = localStorage.getItem('selectedAddress');
-  //   if (storedSelectedAddress) {
-  //     setSelectedAddress(JSON.parse(storedSelectedAddress));
-  //   }
-  // }, []); // Empty dependency array ensures this effect runs only once on mount
+    const storedSelectedAddress = localStorage.getItem('selectedAddress');
+    if (storedSelectedAddress) {
+      setSelectedAddress(JSON.parse(storedSelectedAddress));
+    }
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   // useEffect to save to localStorage
-  // useEffect(() => {
-  //   // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
-  //  if(form && youTube&& actors&& allCategory&& searchTerm&& locObj, searchResults, selectedAddress) {localStorage.setItem('form', JSON.stringify(form));
-  //   // localStorage.setItem('youTube', JSON.stringify(youTube));
-  //   localStorage.setItem('actors', JSON.stringify(actors));
-  //   localStorage.setItem('allCategory', JSON.stringify(allCategory));
-  //   localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
-  //   localStorage.setItem('locObj', JSON.stringify(locObj));
-  //   localStorage.setItem('searchResults', JSON.stringify(searchResults));
-  //   localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));}
-  // }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
+  useEffect(() => {
+    // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
+    if (form && youTube && actors && allCategory && searchTerm && locObj, searchResults, selectedAddress) {
+      localStorage.setItem('form', JSON.stringify(form));
+      // localStorage.setItem('youTube', JSON.stringify(youTube));
+      localStorage.setItem('actors', JSON.stringify(actors));
+      localStorage.setItem('allCategory', JSON.stringify(allCategory));
+      localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
+      localStorage.setItem('locObj', JSON.stringify(locObj));
+      localStorage.setItem('searchResults', JSON.stringify(searchResults));
+      localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+    }
+  }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
 
 
   const validateStep = async () => {
@@ -316,17 +360,19 @@ const EventForm = () => {
         }
         if (!form.venueName.trim()) {
           step1Errors.venueName = "Venue Name is required";
-        } if (form.ticketSaleEndTime && form.eventStartDateTime) {
-          if (form.ticketSaleEndTime > form.eventStartDateTime)
-            step1Errors.ticketSaleEndTime = "Ticket sale should be greater than Event start time"
+        } if (form.ticketSaleStartTime && form.eventStartDateTime) { //it can be written in the single line
+          if (form.ticketSaleStartTime > form.eventStartDateTime)
+            step1Errors.ticketSaleStartTime = "Ticket sale should be greater than Event start time"
         }
         try {
 
-          await setErrors({ ...step1Errors });
+          setErrors({ ...step1Errors })
           return Object.keys(step1Errors).length === 0;
         } catch (err) {
           console.log(err)
         }
+        break;
+
 
       case 2:
         let step2Errors = {};
@@ -341,11 +387,14 @@ const EventForm = () => {
           ticketCount: !ticket.ticketCount.trim()
         }))
         try {
-          await setTicketErrors({ ...step2Errors })
+          setTicketErrors([...errors])
           return !step2Errors.category && !ticketErrors.some((error) => Object.values(error).some((value) => value));
         } catch (err) {
           console.log(err)
         }
+
+        break;
+
 
       case 3:
         let step3Errors = {}
@@ -390,6 +439,7 @@ const EventForm = () => {
         } catch (err) {
           console.log(err)
         }
+        break;
       default:
         return true;
     };
@@ -405,52 +455,57 @@ const EventForm = () => {
   const prevStep = () => {
     setStep(step - 1)
   }
+
   const handleSubmit = async () => {
     const isValid = await validateStep()
     // const  = Object.keys(stepErrors).length === 0;
     if (isValid) {
 
-      const eventFormData = new FormData();
+      const eventFormData = new FormData()
 
       // Append individual fields
-      eventFormData.append('eventStartDateTime', form.eventStartDateTime);
+      eventFormData.append('eventStartDateTime', form.eventStartDateTime)
       // eventFormData.append('eventEndDateTime', form.eventEndDateTime);
-      eventFormData.append('title', form.title);
-      eventFormData.append('description', form.description);
-      eventFormData.append('venueName', form.venueName);
-      eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime);
-      eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime);
+      eventFormData.append('title', form.title)
+      eventFormData.append('description', form.description)
+      eventFormData.append('venueName', form.venueName)
+      eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime)
+      eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime)
 
-      eventFormData.append('categoryId', form.categoryId);
+      eventFormData.append('categoryId', form.categoryId)
       // Append ticketType array
       form.ticketType.forEach((ticket, index) => {
-        eventFormData.append(`ticketType[${index}][ticketName]`, ticket.ticketName);
-        eventFormData.append(`ticketType[${index}][ticketPrice]`, ticket.ticketPrice);
-        eventFormData.append(`ticketType[${index}][ticketCount]`, ticket.ticketCount);
-        eventFormData.append(`ticketType[${index}][remainingTickets]`, ticket.remainingTickets);
-      });
+        eventFormData.append(`ticketType[${index}][ticketName]`, ticket.ticketName)
+        eventFormData.append(`ticketType[${index}][ticketPrice]`, ticket.ticketPrice)
+        eventFormData.append(`ticketType[${index}][ticketCount]`, ticket.ticketCount)
+        eventFormData.append(`ticketType[${index}][remainingTickets]`, ticket.remainingTickets)
+      })
 
       actors.forEach((actor, index) => {
         eventFormData.append(`Actors[${index}][name]`, actor.name);
-      });
-      eventFormData.append('ClipName', poster.Clip.name);
+      })
+      eventFormData.append('ClipName', poster.Clip.name)
       eventFormData.append('ClipFile', poster.Clip.file)
 
       eventFormData.append('BrochureName', poster.Brochure.name)
       eventFormData.append('BrochureFile', poster.Brochure.file)
 
-      eventFormData.append('youTube[title]', youTube.title);
-      eventFormData.append('youTube[url]', youTube.url);
-      // Append addressInfo
-      eventFormData.append(`addressInfo[address]`, locObj.address);
-      eventFormData.append(`addressInfo[city]`, locObj.city);
+      eventFormData.append('youTube[title]', youTube.title)
+      eventFormData.append('youTube[url]', youTube.url)
+
+      eventFormData.append(`addressInfo[address]`, locObj.address)
+      eventFormData.append(`addressInfo[city]`, locObj.city)
       // Append location coordinates
       eventFormData.append(`location[lon]`, locObj.lonlat[0])
       eventFormData.append(`location[lat]`, locObj.lonlat[1])
-      console.log([...eventFormData], "i am event")
+      console.log([...eventFormData], "End Result")
 
       try {
-        dispatch(startCreateEvent(eventFormData))
+        if (event && eventId) {
+          dispatch(startUpdateEvent(eventFormData))
+        } else {
+          dispatch(startCreateEvent(eventFormData))
+        }
         // setForm("")
         // setActors("")
         // setPoster("")
@@ -463,7 +518,7 @@ const EventForm = () => {
         // setServerErrors("")
         // setTicketErrors("")
       } catch (err) {
-
+        ///write the dipated error here in toastify
       }
     };
   }
@@ -471,9 +526,27 @@ const EventForm = () => {
   const totalSteps = 3; // Update this if you have more steps
 
   const calculateProgress = () => {
-    return (step / totalSteps) * 100;
-  }
+    const formValues = Object.values(form).flat()
+    const posterValues = Object.values(poster).flatMap((p) => Object.values(p))
+    const youtubeValues = Object.values(youTube)
+    const actorsValues = actors.flat()
+    const locObjValues = Object.values(locObj).flat()
 
+    const allValues = [
+      ...formValues, ...posterValues, ...youtubeValues, ...actorsValues, ...locObjValues]
+
+    const filledFields = allValues.filter((value) => {
+      return typeof value === 'string' && value.trim() !== '';
+    }).length
+    const totalFields = allValues.length
+
+    if (totalFields === 0) {
+      return 0
+    }
+    const progress = (filledFields / totalFields) * 100
+    return Math.min(progress, 100)
+
+  }
 
   const renderFormSection = () => {
     switch (step) {
@@ -546,10 +619,13 @@ const EventForm = () => {
                       name="ticketSaleStartTime"
                       onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                       isInvalid={!!errors.ticketSaleStartTime}
+                      onFocus={() => setTicketStartHelp(true)}
+                      onBlur={() => setTicketStartHelp(false)}
 
                     />
-                    <Form.Text muted>Ticket Sale Start Time where users can start booking the event.</Form.Text>
-                    <Form.Control.Feedback type="invalid">
+                    {ticketStartHelp &&
+                      <Form.Text muted>Ticket Sale Start Time where users can start booking the event.</Form.Text>
+                    }                    <Form.Control.Feedback type="invalid">
                       {errors.ticketSaleStartTime && <div>{errors.ticketSaleStartTime}</div>}
                     </Form.Control.Feedback>
                   </Form.Group>
@@ -562,9 +638,14 @@ const EventForm = () => {
                       name="ticketSaleEndTime"
                       onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                       isInvalid={!!errors.ticketSaleEndTime}
+                      onFocus={() => setTicketEndHelp(true)}
+                      onBlur={() => setTicketEndHelp(false)}
 
                     />
-                    <Form.Text muted>Ticket Sale End Time where users cannot buy tickets for your event.</Form.Text>
+                    {ticketEndHelp && <Form.Text muted>
+
+                      <span>Ticket Sale End Time where users cannot buy tickets for your event.</span>
+                    </Form.Text>}
                     <Form.Control.Feedback type="invalid">
                       {errors.ticketSaleEndTime && <div>{errors.ticketSaleEndTime}</div>}
                     </Form.Control.Feedback>
@@ -585,10 +666,10 @@ const EventForm = () => {
                     {errors.venueName && <div>{errors.venueName}</div>}
                   </Form.Control.Feedback>
                 </Form.Group>
-
-                <Button variant="primary" onClick={async () => await nextStep()}>
-                  Next
-                </Button>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
+                    Next
+                  </Button></div>
               </Form>
             </Container>
           </div>
@@ -610,6 +691,7 @@ const EventForm = () => {
                     onChange={handleCategoryChange}
                     isSearchable
                     placeholder="Select Categories"
+                    style={{ width: "200px !important" }}
                   />
                   <div className="errors">
                     {errors.category && <span>{errors.category}</span>}
@@ -643,7 +725,6 @@ const EventForm = () => {
                         <Form.Control.Feedback type="invalid">
                           Ticket Price cannot be empty
                         </Form.Control.Feedback>
-
                       </Col>
                       <Col>
                         <Form.Label>Total Seat:</Form.Label>
@@ -657,13 +738,13 @@ const EventForm = () => {
                           Ticket seat cannot be empty
                         </Form.Control.Feedback>
                       </Col>
-                      {index >= 1 && (
-                        <Col>
-                          <Button variant="danger" onClick={() => handleRemoveSlot(index)}>
+                      <Col>
+                        {index >= 1 && (
+                          <Button variant="danger" onClick={() => handleRemoveSlot(index)} style={{ marginTop: "30px" }}>
                             Delete
                           </Button>
-                        </Col>
-                      )}
+                        )}
+                      </Col>
                     </Row>
                   ))}
                   <Button variant="primary" onClick={handleAddSlot}>
@@ -671,16 +752,21 @@ const EventForm = () => {
                   </Button>
                 </Form.Group>
 
+
                 <Row>
                   <Col>
-                    <Button variant="secondary" onClick={() => prevStep()}>
-                      Previous
-                    </Button>
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+
+                      <Button variant="secondary" style={{ height: "40px", width: "90px" }} onClick={() => prevStep()}>
+                        Previous
+                      </Button>
+                    </div>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={async () => await nextStep()}>
-                      Next
-                    </Button>
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                      <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
+                        Next
+                      </Button></div>
                   </Col>
                 </Row>
               </Form>
@@ -697,7 +783,7 @@ const EventForm = () => {
                 <Row>
                   <Col>
                     <Form.Group className="mb-3" controlId="clipName">
-                      <Form.Label>Clip Name:</Form.Label>
+                      <Form.Label>Clip Title:</Form.Label>
                       <Form.Control
                         type="text"
                         value={poster.Clip.name}
@@ -720,6 +806,7 @@ const EventForm = () => {
                       <Form.Control
                         type="file"
                         accept="image/*"
+                        //,"video/*"
                         onChange={handleClipFileChange}
                         isInvalid={!!errors.clipUpload}
 
@@ -734,7 +821,7 @@ const EventForm = () => {
                 <Row>
                   <Col>
                     <Form.Group className="mb-3" controlId="brochureName">
-                      <Form.Label>Brochure Name:</Form.Label>
+                      <Form.Label>Image Title:</Form.Label>
                       <Form.Control
                         type="text"
                         value={poster.Brochure.name}
@@ -749,7 +836,7 @@ const EventForm = () => {
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="brochureUpload">
-                      <Form.Label>Upload Brochure:</Form.Label>
+                      <Form.Label>Upload Image:</Form.Label>
                       <Form.Control
                         type="file"
                         accept="image/*"
@@ -767,7 +854,7 @@ const EventForm = () => {
                   <Col>
 
                     <Form.Group className="mb-3" controlId="youTubeName">
-                      <Form.Label>Youtube Name:</Form.Label>
+                      <Form.Label>Youtube Title:</Form.Label>
                       <Form.Control
                         type="text"
                         name="title"
@@ -810,6 +897,7 @@ const EventForm = () => {
                           placeholder="Type to search addresses"
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
+                          onFocus={() => setLocObj((prevLocObj) => ({ ...prevLocObj, selectedAddress: "" }))} ///the select an address is not working in the to empty
                           isInvalid={!!errors.searchTerm}
 
                         />
@@ -894,14 +982,20 @@ const EventForm = () => {
 
                 <Row className="mb-3">
                   <Col>
-                    <Button variant="secondary" onClick={() => prevStep()}>
-                      Previous
-                    </Button>
+
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+
+                      <Button variant="secondary" style={{ height: "40px", width: "90px", marginTop: "10px" }} onClick={() => prevStep()}>
+                        Previous
+                      </Button>
+                    </div>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={handleSubmit}>
-                      Submit
-                    </Button>
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                      <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={handleSubmit}>
+                        Submit
+
+                      </Button></div>
                   </Col>
                 </Row>
               </Form>
@@ -917,22 +1011,20 @@ const EventForm = () => {
   }, [errors])
 
 
-
   return (
-    <div>
+    <div style={{ minHeight: "100vh" }}>
       <Container>
-        <h1 style={{ textAlign: 'center', marginTop: "30px" }}> Event-Form</h1>
-        <div style={{ display: "inline", display: "flex", justifyContent: 'center', textAlign: "center" }}>
-
-          <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} style={{ marginTop: "70px", width: "450px" }} />
+        <h1 style={{ textAlign: 'center', marginTop: "30px", color: "#333", backgroundColor: "#fff", padding: "10px", boxShadow: "2px 2px 5px 0px rgba(0, 0, 0, 0.2)", borderRadius: "8px" }}>Event Form</h1>
+        <div style={{ display: "flex", justifyContent: 'center', textAlign: "center", marginBottom: "20px" }}>
+          <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} style={{ width: "450px" }} />
         </div>
       </Container>
-      <Container style={{ marginTop: "70px" }}>
-
+      <Container style={{ marginTop: "20px", padding: "20px", backgroundColor: "#fff", boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)", borderRadius: "5px" }}>
         {renderFormSection()}
       </Container>
     </div>
   );
 }
+
 
 export default EventForm;

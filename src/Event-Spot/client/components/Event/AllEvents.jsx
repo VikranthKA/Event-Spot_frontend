@@ -1,132 +1,118 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { pagination } from '../../react-redux/action/paginateAction';
 import axios from '../Api_Resources/axios';
+import { useNavigate } from 'react-router-dom';
 
-export default function AllEvents() {
-  const [events, setEvents] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [expandedDescriptions, setExpandedDescriptions] = useState({});
+const AllEvents = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, data, totalPages, currentPage, error } = useSelector((state) => state.pagination);
+
+  const [currentPageNum, setCurrentPageNum] = useState(1);
+  const [expandedEventId, setExpandedEventId] = useState(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axios.get(`/api/event?page=${currentPage}`);
-        setEvents(response.data.events);
-        setTotalPages(response.data.totalPages);
-      } catch (error) {
-        console.error('Error fetching events:', error);
-        // Handle error, e.g., show an error message to the user
-      }
-    };
+    dispatch(pagination(currentPageNum));
+  }, [dispatch, currentPageNum]);
 
-    fetchEvents();
-  }, [currentPage]);
+  const handlePageChange = (page) => {
+    setCurrentPageNum(page);
+  };
 
-  const toggleDescription = (eventId) => {
-    setExpandedDescriptions((prevDescriptions) => ({
-      ...prevDescriptions,
-      [eventId]: !prevDescriptions[eventId],
-    }));
+  const handleToggleDescription = (eventId) => {
+    setExpandedEventId(expandedEventId === eventId ? null : eventId);
   };
 
   const handleApprove = async (eventId) => {
     try {
-      const response = await axios.put(`/api/event/approve/${eventId}`);
-      const updatedEvent = response.data;
-      setEvents((prevEvents) =>
-        prevEvents.map((event) =>
-          event._id === updatedEvent._id ? updatedEvent : event
-        )
-      );
+      await axios.put(`/api/event/approve/${eventId}`);
+      // Refetch the API data after approval
+      dispatch(pagination(currentPageNum));
     } catch (error) {
       console.error('Error approving event:', error);
     }
   };
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
+  const handleNavigate = () => {
+    navigate('/approved-list');
   };
 
   return (
     <div className="container mt-5">
       <div className="card text-center bg-light p-3">
-        <h1 className="card-title">Events Approval</h1>
+        <h1 className="card-title">Approval list</h1>
       </div>
-      <div className="card-container d-flex flex-wrap justify-content-around" style={{marginTop:'20px'}}>
-        {events.map((event) => (
-          <div key={event._id} className="card mb-4" style={{ width: '18rem' }}>
-            {event.posters && event.posters.length > 0 && (
-              <img src={event.posters[0].image} className="card-img-top" alt={event.title} />
-            )}
-            <div className="card-body">
-              <h5 className="card-title">{event.title}</h5>
-              <p className="card-text">Category: {event.categoryId && event.categoryId.name}</p>
-              {expandedDescriptions[event._id] ? (
-                <div>
-                  <p className="card-text">Description: {event.description}</p>
-                  <button
-                    className="btn btn-link p-0"
-                    onClick={() => toggleDescription(event._id)}
-                  >
-                    Read Less
-                  </button>
+      <div className="row" style={{ marginTop: '20px' }}>
+        {error && <p>Error: {error}</p>}
+        {data && (
+          <>
+            {/* Map over your paginated events where isApproved is false and display them */}
+            {data.filter(event => !event.isApproved).map((event) => (
+              <div key={event._id} className="col-md-4 mb-4">
+                <div className="card" style={{ width: '18rem' }}>
+                  <img src={`http://localhost:3333/Uploads/images/${event.posters[0].image}`} className="card-img-top" alt="image" />
+                  <div className="card-body">
+                    <h5 className="card-title">{event.title}</h5>
+                    <p className="card-text">Category: {event.categoryId.name}</p>
+                    <div className="card-text">
+                      {expandedEventId === event._id ? (
+                        <div>{event.description}</div>
+                      ) : (
+                        <div>{event.description.slice(0, 100)}...</div>
+                      )}
+                    </div>
+                    <button
+                      className="btn btn-link"
+                      onClick={() => handleToggleDescription(event._id)}
+                    >
+                      {expandedEventId === event._id ? 'Read Less' : 'Read More'}
+                    </button>
+                    <button className='btn btn-success' onClick={()=>handleApprove(event._id)}>
+                      Approve
+                    </button>
+                  </div>
                 </div>
-              ) : (
-                <div>
-                  <p className="card-text">
-                    Description: {event.description.substring(0, 100)}
-                    {event.description.length > 100 && (
-                      <span>
-                        ...{' '}
-                        <button
-                          className="btn btn-link p-0"
-                          onClick={() => toggleDescription(event._id)}
-                        >
-                          Read More
-                        </button>
-                      </span>
-                    )}
-                  </p>
-                </div>
-              )}
-              <br />
-              <button className="btn btn-success" onClick={() => handleApprove(event._id)}>
-                Approve
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* Display pagination controls */}
+        <div className="row justify-content-center mt-4" style={{marginBottom:"20px"}}>
+          <div className="btn-group">
+            <button
+              className={`btn ${currentPageNum === 1 ? 'btn-dark' : 'btn-dark'}`}
+              onClick={() => handlePageChange(currentPageNum - 1)}
+              disabled={currentPageNum === 1}
+            >
+              Previous
+            </button>
+            {[...Array(totalPages).keys()].map((page) => (
+              <button
+                key={page + 1}
+                className={`btn ${currentPageNum === page + 1 ? 'btn-dark' : 'btn-secondary'}`}
+                onClick={() => handlePageChange(page + 1)}
+              >
+                {page + 1}
               </button>
-              <br />
-              <br />
-              <button className="btn btn-danger">disapprove</button>
-            </div>
+            ))}
+            <button
+              className={`btn ${currentPageNum === totalPages ? 'btn-secondary' : 'btn-dark'}`}
+              onClick={() => handlePageChange(currentPageNum + 1)}
+              disabled={currentPageNum === totalPages}
+            >
+              Next
+            </button>
           </div>
-        ))}
+        </div>
+        
       </div>
-      <div className="d-flex justify-content-center mt-3">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="btn btn-dark"
-        >
-          Previous
-        </button>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            className={`btn btn-dark ${currentPage === index + 1 ? 'active' : ''}`}
-          >
-            {index + 1}
+      <button className='btn btn-primary' style={{marginBottom:"20px"}} onClick={handleNavigate}>
+          Click here for already approved events
           </button>
-        ))}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="btn btn-dark"
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
-}
+};
+
+export default AllEvents;
