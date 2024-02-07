@@ -1,5 +1,6 @@
 import React, { useEffect ,useReducer,useState} from 'react'
 import {Routes,Route,Link} from 'react-router-dom' 
+import { jwtDecode } from 'jwt-decode';
 import './App.css'
 import { MyContext } from './Event-Spot/client/ContextApi/Context'
 import DisplayUser from './Event-Spot/client/components/UserProfile.js/DisplayUser'
@@ -24,6 +25,9 @@ import axios from './Event-Spot/client/components/Api_Resources/axios'
 import UserForm from './Event-Spot/client/components/UserProfile.js/UserForm'
 import AllEvents from './Event-Spot/client/components/Event/AllEvents'
 import { ToastContainer, toast } from 'react-toastify'
+import ForgotPassword from './Event-Spot/client/components/UserAuthenticate.js/ForgotPassword'
+import ResetPassword from './Event-Spot/client/components/UserAuthenticate.js/ResetPassword'
+import ViewHisBookings from './Event-Spot/client/components/ProfileHelpers/ViewHisBookings';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -39,6 +43,7 @@ function geoWithin(state,action){
 const App = () => {
   const [raduisEvents,dispatch] = useReducer(geoWithin,[])
   const [searchQuery,setSearchQuery] = useState("")
+  const [userData,setUserData] = useState("")
 
   const handleGeoWithinEvents = async(radius,lon,lat) =>{
     try{
@@ -57,11 +62,25 @@ const App = () => {
     }
   }
 
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+    const userObj = jwtDecode(localStorage.getItem('token'))
+    if(userObj) setUserData(userObj)
+    }
+
+    console.log(raduisEvents,"inside the contextAPI")
+  },[raduisEvents])
+
   return (
     <div>
 
       
-    <MyContext.Provider value={{raduisEvents,handleGeoWithinEvents,searchQuery,setSearchQuery}}>
+    <MyContext.Provider value={
+                              {raduisEvents,handleGeoWithinEvents,//handling the radius events
+                                searchQuery,setSearchQuery,//handling the search query
+                                userData//obj of the user info id,role,expriesIn
+                              }
+    }>
       <Header/>
         <Routes>
           <Route path='/' element={<Home/>}/>
@@ -78,6 +97,15 @@ const App = () => {
           <Route path="/cancel" element={<Cancel/>}/>
           <Route path="/edit-profile" element={<UserForm/>}/>
           <Route path="/all-events" element={<AllEvents/>}/>
+          <Route path="/login/forgot-password" element={<ForgotPassword/>} exact="true"/> 
+          <Route path="/resetPassword/:id/:token" element={<ResetPassword/>}/>
+          {/* <Route path="/user-booking" element={<ViewHisBookings/>}/> */}
+          <Route path="/event-form/:eventId" element={<EventForm/>}/>
+          
+
+
+
+
 
       </Routes>
       <ToastContainer/>

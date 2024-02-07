@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import CountDown from '../Utils/CountDown/CountDown';
 import { useParams,useNavigate } from 'react-router-dom';
@@ -8,15 +8,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startGetEvents, startRaduisEvents } from '../../react-redux/action/eventAction';
 import ReviewForm from '../Review/ReviewForm';
 import EventCardsDisplay from './EventCardsDisplay';
+import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
+import { MyContext } from '../../ContextApi/Context';
 
 // Import statements...
+function countRemainingTicket(tickets){
+const totalRemainingTickets = tickets.reduce((total, ticket) => total + ticket.remainingTickets, 0);
+return totalRemainingTickets
+}
 
 function EventInfo() {
   const { eventId } = useParams();
   const [event, setEvent] = useState('');
   const [reviewToggle, setReviewToggle] = useState(false);
   const dispatch = useDispatch();
-  const events = useSelector((state) => state.events);
+  const events = useSelector((state) => state.events)
+  const {userData} = useContext(MyContext)
 
   useEffect(() => {
     dispatch(startGetEvents());
@@ -45,7 +52,9 @@ function EventInfo() {
               <img
                 style={{ height: "400px", width: "100%", objectFit: "cover" }}
                 className="d-block w-100"
-                src={`${process.env.REACT_APP_IMAGE_URL}${poster.image}`}
+                // src={`${process.env.REACT_APP_IMAGE_URL}${poster.image}`}
+                src={`http://localhost:3333/Uploads/images/${poster.image}`}
+
 
                 alt={poster.ClipName || poster.BrochureName}
               />
@@ -79,22 +88,30 @@ function EventInfo() {
           <h5>Venue: {event?.venueName}</h5>
           <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
         </Col>
-        <button onClick={handleBookTickets}>Book</button>
 
         {/* <Col>
-          {event.ticketSaleStartTime && new Date(event.ticketSaleStartTime) > new Date() && event.remainingTickets >= 1 ? (
-            <button onClick={handleBookTickets}>Book</button>
-          ) : (
-            <CountDown ticketSaleStartTime={event.ticketSaleStartTime} />
-          )}
-          {event.ticketSaleStartTime && new Date(event.ticketSaleEndTime) <= new Date() && <h4>Ticket Booking Closed</h4>}
-        </Col> */}
-      </Row>
+      {event.ticketSaleStartTime && !event.ticketSaleEndTime && countRemainingTicket(event.ticketType) >=1 ? (
+        <button onClick={handleBookTickets}>Book</button>
+      ) : event.ticketSaleEndTime ? (
+        <h4>Ticket Booking Closed</h4>
+      ) : (
+        <CountDown ticketSaleStartTime={event.ticketSaleStartTime} />
+      )}
+    </Col> */}
+    <div>
+      {userData.role === 'organiser' && userData.id === event.organiserId ? (
+        <Button onClick={()=>navigate}>Edit</Button>
+      ) : (
+        <Button onClick={handleBookTickets}>Book</Button>
+      )}
+      <Button onClick={()=>navigate(`/event-form/${event._id}`)}>Edit</Button>
+    </div>      </Row>
       <Row className="my-4">
       </Row>
       <ListGroup as="ol" numbered className="my-4">
         <ListGroup.Item className="fw-bold">Reviews</ListGroup.Item>
-{  event.reviews && event?.reviews.map((review) => (
+        {/* userData.id==="Organiser" can u show the review for that event */}
+        { event.reviews?.length < 0 && event?.reviews?.map((review) => (
           <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
               <div className="fw-bold">{review.title}</div>
@@ -117,7 +134,7 @@ function EventInfo() {
         {reviewToggle && <ReviewForm />}
       </ListGroup>
     </Container>
-    <EventCardsDisplay />
+      {userData.role==="Organiser" ? <ViewHisEvents/>  :<EventCardsDisplay />}
     </div>
   );
 }

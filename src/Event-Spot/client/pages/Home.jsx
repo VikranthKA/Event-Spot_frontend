@@ -22,7 +22,9 @@ export default function Home() {
       <div className="header">
       </div>
       <div className="body">
-        {role && role === "Admin" ? <Dashboard /> : <EventInMap />}
+        {role && role === "Admin" ? <Dashboard /> :
+        
+         <EventInMap />}
       </div>
       <div className="footer">
         {(role === "Customer" || role === "Organiser") && <Footer />}
