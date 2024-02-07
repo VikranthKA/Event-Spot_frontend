@@ -3,7 +3,7 @@ import { Button, Card, Spinner, Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { startGetEvents } from '../../react-redux/action/eventAction';
-import { startCreateBooking, startPayment } from "../../react-redux/action/bookingAction";
+import { startCreateBooking, startPayment ,setClearTicket} from "../../react-redux/action/bookingAction";
 import { config } from '../Api_Resources/config';
 import axios from '../Api_Resources/axios';
 
@@ -41,6 +41,7 @@ const TicketBook = () => {
     };
 
     fetchData();
+    dispatch(setClearTicket())
   }, [])
 
   useEffect(()=>{
@@ -58,10 +59,12 @@ const TicketBook = () => {
   })
 
   const handlePayment =()=>{
+    console.log("payment")
       dispatch(startPayment(bookedTicket._id,card))   
   }
   const handleCancelPayment = ()=>{
-    dispatch(startCreateBooking(bookedTicket._id))
+    if(bookedTicket) dispatch(startCreateBooking(bookedTicket._id))
+    setModalVisible(false)
   }
 
   const updateTicketsAndRemaining = (index, updateCount) => {

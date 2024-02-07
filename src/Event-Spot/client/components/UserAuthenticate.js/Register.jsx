@@ -148,7 +148,7 @@ export default function Register() {
                 <br/>
                 <br/>
                 <div>
-                  Already Registered ?<Link to='/login'>Login</Link>
+                  Already Registered ?<Link to='/login'>Login</Link><br/><Link to="forgot-password" style={{textAlign:"center"}}>forgot-password</Link>
                 </div>
               </div>
             </Form>

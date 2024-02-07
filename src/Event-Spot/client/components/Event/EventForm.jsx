@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from "../Api_Resources/axios";
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -9,8 +9,20 @@ import NotFound from '../Utils/NotFound/NotFound';
 import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eventAction"
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { MyContext } from '../../ContextApi/Context';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
+
+function formatDateToTimeLocal(dateString){
+  const date = new Date(dateString);
+    date.setDate(15);
+    date.setUTCHours(17); 
+    date.setUTCMinutes(6); 
+    const formattedDate = date.toISOString().substring(0, 16);
+  return formattedDate
+
+}
 const EventForm = () => {
+  const {userData} = useContext(MyContext)
   const { eventId } = useParams()
 
   const [errors, setErrors] = useState({});
@@ -18,6 +30,7 @@ const EventForm = () => {
   const [ticketErrors, setTicketErrors] = useState([])
   const [ticketStartHelp, setTicketStartHelp] = useState(false)
   const [ticketEndHelp, setTicketEndHelp] = useState(false)
+  const [edit,setEdit] = useState(false)
 
   const [step, setStep] = useState(1)
 
@@ -53,57 +66,60 @@ const EventForm = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
+  const [event, setEvent] = useState([])
+  
   const events = useSelector((state) => {
     return state.events
   })
-  const [event, setEvent] = useState([])
   useEffect(() => {
     (async () => {
-      if (events) {
+      if (events.length>0) {
         const foundEvent = await events.find((ele) => ele._id === eventId)
         setEvent(foundEvent)
+        console.log(foundEvent,"i am event")
+        if (eventId && event && userData.id && userData.role==="Organiser") { 
+          setForm({
+            title:event.title && event.title,
+            eventStartDateTime: event.eventStartDateTime && formatDateToTimeLocal(event.eventStartDateTime),
+            description: event.description || "", // Provide a default value if event.description is undefined
+            categoryId: "", // You can handle categoryId differently based on your application logic
+            ticketType: event.ticketType?.map(ticket => ({
+              ticketName: ticket.ticketName || "",
+              ticketPrice: parseInt(ticket.ticketPrice) || 0,
+              ticketCount: parseInt(ticket.ticketCount) || 0
+            })) || [],
+            venueName: event.venueName || "",
+            ticketSaleStartTime: event.ticketSaleStartTime && formatDateToTimeLocal(event.ticketSaleStartTime),
+            ticketSaleEndTime: event.ticketSaleEndTime && formatDateToTimeLocal(event.ticketSaleEndTime),
+          });
+    
+          setPoster({
+            Clip: { name: event.posters?.ClipName || "", file: null },
+            Brochure: { name: event.posters?.Brochure || "", file: null },
+          });
+    
+          setYouTube({
+            title: event.youTube?.title || "",
+            url: event.youTube?.url || ""
+          });
+    
+          setLocObj(prevState => ({
+            ...prevState,
+            address: event.addressInfo?.address || "",
+            city: event.addressInfo?.city || ""
+          }));
+  
+          setEdit(true)
+          console.log(edit,"in the edit useEffect")
+        }
       }
     }
 
     )()
-  }, [])
-
-  useEffect(() => {
-
-    (async () => {
-      if (eventId && event) {
-        setForm({
-          eventStartDateTime: await event.eventStartDateTime && event.eventStartDateTime,
-          title: await event.title && event.title,
-          description: await event.description && event.description,
-          categoryId: "", ///i am not keeping the track of the name but i have the name of the category
-          ticketType: await event.ticketType.map((ticket) => ({
-            ticketName: ticket.tikcetName && ticket.tikcetName,
-            ticketPrice: ticket.tikcetPrice && parseInt(ticket.tikcetPrice),
-            ticketCount: ticket.tikcetCount && parseInt(ticket.tikcetCount)
-
-          })),
-          venueName: await event.venueName && event.venueName,
-          ticketSaleStartTime: await event.ticketSaleStartTime && event.ticketSaleStartTime,
-          ticketSaleEndTime: await event.ticketSaleEndTime && event.ticketSaleEndTime,
-        })
-        setPoster({
-          Clip: { name: await event.posters.ClipName && event.posters.ClipName, file: null },
-          Brochure: { name: await event.posters.Brochure && event.posters.Brochure, file: null }, ///Brochure name is not defined
-        })
+  }, [events])
 
 
-        setYouTube({
-          title: await event.youTube.title && event.youTube.title, url: event.youTube.url && event.youTube.url,
-        })
-        setLocObj((prevState) => ({
-          ...prevState,
-          address: event.addressInfo.address && event.addressInfo.address, city: event.addressInfo.city && event.addressInfo.city
-        }))
-
-      }
-    })()
-  }, [eventId])
+  
 
   const dispatch = useDispatch()
 
@@ -287,10 +303,10 @@ const EventForm = () => {
       setForm(JSON.parse(storedForm));
     }
 
-    const storedYouTube = localStorage.getItem('youTube');
-    if (storedYouTube) {
-      setYouTube(JSON.parse(storedYouTube));
-    }
+  //   const storedYouTube = localStorage.getItem('youTube')
+  //   if (storedYouTube) {
+  //     setYouTube(JSON.parse(storedYouTube));
+  //   }
 
     const storedActors = localStorage.getItem('actors');
     if (storedActors) {
@@ -323,30 +339,30 @@ const EventForm = () => {
     }
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
-  // useEffect to save to localStorage
-  useEffect(() => {
-    // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
-    if (form && youTube && actors && allCategory && searchTerm && locObj, searchResults, selectedAddress) {
-      localStorage.setItem('form', JSON.stringify(form));
-      // localStorage.setItem('youTube', JSON.stringify(youTube));
-      localStorage.setItem('actors', JSON.stringify(actors));
-      localStorage.setItem('allCategory', JSON.stringify(allCategory));
-      localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
-      localStorage.setItem('locObj', JSON.stringify(locObj));
-      localStorage.setItem('searchResults', JSON.stringify(searchResults));
-      localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
-    }
-  }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
+  // // useEffect to save to localStorage
+  // useEffect(() => {
+  //   // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
+  //   if (form && youTube && actors && allCategory && searchTerm && locObj, searchResults, selectedAddress) {
+  //     localStorage.setItem('form', JSON.stringify(form));
+  //     // localStorage.setItem('youTube', JSON.stringify(youTube));
+  //     localStorage.setItem('actors', JSON.stringify(actors));
+  //     localStorage.setItem('allCategory', JSON.stringify(allCategory));
+  //     localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
+  //     localStorage.setItem('locObj', JSON.stringify(locObj));
+  //     localStorage.setItem('searchResults', JSON.stringify(searchResults));
+  //     localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+  //   }
+  // }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
 
 
   const validateStep = async () => {
     switch (step) {
       case 1:
         let step1Errors = {}
-        if (!form.title.trim()) {
+        if (!form.title?.trim()) {
           step1Errors.title = "Title is required";
         }
-        if (!form.description.trim()) {
+        if (!form.description?.trim()) {
           step1Errors.description = "Description is required";
         }
         if (!form.ticketSaleStartTime) {
@@ -358,7 +374,7 @@ const EventForm = () => {
         if (!form.ticketSaleEndTime) {
           step1Errors.ticketSaleEndTime = "Ticket Sale End Time is required";
         }
-        if (!form.venueName.trim()) {
+        if (!form.venueName?.trim()) {
           step1Errors.venueName = "Venue Name is required";
         } if (form.ticketSaleStartTime && form.eventStartDateTime) { //it can be written in the single line
           if (form.ticketSaleStartTime > form.eventStartDateTime)
@@ -381,13 +397,13 @@ const EventForm = () => {
         }
         setErrors(step2Errors)
 
-        const errors = form.ticketType.map((ticket) => ({
-          ticketName: !ticket.ticketName.trim(),
-          ticketPrice: !ticket.ticketPrice.trim(),
-          ticketCount: !ticket.ticketCount.trim()
+        const errors = form.ticketType?.map((ticket) => ({
+          ticketName: !ticket.ticketName?.trim(),
+          ticketPrice: typeof ticket.ticketPrice !== 'number',
+          ticketCount: typeof ticket.ticketCount !== 'number'
         }))
         try {
-          setTicketErrors([...errors])
+         await setTicketErrors([...errors])
           return !step2Errors.category && !ticketErrors.some((error) => Object.values(error).some((value) => value));
         } catch (err) {
           console.log(err)
@@ -399,35 +415,35 @@ const EventForm = () => {
       case 3:
         let step3Errors = {}
 
-        if (!poster.Clip.name.trim()) {
+        if (!poster.Clip.name?.trim()) {
           step3Errors.clipName = "Clip Name is required";
         }
         if (!poster.Clip.file) {
           step3Errors.clipUpload = "Upload Clip is required";
         }
-        if (!poster.Brochure.name.trim()) {
+        if (!poster.Brochure.name?.trim()) {
           step3Errors.brochurename = "Brochure Name is required";  // Check if 'brochurename' matches the validation property
         }
         if (!poster.Brochure.file) {
           step3Errors.brochureUplaod = "Brochure Upload is required";
         }
-        if (!youTube.title.trim()) {
+        if (!youTube.title?.trim()) {
           step3Errors.youTubeName = "YouTube Name is required";
         }
-        if (!youTube.url.trim()) {
+        if (!youTube.url?.trim()) {
           step3Errors.youTubeUrl = "YouTube URL is required";
         }
-        if (!searchTerm.trim()) {
+        if (!searchTerm?.trim()) {
           step3Errors.searchAddress = "Search Address is required";
         }
-        if (!locObj.city.trim()) {
+        if (!locObj.city?.trim()) {
           step3Errors.cityName = "Search Address is required";
         }
         if (!selectedAddress) {
           step3Errors.selectedAddress = "Select an Address is required";
         }
         actors.forEach((actor, index) => {
-          if (!actor.name.trim()) {
+          if (!actor.name?.trim()) {
             step3Errors[`actorName${index}`] = `Actor ${index + 1} Name is required`
           }
         })
@@ -458,7 +474,6 @@ const EventForm = () => {
 
   const handleSubmit = async () => {
     const isValid = await validateStep()
-    // const  = Object.keys(stepErrors).length === 0;
     if (isValid) {
 
       const eventFormData = new FormData()
@@ -482,7 +497,7 @@ const EventForm = () => {
       })
 
       actors.forEach((actor, index) => {
-        eventFormData.append(`Actors[${index}][name]`, actor.name);
+        eventFormData.append(`Actors[${index}][name]`, actor.name)
       })
       eventFormData.append('ClipName', poster.Clip.name)
       eventFormData.append('ClipFile', poster.Clip.file)
@@ -501,8 +516,8 @@ const EventForm = () => {
       console.log([...eventFormData], "End Result")
 
       try {
-        if (event && eventId) {
-          dispatch(startUpdateEvent(eventFormData))
+        if (edit) {
+          dispatch(startUpdateEvent(eventFormData,event._id))
         } else {
           dispatch(startCreateEvent(eventFormData))
         }
@@ -523,7 +538,6 @@ const EventForm = () => {
     };
   }
 
-  const totalSteps = 3; // Update this if you have more steps
 
   const calculateProgress = () => {
     const formValues = Object.values(form).flat()
@@ -535,8 +549,8 @@ const EventForm = () => {
     const allValues = [
       ...formValues, ...posterValues, ...youtubeValues, ...actorsValues, ...locObjValues]
 
-    const filledFields = allValues.filter((value) => {
-      return typeof value === 'string' && value.trim() !== '';
+    const filledFields = allValues?.filter((value) => {
+      return typeof value === 'string' && value?.trim() !== '';
     }).length
     const totalFields = allValues.length
 
@@ -548,7 +562,7 @@ const EventForm = () => {
 
   }
 
-  const renderFormSection = () => {
+  const renderFormSection = () =>{
     switch (step) {
       case 1:
         return (
@@ -991,11 +1005,8 @@ const EventForm = () => {
                     </div>
                   </Col>
                   <Col>
-                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                      <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={handleSubmit}>
-                        Submit
+                  {edit ? <Button variant="primary" style={{ height: "60px", width: "120px" }} onClick={handleSubmit}>Confirm Edit</Button> : <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={handleSubmit}>Submit</Button>}
 
-                      </Button></div>
                   </Col>
                 </Row>
               </Form>
@@ -1006,11 +1017,6 @@ const EventForm = () => {
         return "Not found"
     }
   }
-  useEffect(() => {
-    console.log(errors, "i am error")
-  }, [errors])
-
-
   return (
     <div style={{ minHeight: "100vh" }}>
       <Container>

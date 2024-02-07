@@ -1,7 +1,9 @@
 import React from 'react';
-import CountdownClock from 'react-countdown-clock';
+import { ToastContainer, toast } from 'react-toastify';
+import Countdown from 'react-countdown';
 
 const CountDown = ({ ticketSaleStartTime }) => {
+  console.log(ticketSaleStartTime,"date")
   const calculateRemainingTime = () => {
     const targetTime = new Date(ticketSaleStartTime).getTime();
     const currentTime = new Date().getTime();
@@ -10,13 +12,14 @@ const CountDown = ({ ticketSaleStartTime }) => {
 
   return (
     <div className='countDown'>
-      <CountdownClock
+      <Countdown
         seconds={calculateRemainingTime() / 1000}
         color="#004777"
         alpha={0.9}
-        size={50} // Adjust the size as needed
-        onComplete={() => console.log('Countdown completed')}
+        size={50} 
+        onComplete={() => toast.info("Booking are Opened")}
       />
+      <ToastContainer/>
     </div>
   );
 };

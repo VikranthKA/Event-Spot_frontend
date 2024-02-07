@@ -8,7 +8,7 @@ export const startGetEvents = ()=>{
             try{
                 const response = await axios.get(`/api/event`)
                 dispatch(setEvents(response.data))
-                console.log("action",response.data)
+                console.log(response.data,"data")
             }catch(err){
                 console.log(err)
                 alert(err)
@@ -45,7 +45,7 @@ const setCreateEvents =(data)=>{
     }
 }
 
-export const startUpdateEvent = (eventId,eventFormData)=>{
+export const startUpdateEvent = (eventFormData,eventId)=>{
     return async(dispatch)=>{
         try{
             const response = await axios.post(`/api/event/${eventId}`, eventFormData, fileConfig)
@@ -84,3 +84,4 @@ const setDeleteEvents =(data)=>{
         payload:data
     }
 }
+

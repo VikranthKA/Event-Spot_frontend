@@ -4,6 +4,9 @@ const bookingReducer = (state=bookingInitialState,action)=>{
         case "SET_TICKET_BOOKED_TRUE":{
             return {...state,...action.payload}
         }
+        case "CLEAR_BOOKING_IN_STATE":{
+            return {  }
+        }
         default:{
             return {...state}
         }
