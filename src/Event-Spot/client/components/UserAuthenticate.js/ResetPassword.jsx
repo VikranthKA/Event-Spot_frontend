@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from "../Api_Resources/axios";
+import { toast,ToastContainer } from 'react-toastify';
 
 function ResetPassword() {
   const { id, token } = useParams();
@@ -33,11 +34,12 @@ function ResetPassword() {
         const response = await axios.post(`/api/reset-password/${id}/${token}`, formData);
        
 
-        if (response.data.status === 'success') {
-          alert('Password changed successfully');
-          navigate('/login');
+        if (response.data.msg) {
+          toast.success(response.data.msg)
+            navigate('/login');
         }
       } catch (e) {
+        toast.error("Somthing Went Wrong!")
         setUser({ ...user, serverErrors: e.response.data.errors });
       }
     }
@@ -74,6 +76,7 @@ function ResetPassword() {
             name="password"
             id="password"
             className="form-control"
+            style={{width:"300px"}}
           />
         </div>
 
@@ -91,6 +94,8 @@ function ResetPassword() {
           </button>
         </div>
       </form>
+      <ToastContainer/>
+
     </div>
   );
 }

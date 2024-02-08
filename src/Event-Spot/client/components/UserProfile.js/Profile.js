@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import axios from '../Api_Resources/axios';
 import './ActualProfile.css'; // Import a separate CSS file for styling
 import UserForm from './UserForm';
+import { config } from '../Api_Resources/config';
+import ViewHisBookings from '../ProfileHelpers/ViewHisBookings';
 
 export default function Profile (){
   const [profileData, setProfileData] = useState(null);
@@ -12,11 +14,7 @@ export default function Profile (){
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`api/profile`, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
+        const response = await axios.get(`api/profile`,config)
 
         if (response.data) {
           console.log(response.data)
@@ -62,10 +60,10 @@ export default function Profile (){
   }
 
   return (
-    <div className="actual-profile-container">
-      <div className="card mt-3">
-        <h2 className="card-header d-flex justify-content-between align-items-center">
-          Profile Details
+    <div className="container mt-5">
+      <div className="card shadow" style={{width:"700px", marginLeft:"200px"}}>
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <h5 className="mb-0">Profile Details</h5>
           <div>
             {profileData && (
               <Link to="/edit-profile" className="btn btn-primary me-2">
@@ -78,33 +76,42 @@ export default function Profile (){
               </Link>
             )}
           </div>
-        </h2>
+        </div>
         <div className="card-body">
-          <img
-            className="rounded-circle mb-3"
-            src={`http://localhost:3333/Uploads/images/${profileData.profilePic}`}
-            alt="Profile"
-            width="100"
-            height="100"
-          />
-            <p className="card-text">
-        <strong>Username:</strong> {profileData.userId.username}
-    </p>
-    <p className="card-text">
-        <strong>Role:</strong> {profileData.userId.role}
-    </p>
-    <p className="card-text">
-        <strong>Email:</strong> {profileData.userId.email}
-    </p>
-    <p className="card-text">
-        <strong>Description:</strong> {profileData.description}
-    </p>
-    <p className="card-text">
-        <strong>Address:</strong> {profileData.addressInfo.address}
-    </p>
+          <div className="row">
+            <div className="col-md-4 text-center" style={{marginTop:"20px"}}>
+              <img
+                className="rounded-circle mb-3"
+                src={`http://localhost:3333/Uploads/images/${profileData.profilePic}`}
+                alt="Profile"
+                width="150"
+                height="150"
+              />
+            </div>
+            <div className="col-md-8">
+              <p className="card-text">
+                <strong>Username:</strong> {profileData.userId.username}
+              </p>
+              <p className="card-text">
+                <strong>Role:</strong> {profileData.userId.role}
+              </p>
+              <p className="card-text">
+                <strong>Email:</strong> {profileData.userId.email}
+              </p>
+              <p className="card-text">
+                <strong>Description:</strong> {profileData.description}
+              </p>
+              <p className="card-text">
+                <strong>Address:</strong> {profileData.addressInfo.address}
+              </p>
+            </div>
+            <div>
+              <ViewHisBookings profileData={profileData}/>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
+}

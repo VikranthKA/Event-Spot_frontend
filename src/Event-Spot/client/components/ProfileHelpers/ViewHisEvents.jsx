@@ -16,12 +16,28 @@ useEffect(()=>{
 function filterEventsByOrganizer(events, organizerId) {
     return events.filter(event => event.organiserId === organizerId)
 }
+try{
 const foundEvent = filterEventsByOrganizer(eventsData, userData.id)
 setOrganizerEvents(foundEvent)
 console.log(foundEvent,"these are the events i created")
+}catch(err){
+  console.log(err)
+}
+
+
 
 
 },[userData])
+
+
+// toast.promise(
+//   foundEvent(), 
+//   {
+//     pending: 'Updating...',
+//     success: 'Update successful!',
+//     error: 'Update failed',
+//   }
+// )
 
   return (
     <div className="container">
