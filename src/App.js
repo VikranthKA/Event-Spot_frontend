@@ -29,6 +29,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import ForgotPassword from './Event-Spot/client/components/UserAuthenticate.js/ForgotPassword'
 import ResetPassword from './Event-Spot/client/components/UserAuthenticate.js/ResetPassword'
 import ViewHisBookings from './Event-Spot/client/components/ProfileHelpers/ViewHisBookings';
+import Deactivate from './Event-Spot/client/components/UserProfile.js/Deactivate';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -102,6 +103,9 @@ const App = () => {
           <Route path="/resetPassword/:id/:token" element={<ResetPassword/>}/>
           {/* <Route path="/user-booking" element={<ViewHisBookings/>}/> */}
           <Route path="/event-form/:eventId" element={<EventForm/>}/>
+          <Route path="/approved-list" element={<ApprovedList/>}/>
+          <Route path="/user-deactivate" element={<Deactivate/>}/>
+
           
 
 

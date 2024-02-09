@@ -1,5 +1,3 @@
-// actions.js
-
 import axios from '../../components/Api_Resources/axios';
 
 export const eventPaginate = () => ({
@@ -16,11 +14,12 @@ export const paginationError = (error) => ({
   payload: error
 });
 
-export const pagination = (page) => {
+export const pagination = (page = null) => {
   return async (dispatch) => {
     dispatch(eventPaginate());
     try {
-      const response = await axios.get(`/api/paginate/event?page=${page}`);
+      const pageNumber = page !== null ? page : 1; // Use the provided page number or default to 1
+      const response = await axios.get(`/api/paginate/event?page=${pageNumber}`);
       const { events, totalPages, currentPage } = response.data;
       dispatch(paginationSuccess(events, totalPages, currentPage));
     } catch (err) {
@@ -29,3 +28,4 @@ export const pagination = (page) => {
     }
   };
 };
+

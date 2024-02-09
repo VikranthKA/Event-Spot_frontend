@@ -123,7 +123,7 @@ const UserForm = () => {
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
       const profileId = "65bcdb6560b7e035c0987dc6"
-      const response = await axios.put(`/api/profile/${profileId}`, formData, {
+      const response = await axios.put(`/api/profile`, formData, {
         headers: {
           Authorization: localStorage.getItem('token'),
           'Content-Type': 'multipart/form-data',
@@ -150,7 +150,7 @@ const UserForm = () => {
   </label>
   <FilePond
     files={filePondFiles}
-    allowMultiple={true} // Set to true if you want to allow multiple files
+    allowMultiple={false} // Set to true if you want to allow multiple files
     onupdatefiles={(fileItems) => {
       setFilePondFiles(fileItems.map((fileItem) => fileItem.file));
     }}

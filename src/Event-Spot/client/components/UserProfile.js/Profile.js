@@ -66,7 +66,7 @@ export default function Profile (){
           <h5 className="mb-0">Profile Details</h5>
           <div>
             {profileData && (
-              <Link to="/edit-profile" className="btn btn-primary me-2">
+              <Link to="/edit-profile" className="btn btn-warning me-2">
                 Edit
               </Link>
             )}

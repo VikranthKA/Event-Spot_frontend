@@ -27,12 +27,15 @@ const AllEvents = () => {
   const handleApprove = async (eventId) => {
     try {
       await axios.put(`/api/event/approve/${eventId}`);
-      // Refetch the API data after approval
-      dispatch(pagination(currentPageNum));
+      // Refetch the API data for the current page
+      dispatch(pagination(currentPage));
     } catch (error) {
       console.error('Error approving event:', error);
     }
   };
+  
+  
+  
 
   const handleNavigate = () => {
     navigate('/approved-list');
@@ -40,7 +43,7 @@ const AllEvents = () => {
 
   return (
     <div className="container mt-5">
-      <div className="card text-center bg-light p-3">
+      <div className="card text-center bg-light p-3" style={{width:"1050px"}}>
         <h1 className="card-title">Approval list</h1>
       </div>
       <div className="row" style={{ marginTop: '20px' }}>
@@ -51,7 +54,7 @@ const AllEvents = () => {
             {data.filter(event => !event.isApproved).map((event) => (
               <div key={event._id} className="col-md-4 mb-4">
                 <div className="card" style={{ width: '18rem' }}>
-                  <img src={`http://localhost:3333/Uploads/images/${event.posters[0].image}`} className="card-img-top" alt="image" />
+                  <img src={`http://localhost:3333/Uploads/images/${event.posters[0].image}`} className="card-img-top" alt="card" />
                   <div className="card-body">
                     <h5 className="card-title">{event.title}</h5>
                     <p className="card-text">Category: {event.categoryId.name}</p>
