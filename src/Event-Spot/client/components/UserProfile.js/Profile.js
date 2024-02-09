@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import axios from '../Api_Resources/axios';
 import './ActualProfile.css'; // Import a separate CSS file for styling
 import UserForm from './UserForm';
+import { config } from '../Api_Resources/config';
+import ViewHisBookings from '../ProfileHelpers/ViewHisBookings';
 
 export default function Profile (){
   const [profileData, setProfileData] = useState(null);
@@ -12,11 +14,7 @@ export default function Profile (){
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`api/profile`, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
+        const response = await axios.get(`api/profile`,config)
 
         if (response.data) {
           console.log(response.data)
@@ -107,6 +105,10 @@ export default function Profile (){
                 <strong>Address:</strong> {profileData.addressInfo.address}
               </p>
             </div>
+            <div>
+              <ViewHisBookings profileData={profileData}/>
+            </div>
+
           </div>
         </div>
       </div>

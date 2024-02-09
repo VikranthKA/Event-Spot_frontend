@@ -1,11 +1,18 @@
-import React from 'react'
+import TicketCard from "./TicketCard"
 
-const ViewHisBookings = () => {
+export default function ViewHisBooking({profileData}) {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <div className="tickets">
+      {profileData.bookings.map((ele)=>ele.tickets.map((ticket)=><TicketCard
+            id={ticket._id} 
+            quantity={ticket.quantity}
+            ticketPrice={ticket.ticketPrice}
+            ticketType={ticket.ticketType}
+            totalAmount={ticket.totalAmount}
+          />
+        ))
+      } 
 
-export default ViewHisBookings
+    </div>
+  );
+}

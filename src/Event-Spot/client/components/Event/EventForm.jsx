@@ -10,6 +10,7 @@ import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eve
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { MyContext } from '../../ContextApi/Context';
+import { toast } from 'react-toastify';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 
 function formatDateToTimeLocal(dateString){
@@ -25,6 +26,7 @@ const EventForm = () => {
   const {userData} = useContext(MyContext)
   const { eventId } = useParams()
 
+  const [event, setEvent] = useState([])
   const [errors, setErrors] = useState({});
   const [serverErrors, setServerErrors] = useState()
   const [ticketErrors, setTicketErrors] = useState([])
@@ -32,10 +34,14 @@ const EventForm = () => {
   const [ticketEndHelp, setTicketEndHelp] = useState(false)
   const [edit,setEdit] = useState(false)
 
+  const events = useSelector((state) => {
+    return state.events
+  })
+
   const [step, setStep] = useState(1)
 
   const [form, setForm] = useState({
-    eventStartDateTime: "",
+    eventStartDateTime: event && event.title ? event.title : "" ,
     title: " ",
     description: " ",
     categoryId: null,
@@ -52,7 +58,7 @@ const EventForm = () => {
     Brochure: { name: '', file: null },
   })
   const [youTube, setYouTube] = useState({
-    title: " ", url: " ",
+    title:  "", url: "",
   })
   const [actors, setActors] = useState([{ name: " " }])
   const [allCategory, setAllCategory] = useState([]);
@@ -66,56 +72,72 @@ const EventForm = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const [event, setEvent] = useState([])
-  
-  const events = useSelector((state) => {
-    return state.events
-  })
   useEffect(() => {
-    (async () => {
-      if (events.length>0) {
-        const foundEvent = await events.find((ele) => ele._id === eventId)
-        setEvent(foundEvent)
-        console.log(foundEvent,"i am event")
-        if (eventId && event && userData.id && userData.role==="Organiser") { 
-          setForm({
-            title:event.title && event.title,
-            eventStartDateTime: event.eventStartDateTime && formatDateToTimeLocal(event.eventStartDateTime),
-            description: event.description || "", // Provide a default value if event.description is undefined
-            categoryId: "", // You can handle categoryId differently based on your application logic
-            ticketType: event.ticketType?.map(ticket => ({
-              ticketName: ticket.ticketName || "",
-              ticketPrice: parseInt(ticket.ticketPrice) || 0,
-              ticketCount: parseInt(ticket.ticketCount) || 0
-            })) || [],
-            venueName: event.venueName || "",
-            ticketSaleStartTime: event.ticketSaleStartTime && formatDateToTimeLocal(event.ticketSaleStartTime),
-            ticketSaleEndTime: event.ticketSaleEndTime && formatDateToTimeLocal(event.ticketSaleEndTime),
-          });
-    
-          setPoster({
-            Clip: { name: event.posters?.ClipName || "", file: null },
-            Brochure: { name: event.posters?.Brochure || "", file: null },
-          });
-    
-          setYouTube({
-            title: event.youTube?.title || "",
-            url: event.youTube?.url || ""
-          });
-    
-          setLocObj(prevState => ({
-            ...prevState,
-            address: event.addressInfo?.address || "",
-            city: event.addressInfo?.city || ""
-          }));
-  
-          setEdit(true)
-          console.log(edit,"in the edit useEffect")
+    const fetchData = async () => {
+      if (events.length > 0) {
+        const foundEvent = events.find(ele => ele._id === eventId);
+        setEvent(foundEvent);
+        if (
+          eventId &&
+          event &&
+          userData.id &&
+          userData.role === 'Organiser'
+        ) {
+          console.log(eventId)
+
+          try {
+            toast.info("Updating the state")
+            setForm({
+              title: event.title || '',
+              eventStartDateTime:
+                event.eventStartDateTime &&
+                formatDateToTimeLocal(event.eventStartDateTime),
+              description: event.description || '',
+              categoryId: '',
+              ticketType:
+                event.ticketType?.map(ticket => ({
+                  ticketName: ticket.ticketName || '',
+                  ticketPrice: parseInt(ticket.ticketPrice) || 0,
+                  ticketCount: parseInt(ticket.ticketCount) || 0,
+                })) || [],
+              venueName: event.venueName || '',
+              ticketSaleStartTime:
+                event.ticketSaleStartTime &&
+                formatDateToTimeLocal(event.ticketSaleStartTime),
+              ticketSaleEndTime:
+                event.ticketSaleEndTime &&
+                formatDateToTimeLocal(event.ticketSaleEndTime),
+            });
+
+            setPoster({
+              Clip: { name: event.posters?.ClipName || '', file: null },
+              Brochure: { name: event.posters?.Brochure || '', file: null },
+            });
+
+            setYouTube({
+              title: event.youTube?.title || '',
+              url: event.youTube?.url || '',
+            });
+
+            setLocObj(prevState => ({
+              ...prevState,
+              address: event.addressInfo?.address || '',
+              city: event.addressInfo?.city || '',
+            }));
+
+            setEdit(true);
+
+            toast.success("State updated successfully")
+
+            
+          } catch (error) {
+            console.error('Error updating:', error);
+          }
         }
       }
-    }
+    };
 
-    )()
+    fetchData();
   }, [events])
 
 

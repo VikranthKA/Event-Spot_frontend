@@ -99,7 +99,7 @@ const App = () => {
           <Route path="/cancel" element={<Cancel/>}/>
           <Route path="/edit-profile" element={<UserForm/>}/>
           <Route path="/all-events" element={<AllEvents/>}/>
-          <Route path="/login/forgot-password" element={<ForgotPassword/>} exact="true"/> 
+          <Route path="/forgot-password" element={<ForgotPassword/>} exact="true"/> 
           <Route path="/resetPassword/:id/:token" element={<ResetPassword/>}/>
           {/* <Route path="/user-booking" element={<ViewHisBookings/>}/> */}
           <Route path="/event-form/:eventId" element={<EventForm/>}/>

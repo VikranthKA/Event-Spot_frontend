@@ -5,6 +5,8 @@ import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
 import { MyContext } from '../../ContextApi/Context';
+import eventLogo from "../../Z_images/event_logo.png"
+
 
 
 

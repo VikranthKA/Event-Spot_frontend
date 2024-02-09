@@ -7,7 +7,6 @@ import { startCreateBooking, startPayment ,setClearTicket} from "../../react-red
 import { config } from '../Api_Resources/config';
 import axios from '../Api_Resources/axios';
 
-// Action to update remaining ticket count in the Redux store
 const updateRemainingTickets = (eventId, updatedTickets) => ({
   type: 'UPDATE_REMAINING_TICKETS',
   payload: { eventId, updatedTickets },
@@ -80,6 +79,7 @@ const TicketBook = () => {
             const updatedTicket = { ...ticket, remainingTickets, Quantity: ticket.ticketCount - remainingTickets };
 
             // Dispatch action to update remaining ticket count in the Redux store
+
             dispatch(updateRemainingTickets(eventId, [...eventDetails.ticketType.slice(0, i), updatedTicket, ...eventDetails.ticketType.slice(i + 1)]));
 
             return updatedTicket;
@@ -131,10 +131,13 @@ const TicketBook = () => {
       // Calculate the total amount for the current ticket
       const totalAmountForTicket = bookedTicket ? bookedTicket.count * ticket.ticketPrice : 0;
 
+
       return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount,ticketPrice:ticket.ticketPrice   }; //
     });
+    const filteredTickets = updatedEventTickets.filter((ticket) => ticket.Quantity > 0);
 
-    dispatch(startCreateBooking(eventId, updatedEventTickets));
+
+    dispatch(startCreateBooking(eventId, filteredTickets));
     setModalVisible(true); // Show modal after creating booking
   };
 
@@ -196,4 +199,4 @@ const TicketBook = () => {
   );
 };
 
-export default TicketBook;
+export default TicketBook
