@@ -62,13 +62,13 @@ export default function Profile (){
   }
 
   return (
-    <div className="actual-profile-container">
-      <div className="card mt-3">
-        <h2 className="card-header d-flex justify-content-between align-items-center">
-          Profile Details
+    <div className="container mt-5">
+      <div className="card shadow" style={{width:"700px", marginLeft:"200px"}}>
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <h5 className="mb-0">Profile Details</h5>
           <div>
             {profileData && (
-              <Link to="/edit-profile" className="btn btn-primary me-2">
+              <Link to="/edit-profile" className="btn btn-warning me-2">
                 Edit
               </Link>
             )}
@@ -78,33 +78,38 @@ export default function Profile (){
               </Link>
             )}
           </div>
-        </h2>
+        </div>
         <div className="card-body">
-          <img
-            className="rounded-circle mb-3"
-            src={`http://localhost:3333/Uploads/images/${profileData.profilePic}`}
-            alt="Profile"
-            width="100"
-            height="100"
-          />
-            <p className="card-text">
-        <strong>Username:</strong> {profileData.userId.username}
-    </p>
-    <p className="card-text">
-        <strong>Role:</strong> {profileData.userId.role}
-    </p>
-    <p className="card-text">
-        <strong>Email:</strong> {profileData.userId.email}
-    </p>
-    <p className="card-text">
-        <strong>Description:</strong> {profileData.description}
-    </p>
-    <p className="card-text">
-        <strong>Address:</strong> {profileData.addressInfo.address}
-    </p>
+          <div className="row">
+            <div className="col-md-4 text-center" style={{marginTop:"20px"}}>
+              <img
+                className="rounded-circle mb-3"
+                src={`http://localhost:3333/Uploads/images/${profileData.profilePic}`}
+                alt="Profile"
+                width="150"
+                height="150"
+              />
+            </div>
+            <div className="col-md-8">
+              <p className="card-text">
+                <strong>Username:</strong> {profileData.userId.username}
+              </p>
+              <p className="card-text">
+                <strong>Role:</strong> {profileData.userId.role}
+              </p>
+              <p className="card-text">
+                <strong>Email:</strong> {profileData.userId.email}
+              </p>
+              <p className="card-text">
+                <strong>Description:</strong> {profileData.description}
+              </p>
+              <p className="card-text">
+                <strong>Address:</strong> {profileData.addressInfo.address}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
+}

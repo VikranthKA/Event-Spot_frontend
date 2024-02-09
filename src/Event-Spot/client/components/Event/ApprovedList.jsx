@@ -29,7 +29,7 @@ function Approved({ events, pagination }) {
 
   return (
     <div className="container mt-5">
-      <div className="card text-center bg-light p-3">
+      <div className="card text-center bg-light p-3" style={{width:"1050px"}}>
         <h1 className="card-title">Approved list</h1>
       </div>
       <div className="row events-list" style={{ marginTop: '20px' }}>

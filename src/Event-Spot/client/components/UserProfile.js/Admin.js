@@ -10,10 +10,14 @@ export default function Admin() {
     navigate('/all-events');
   }
 
+  const handleDeactivate = () =>{
+    navigate('/user-deactivate')
+  }
+
   return (
     <div className="container mt-5">
-      <div className="card text-center bg-light p-3">
-        <h1 className="card-title">Admin Profile</h1>
+      <div>
+        <h1>Admin Profile</h1>
       </div>
       <Profile />
       <Create />
@@ -21,6 +25,9 @@ export default function Admin() {
         <button className="btn btn-primary" onClick={onClick}>
           Approve or disapprove events here
         </button>
+        <br/>
+        <br/>
+        <button className="btn btn-primary" onClick={handleDeactivate}>Click here to deactivate users</button>
       </div>
       <br />
       <br />

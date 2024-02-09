@@ -3,7 +3,7 @@ const eventReducer = (state=eventInitialState,action)=>{
     switch(action.type){
         case "GET_ALL_EVENTS_BY_API":{
             console.log("Payload in reducer:", action.payload);
-            return [...action.payload.events]
+            return [...action.payload]
         }
         case "CREATE_NEW_EVENT":{
             return [action.payload,...state]
