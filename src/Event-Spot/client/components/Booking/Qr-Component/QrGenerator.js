@@ -6,7 +6,7 @@ function QrGenerator({QrData}) {
         // value,//empty 
         back:" ",//#FFFFFF bgcolor
         fore:" ",//#000000 color
-        size:256//256 
+        size:70//256 
     })
      
 

@@ -15,7 +15,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 
 
-const UserForm = () => {
+const UserForm2 = () => {
   const navigate = useNavigate()
   // const {profileId} = useParams()
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,7 +32,7 @@ const UserForm = () => {
   const [displayPic, setDisplayPic] = useState('');
   const [userDetails, setUserDetails] = useState('');
   const [filePondFiles, setFilePondFiles] = useState([]);
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
   useEffect(() => {
     fetchAddresses(); // Call fetchAddresses when the component mounts
   }, []);
@@ -82,7 +82,7 @@ const UserForm = () => {
     setDescription(e.target.value);
   };
 
-  const updateForm = async () => {
+  const formSubmit = async () => {
     try {
       const formData = new FormData();
       formData.append('profilePic', filePondFiles[0]);
@@ -93,8 +93,8 @@ const UserForm = () => {
       formData.append('lonlat[lat]', locObj.lonlat[1])
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
-      // const profileId = "65bcdb6560b7e035c0987dc6"
-      const response = await axios.put(`/api/profile`, formData, {
+
+      const response = await axios.post('/api/profile', formData, {
         headers: {
           Authorization: localStorage.getItem('token'),
           'Content-Type': 'multipart/form-data',
@@ -110,6 +110,7 @@ const UserForm = () => {
       // Handle error scenarios
     }
   };
+
 
   return (
     <div className="container mt-5">
@@ -183,14 +184,15 @@ const UserForm = () => {
         </div>
 
         <div className="mb-3">
-          {/* <button type="button" className="btn btn-dark" onClick={formSubmit}>
+          <button type="button" className="btn btn-dark" onClick={formSubmit}>
             Submit
-          </button> */}
-          <button type="button" className="btn btn-dark" onClick={updateForm}>Update</button>
+          </button>
+          {/* <button type="button" className="btn btn-dark" onClick={updateForm}>Update</button> */}
         </div>
       </form>
     </div>
   );
 }
 
-export default UserForm
+export default UserForm2;
+

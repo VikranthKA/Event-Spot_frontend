@@ -30,6 +30,8 @@ import ForgotPassword from './Event-Spot/client/components/UserAuthenticate.js/F
 import ResetPassword from './Event-Spot/client/components/UserAuthenticate.js/ResetPassword'
 import ViewHisBookings from './Event-Spot/client/components/ProfileHelpers/ViewHisBookings';
 import Deactivate from './Event-Spot/client/components/UserProfile.js/Deactivate';
+import { config } from './Event-Spot/client/components/Api_Resources/config';
+import UserForm2 from './Event-Spot/client/components/UserProfile.js/UserForm2';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -42,16 +44,26 @@ function geoWithin(state,action){
   }
 }
 
+function profileFunction (state, action){
+  switch(action.type){
+    case "SET_PROFILE_DATA":
+      return action.payload
+      default:
+        return { ...state }
+  }
+}
+
 const App = () => {
-  const [raduisEvents,dispatch] = useReducer(geoWithin,[])
+  const [raduisEvents,radiusDispatch] = useReducer(geoWithin,[])
   const [searchQuery,setSearchQuery] = useState("")
   const [userData,setUserData] = useState("")
+  const [profile, profileDispatch] = useReducer(profileFunction,"")
 
   const handleGeoWithinEvents = async(radius,lon,lat) =>{
     try{
         const response = await axios.get(`/api/event/${radius}/${lon}/${lat}`)
         console.log(response.data)
-        dispatch(
+        radiusDispatch(
           {
             type:"GET_ALL_RADIUSEVENT_BY_API_TRUE",
             payload:response.data
@@ -73,6 +85,28 @@ const App = () => {
     console.log(raduisEvents,"inside the contextAPI")
   },[raduisEvents])
 
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get(`api/profile`, config);
+
+        if (response.data) {
+          console.log(response.data);
+          profileDispatch({ type: 'SET_PROFILE_DATA', payload: response.data });
+        } else {
+          // setError('User profile not found');
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        // setError('Error fetching user profile');
+      }
+    };
+
+    fetchProfileData();
+  }, [localStorage.getItem('token')]);
+
+
+
   return (
     <div>
 
@@ -80,7 +114,8 @@ const App = () => {
     <MyContext.Provider value={
                               {raduisEvents,handleGeoWithinEvents,//handling the radius events
                                 searchQuery,setSearchQuery,//handling the search query
-                                userData//obj of the user info id,role,expriesIn
+                                userData,//obj of the user info id,role,expriesIn
+                                profile //displaying user profile
                               }
     }>
       <Header/>
@@ -105,12 +140,7 @@ const App = () => {
           <Route path="/event-form/:eventId" element={<EventForm/>}/>
           <Route path="/approved-list" element={<ApprovedList/>}/>
           <Route path="/user-deactivate" element={<Deactivate/>}/>
-
-          
-
-
-
-
+          <Route path="/create-profile" element={<UserForm2/>}/>
 
       </Routes>
       <ToastContainer/>

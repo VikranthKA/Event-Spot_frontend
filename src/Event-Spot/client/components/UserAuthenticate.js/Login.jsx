@@ -7,6 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Snackbar from './Snackbar';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import './register.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const loginValidationSchema = yup.object({
   email: yup.string().required().email(),
@@ -27,6 +29,7 @@ export default function Login() {
     validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
       try {
+        setServerErrors('');
         const response = await axios.post('api/user/login', values);
         localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
@@ -35,7 +38,9 @@ export default function Login() {
         }, 2000);
         snackbarRef.current.show("Login Successful!", "success");
       } catch (e) {
+        setServerErrors(e.response.data);
         snackbarRef.current.show("Login Failed. Check your credentials and try again.", "fail");
+        toast.error(e.response.data);
         console.error(e);
       }
     },
@@ -79,6 +84,9 @@ export default function Login() {
               </FormGroup>
 
               <div>
+              </div>
+              <div>
+                <ToastContainer />
               </div>
 
               <div>
