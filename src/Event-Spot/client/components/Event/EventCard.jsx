@@ -8,6 +8,15 @@ function readableDate(inputDateString) {
 }
 function EventCard({title,image,start,categoryName,id}) {
 
+import {Link} from 'react-router-dom'
+import moment from 'moment'
+
+function readableDate(inputDateString) {
+  const momentObject = moment(inputDateString);
+  return momentObject.format('LLLL');
+}
+function EventCard({title,image,start,categoryName,id}) {
+
   return (
     <Card style={{ width: '18rem',border:"1px solid black" }}>
 
@@ -19,11 +28,14 @@ function EventCard({title,image,start,categoryName,id}) {
         <Card.Title>{title}</Card.Title>
         <Card.Text>
           {readableDate(start)}<br/>{categoryName}
+          {readableDate(start)}<br/>{categoryName}
         </Card.Text>
+        <Link to={`/event-info/${id}`}>View</Link>
         <Link to={`/event-info/${id}`}>View</Link>
       </Card.Body>
     </Card>
   );
 }
 
+export default EventCard
 export default EventCard

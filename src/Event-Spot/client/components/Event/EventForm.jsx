@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from "../Api_Resources/axios";
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -6,6 +7,11 @@ import { Container, Carousel, Spinner, ProgressBar,Row, Col, Form, Card, ListGro
 
 import "./EventForm.css"
 import NotFound from '../Utils/NotFound/NotFound';
+import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eventAction"
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { MyContext } from '../../ContextApi/Context';
+import { toast } from 'react-toastify';
 import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eventAction"
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -21,6 +27,10 @@ const EventForm = () => {
   const { eventId } = useParams()
 
   const [event, setEvent] = useState([])
+  const {userData} = useContext(MyContext)
+  const { eventId } = useParams()
+
+  const [event, setEvent] = useState([])
   const [errors, setErrors] = useState({});
   const [serverErrors, setServerErrors] = useState()
   const [ticketErrors, setTicketErrors] = useState([])
@@ -32,9 +42,19 @@ const EventForm = () => {
     return state.events
   })
 
+  const [ticketStartHelp, setTicketStartHelp] = useState(false)
+  const [ticketEndHelp, setTicketEndHelp] = useState(false)
+  const [edit,setEdit] = useState(false)
+
+  const events = useSelector((state) => {
+    return state.events
+  })
+
   const [step, setStep] = useState(1)
 
+
   const [form, setForm] = useState({
+    eventStartDateTime: event && event.title ? event.title : "" ,
     eventStartDateTime: event && event.title ? event.title : "" ,
     title: " ",
     description: " ",
@@ -47,11 +67,13 @@ const EventForm = () => {
     ticketSaleEndTime: "",
   })
 
+
   const [poster, setPoster] = useState({
     Clip: { name: '', file: null },
     Brochure: { name: '', file: null },
   })
   const [youTube, setYouTube] = useState({
+    title:  "", url: "",
     title:  "", url: "",
   })
   const [actors, setActors] = useState([{ name: " " }])
@@ -124,6 +146,7 @@ const EventForm = () => {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
+        const response = await axios.get(`/api/categoryall`)
         const response = await axios.get(`/api/categoryall`)
         const modifiedCategory = response.data.map((category) => ({
           label: category.name,
@@ -320,8 +343,10 @@ const EventForm = () => {
       case 1:
         let step1Errors = {}
         if (!form.title?.trim()) {
+        if (!form.title?.trim()) {
           step1Errors.title = "Title is required";
         }
+        if (!form.description?.trim()) {
         if (!form.description?.trim()) {
           step1Errors.description = "Description is required";
         }
@@ -335,7 +360,11 @@ const EventForm = () => {
           step1Errors.ticketSaleEndTime = "Ticket Sale End Time is required";
         }
         if (!form.venueName?.trim()) {
+        if (!form.venueName?.trim()) {
           step1Errors.venueName = "Venue Name is required";
+        } if (form.ticketSaleStartTime && form.eventStartDateTime) { //it can be written in the single line
+          if (form.ticketSaleStartTime > form.eventStartDateTime)
+            step1Errors.ticketSaleStartTime = "Ticket sale should be greater than Event start time"
         } if (form.ticketSaleStartTime && form.eventStartDateTime) { //it can be written in the single line
           if (form.ticketSaleStartTime > form.eventStartDateTime)
             step1Errors.ticketSaleStartTime = "Ticket sale should be greater than Event start time"
@@ -343,10 +372,13 @@ const EventForm = () => {
         try {
 
           setErrors({ ...step1Errors })
+          setErrors({ ...step1Errors })
           return Object.keys(step1Errors).length === 0;
         } catch (err) {
           console.log(err)
         }
+        break;
+
         break;
 
 
@@ -364,6 +396,7 @@ const EventForm = () => {
         }))
         try {
          await setTicketErrors([...errors])
+         await setTicketErrors([...errors])
           return !step2Errors.category && !ticketErrors.some((error) => Object.values(error).some((value) => value));
         } catch (err) {
           console.log(err)
@@ -372,9 +405,13 @@ const EventForm = () => {
         break;
 
 
+        break;
+
+
       case 3:
         let step3Errors = {}
 
+        if (!poster.Clip.name?.trim()) {
         if (!poster.Clip.name?.trim()) {
           step3Errors.clipName = "Clip Name is required";
         }
@@ -382,20 +419,25 @@ const EventForm = () => {
           step3Errors.clipUpload = "Upload Clip is required";
         }
         if (!poster.Brochure.name?.trim()) {
+        if (!poster.Brochure.name?.trim()) {
           step3Errors.brochurename = "Brochure Name is required";  // Check if 'brochurename' matches the validation property
         }
         if (!poster.Brochure.file) {
           step3Errors.brochureUplaod = "Brochure Upload is required";
         }
         if (!youTube.title?.trim()) {
+        if (!youTube.title?.trim()) {
           step3Errors.youTubeName = "YouTube Name is required";
         }
+        if (!youTube.url?.trim()) {
         if (!youTube.url?.trim()) {
           step3Errors.youTubeUrl = "YouTube URL is required";
         }
         if (!searchTerm?.trim()) {
+        if (!searchTerm?.trim()) {
           step3Errors.searchAddress = "Search Address is required";
         }
+        if (!locObj.city?.trim()) {
         if (!locObj.city?.trim()) {
           step3Errors.cityName = "Search Address is required";
         }
@@ -403,6 +445,7 @@ const EventForm = () => {
           step3Errors.selectedAddress = "Select an Address is required";
         }
         actors.forEach((actor, index) => {
+          if (!actor.name?.trim()) {
           if (!actor.name?.trim()) {
             step3Errors[`actorName${index}`] = `Actor ${index + 1} Name is required`
           }
@@ -415,6 +458,7 @@ const EventForm = () => {
         } catch (err) {
           console.log(err)
         }
+        break;
         break;
       default:
         return true;
@@ -432,13 +476,16 @@ const EventForm = () => {
     setStep(step - 1)
   }
 
+
   const handleSubmit = async () => {
     const isValid = await validateStep()
     if (isValid) {
 
       const eventFormData = new FormData()
+      const eventFormData = new FormData()
 
       // Append individual fields
+      eventFormData.append('eventStartDateTime', form.eventStartDateTime)
       eventFormData.append('eventStartDateTime', form.eventStartDateTime)
       // eventFormData.append('eventEndDateTime', form.eventEndDateTime);
       eventFormData.append('title', form.title)
@@ -446,7 +493,13 @@ const EventForm = () => {
       eventFormData.append('venueName', form.venueName)
       eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime)
       eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime)
+      eventFormData.append('title', form.title)
+      eventFormData.append('description', form.description)
+      eventFormData.append('venueName', form.venueName)
+      eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime)
+      eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime)
 
+      eventFormData.append('categoryId', form.categoryId)
       eventFormData.append('categoryId', form.categoryId)
       // Append ticketType array
       form.ticketType.forEach((ticket, index) => {
@@ -455,8 +508,16 @@ const EventForm = () => {
         eventFormData.append(`ticketType[${index}][ticketCount]`, ticket.ticketCount)
         eventFormData.append(`ticketType[${index}][remainingTickets]`, ticket.remainingTickets)
       })
+        eventFormData.append(`ticketType[${index}][ticketName]`, ticket.ticketName)
+        eventFormData.append(`ticketType[${index}][ticketPrice]`, ticket.ticketPrice)
+        eventFormData.append(`ticketType[${index}][ticketCount]`, ticket.ticketCount)
+        eventFormData.append(`ticketType[${index}][remainingTickets]`, ticket.remainingTickets)
+      })
 
       actors.forEach((actor, index) => {
+        eventFormData.append(`Actors[${index}][name]`, actor.name)
+      })
+      eventFormData.append('ClipName', poster.Clip.name)
         eventFormData.append(`Actors[${index}][name]`, actor.name)
       })
       eventFormData.append('ClipName', poster.Clip.name)
@@ -470,9 +531,15 @@ const EventForm = () => {
 
       eventFormData.append(`addressInfo[address]`, locObj.address)
       eventFormData.append(`addressInfo[city]`, locObj.city)
+      eventFormData.append('youTube[title]', youTube.title)
+      eventFormData.append('youTube[url]', youTube.url)
+
+      eventFormData.append(`addressInfo[address]`, locObj.address)
+      eventFormData.append(`addressInfo[city]`, locObj.city)
       // Append location coordinates
       eventFormData.append(`location[lon]`, locObj.lonlat[0])
       eventFormData.append(`location[lat]`, locObj.lonlat[1])
+      console.log([...eventFormData], "End Result")
       console.log([...eventFormData], "End Result")
 
       try {
@@ -498,6 +565,7 @@ const EventForm = () => {
 
 
 
+  const renderFormSection = () =>{
   const renderFormSection = () =>{
     switch (step) {
       case 1:
@@ -571,8 +639,13 @@ const EventForm = () => {
                       isInvalid={!!errors.ticketSaleStartTime}
                       onFocus={() => setTicketStartHelp(true)}
                       onBlur={() => setTicketStartHelp(false)}
+                      onFocus={() => setTicketStartHelp(true)}
+                      onBlur={() => setTicketStartHelp(false)}
 
                     />
+                    {ticketStartHelp &&
+                      <Form.Text muted>Ticket Sale Start Time where users can start booking the event.</Form.Text>
+                    }                    <Form.Control.Feedback type="invalid">
                     {ticketStartHelp &&
                       <Form.Text muted>Ticket Sale Start Time where users can start booking the event.</Form.Text>
                     }                    <Form.Control.Feedback type="invalid">
@@ -590,8 +663,14 @@ const EventForm = () => {
                       isInvalid={!!errors.ticketSaleEndTime}
                       onFocus={() => setTicketEndHelp(true)}
                       onBlur={() => setTicketEndHelp(false)}
+                      onFocus={() => setTicketEndHelp(true)}
+                      onBlur={() => setTicketEndHelp(false)}
 
                     />
+                    {ticketEndHelp && <Form.Text muted>
+
+                      <span>Ticket Sale End Time where users cannot buy tickets for your event.</span>
+                    </Form.Text>}
                     {ticketEndHelp && <Form.Text muted>
 
                       <span>Ticket Sale End Time where users cannot buy tickets for your event.</span>
@@ -620,6 +699,10 @@ const EventForm = () => {
                   <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
                     Next
                   </Button></div>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
+                    Next
+                  </Button></div>
               </Form>
             </Container>
           </div>
@@ -641,6 +724,7 @@ const EventForm = () => {
                     onChange={handleCategoryChange}
                     isSearchable
                     placeholder="Select Categories"
+                    style={{ width: "200px !important" }}
                     style={{ width: "200px !important" }}
                   />
                   <div className="errors">
@@ -691,8 +775,13 @@ const EventForm = () => {
                       <Col>
                         {index >= 1 && (
                           <Button variant="danger" onClick={() => handleRemoveSlot(index)} style={{ marginTop: "30px" }}>
+                      <Col>
+                        {index >= 1 && (
+                          <Button variant="danger" onClick={() => handleRemoveSlot(index)} style={{ marginTop: "30px" }}>
                             Delete
                           </Button>
+                        )}
+                      </Col>
                         )}
                       </Col>
                     </Row>
@@ -703,6 +792,7 @@ const EventForm = () => {
                 </Form.Group>
 
 
+
                 <Row>
                   <Col>
                     <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -711,8 +801,18 @@ const EventForm = () => {
                         Previous
                       </Button>
                     </div>
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+
+                      <Button variant="secondary" style={{ height: "40px", width: "90px" }} onClick={() => prevStep()}>
+                        Previous
+                      </Button>
+                    </div>
                   </Col>
                   <Col>
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                      <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
+                        Next
+                      </Button></div>
                     <div style={{ display: "flex", justifyContent: "flex-end" }}>
                       <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
                         Next
@@ -733,6 +833,7 @@ const EventForm = () => {
                 <Row>
                   <Col>
                     <Form.Group className="mb-3" controlId="clipName">
+                      <Form.Label>Clip Title:</Form.Label>
                       <Form.Label>Clip Title:</Form.Label>
                       <Form.Control
                         type="text"
@@ -757,6 +858,7 @@ const EventForm = () => {
                         type="file"
                         accept="image/*"
                         //,"video/*"
+                        //,"video/*"
                         onChange={handleClipFileChange}
                         isInvalid={!!errors.clipUpload}
 
@@ -772,6 +874,7 @@ const EventForm = () => {
                   <Col>
                     <Form.Group className="mb-3" controlId="brochureName">
                       <Form.Label>Image Title:</Form.Label>
+                      <Form.Label>Image Title:</Form.Label>
                       <Form.Control
                         type="text"
                         value={poster.Brochure.name}
@@ -786,6 +889,7 @@ const EventForm = () => {
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="brochureUpload">
+                      <Form.Label>Upload Image:</Form.Label>
                       <Form.Label>Upload Image:</Form.Label>
                       <Form.Control
                         type="file"
@@ -804,6 +908,7 @@ const EventForm = () => {
                   <Col>
 
                     <Form.Group className="mb-3" controlId="youTubeName">
+                      <Form.Label>Youtube Title:</Form.Label>
                       <Form.Label>Youtube Title:</Form.Label>
                       <Form.Control
                         type="text"
@@ -847,6 +952,7 @@ const EventForm = () => {
                           placeholder="Type to search addresses"
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
+                          onFocus={() => setLocObj((prevLocObj) => ({ ...prevLocObj, selectedAddress: "" }))} ///the select an address is not working in the to empty
                           onFocus={() => setLocObj((prevLocObj) => ({ ...prevLocObj, selectedAddress: "" }))} ///the select an address is not working in the to empty
                           isInvalid={!!errors.searchTerm}
 
@@ -939,6 +1045,13 @@ const EventForm = () => {
                         Previous
                       </Button>
                     </div>
+
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+
+                      <Button variant="secondary" style={{ height: "40px", width: "90px", marginTop: "10px" }} onClick={() => prevStep()}>
+                        Previous
+                      </Button>
+                    </div>
                   </Col>
                   <Col>
                   {edit ? <Button variant="primary" style={{ height: "60px", width: "120px" }} onClick={handleSubmit}>Confirm Edit</Button> : <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={handleSubmit}>Submit</Button>}
@@ -955,6 +1068,7 @@ const EventForm = () => {
   }
   return (
     <div style={{ minHeight: "100vh" }}>
+    <div style={{ minHeight: "100vh" }}>
       <Container>
         <h1 style={{ textAlign: 'center', marginTop: "30px", color: "#333", backgroundColor: "#fff", padding: "10px", boxShadow: "2px 2px 5px 0px rgba(0, 0, 0, 0.2)", borderRadius: "8px" }}>Event Form</h1>
         <div style={{ display: "flex", justifyContent: 'center', textAlign: "center", marginBottom: "20px" }}>
@@ -962,11 +1076,13 @@ const EventForm = () => {
         </div>
       </Container>
       <Container style={{ marginTop: "20px", padding: "20px", backgroundColor: "#fff", boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)", borderRadius: "5px" }}>
+      <Container style={{ marginTop: "20px", padding: "20px", backgroundColor: "#fff", boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)", borderRadius: "5px" }}>
         {renderFormSection()}
       </Container>
     </div>
   );
 }
+
 
 
 export default EventForm;

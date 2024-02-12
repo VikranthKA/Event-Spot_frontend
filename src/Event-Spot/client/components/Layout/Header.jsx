@@ -2,6 +2,7 @@ import React, { useState,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
 import { MyContext } from '../../ContextApi/Context';
@@ -46,8 +47,14 @@ function Header() {
         <Link className="navbar-brand" to="/">
           {/* <img style={{height:"50px",width:"0px",borderRadius:"20%"}} src={eventLogo}/> */}
           LOGO
+          {/* <img style={{height:"50px",width:"0px",borderRadius:"20%"}} src={eventLogo}/> */}
+          LOGO
         </Link>
         
+        {userData.role==="Organiser"&&<Link className="navbar-brand" to="/event-form">
+        <FontAwesomeIcon icon={faPlus} />Event
+        </Link>}
+    
         {userData.role==="Organiser"&&<Link className="navbar-brand" to="/event-form">
         <FontAwesomeIcon icon={faPlus} />Event
         </Link>}
@@ -78,7 +85,9 @@ function Header() {
           <form className="d-flex mx-auto justify-content-start">
             <input
               className="form-control me-2 "
+              className="form-control me-2 "
               type="search"
+              style={{ width: '250px'}}
               style={{ width: '250px'}}
               placeholder="Search"
               aria-label="Search"
@@ -94,12 +103,19 @@ function Header() {
             </button>
           </form>
           <ul className="navbar-nav ml-auto" style={{ display:"flex"}}>
+          <ul className="navbar-nav ml-auto" style={{ display:"flex"}}>
             {localStorage.getItem("token") ? (
               <>
                 <li className="nav-item">
                   <Link to="/user-profile" >
                     <FontAwesomeIcon icon={faUser} style={{ marginTop:"10px",marginRight:"10px"}}/>
+                  <Link to="/user-profile" >
+                    <FontAwesomeIcon icon={faUser} style={{ marginTop:"10px",marginRight:"10px"}}/>
                   </Link>
+                </li>
+                <li className="nav-item" style={{marginRight:"10px"}}>
+                <Darkmode/>
+
                 </li>
                 <li className="nav-item" style={{marginRight:"10px"}}>
                 <Darkmode/>
@@ -124,7 +140,10 @@ function Header() {
                   </Link>
                 </li>
                 <li className="nav-item">
+                <li className="nav-item">
                 <Darkmode/>
+
+                </li>
 
                 </li>
               </>

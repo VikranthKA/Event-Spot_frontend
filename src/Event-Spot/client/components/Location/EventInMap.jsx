@@ -20,7 +20,9 @@ function reverseLatLon(arr) {
 }
 
 
+
 function EventInMap() {
+  const eventData = useSelector((state) => state.events)
   const eventData = useSelector((state) => state.events)
   const [radius, setRadius] = useState(500);
   const [lonlat, setLonLat] = useState([]);
@@ -61,9 +63,11 @@ function EventInMap() {
   useEffect(() => {
     dispatch(startGetEvents());
 
+
   }, []);
 
   const user = {
+    name: 'User',
     name: 'User',
     coordinates: [20, 89],
   };
@@ -87,7 +91,10 @@ function EventInMap() {
     <div className="div-container">
 
 
+
       {center.length > 0 ? (
+        <div>
+        <MapContainer center={lonlat} zoom={7} style={{ height: '400px' }}>
         <div>
         <MapContainer center={lonlat} zoom={7} style={{ height: '400px' }}>
           <TileLayer
@@ -169,6 +176,22 @@ function EventInMap() {
 
         </div>
         
+        <label htmlFor="radiusInput">Radius:</label>
+      <input
+        type="range"
+        id="radiusInput"
+        min="100"
+        max="20000"
+        step="50"
+        value={radius}
+        onBlur={handleRadiusChange}
+        onChange={(e) => setRadius(parseInt(e.target.value, 10))}
+      />
+      <p>Radius: {radius} Meters</p>
+
+
+        </div>
+        
       ) : (
         <p>Loading map...</p>
       )}
@@ -178,9 +201,18 @@ function EventInMap() {
       <div>
         <RadiusEventDis/>
       </div>
+
+      <div>
+        {userData.role=="Organiser" ?  <ViewHisEvents/> :<div>
+      <div>
+        <RadiusEventDis/>
+      </div>
       <div className="EventDisplay">
         <EventCardsDisplay/>
 
+      </div>
+          
+          </div>}
       </div>
           
           </div>}

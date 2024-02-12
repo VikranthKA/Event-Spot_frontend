@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import CountDown from '../Utils/CountDown/CountDown';
 import { useParams,useNavigate } from 'react-router-dom';
@@ -6,7 +7,17 @@ import { Container, Carousel, Spinner, Row, Col, Card, ListGroup, Badge, Button,
 import axios from '../Api_Resources/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { startGetEvents, startRaduisEvents } from '../../react-redux/action/eventAction';
+import { startGetEvents, startRaduisEvents } from '../../react-redux/action/eventAction';
 import ReviewForm from '../Review/ReviewForm';
+import EventCardsDisplay from './EventCardsDisplay';
+import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
+import { MyContext } from '../../ContextApi/Context';
+
+// Import statements...
+function countRemainingTicket(tickets){
+const totalRemainingTickets = tickets.reduce((total, ticket) => total + ticket.remainingTickets, 0);
+return totalRemainingTickets
+}
 import EventCardsDisplay from './EventCardsDisplay';
 import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
 import { MyContext } from '../../ContextApi/Context';
@@ -25,7 +36,17 @@ function EventInfo() {
   const events = useSelector((state) => state.events)
   const {userData} = useContext(MyContext)
 
+  const { eventId } = useParams();
+  const [event, setEvent] = useState('');
+  const [reviewToggle, setReviewToggle] = useState(false);
+  const dispatch = useDispatch();
+  const events = useSelector((state) => state.events)
+  const {userData} = useContext(MyContext)
+
   useEffect(() => {
+    dispatch(startGetEvents());
+    const eventData = events.find((ele) => ele._id === eventId);
+    setEvent(eventData);
     dispatch(startGetEvents());
     const eventData = events.find((ele) => ele._id === eventId);
     setEvent(eventData);
@@ -38,13 +59,19 @@ function EventInfo() {
 
   const navigate = useNavigate();
 
+
+  const navigate = useNavigate();
+
   const handleBookTickets = () => {
+    navigate(`/event-booking/${eventId}`);
     navigate(`/event-booking/${eventId}`);
   };
 
   return (
     <div>
+    <div>
     <Container className="my-5">
+    {event ? (
     {event ? (
         <Carousel style={{ height: "400px", width: "100%", margin: "auto" }}>
           {event.posters.map((poster) => (
@@ -86,6 +113,9 @@ function EventInfo() {
           <h2 className="my-3">{event?.title}</h2>
           <h5>Venue: {event?.venueName}</h5>
           <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
+          <h2 className="my-3">{event?.title}</h2>
+          <h5>Venue: {event?.venueName}</h5>
+          <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
         </Col>
 
         {/* <Col>
@@ -111,6 +141,10 @@ function EventInfo() {
         {/* userData.id==="Organiser" can u show the review for that event */}
         { event.reviews?.length < 0 && event?.reviews?.map((review) => (
           <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start" >
+        <ListGroup.Item className="fw-bold">Reviews</ListGroup.Item>
+        {/* userData.id==="Organiser" can u show the review for that event */}
+        { event.reviews?.length < 0 && event?.reviews?.map((review) => (
+          <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
               <div className="fw-bold">{review.title}</div>
               {review.body}

@@ -56,7 +56,7 @@ export default function Register() {
             <h1 style={{ marginLeft: '60px', marginTop: '15px' }}>Sign Up</h1>
             <Form onSubmit={formik.handleSubmit} style={{ marginLeft: '60px', marginTop: '20px' }}>
               <FormGroup>
-                <strong for='username'>Username:</strong>
+                <strong htmlFor='username'>Username:</strong>
                 <Input
                   style={{width:"500px"}}
                   type='text'
@@ -70,7 +70,7 @@ export default function Register() {
               </FormGroup>
 
               <FormGroup>
-                <strong for='email'>Email:</strong>
+                <strong htmlFor='email'>Email:</strong>
                 <Input
                   style={{width:"500px"}}
                   type='text'
@@ -86,7 +86,7 @@ export default function Register() {
               <Row form>
                 <Col>
                   <FormGroup>
-                    <strong for='number'>Number:</strong>
+                    <strong htmlFor='number'>Number:</strong>
                     <Input
                     style={{width:"240px"}}
                       type='text'
@@ -101,7 +101,7 @@ export default function Register() {
                 </Col>
                 <Col>
                   <FormGroup>
-                    <strong for='role'>Role:</strong>
+                    <strong htmlFor='role'>Role:</strong>
                     <Input
                     style={{width:"170px"}}
                       type='select'
@@ -123,7 +123,7 @@ export default function Register() {
               </Row>
 
               <FormGroup>
-                <strong for='password'>Password:</strong>
+                <strong htmlFor='password'>Password:</strong>
                 <Input
                   style={{width:"500px"}}
                   type='password'
