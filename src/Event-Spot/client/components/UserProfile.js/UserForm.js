@@ -17,7 +17,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const UserForm = () => {
   const navigate = useNavigate()
-  const {profileId} = useParams()
+  // const {profileId} = useParams()
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -122,8 +122,8 @@ const UserForm = () => {
       formData.append('lonlat[lat]', locObj.lonlat[1])
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
-
-      const response = await axios.put(`/api/profile/${profileId}`, formData, {
+      const profileId = "65bcdb6560b7e035c0987dc6"
+      const response = await axios.put(`/api/profile`, formData, {
         headers: {
           Authorization: localStorage.getItem('token'),
           'Content-Type': 'multipart/form-data',
@@ -131,7 +131,7 @@ const UserForm = () => {
       });
 
       console.log('Backend response:', response.data);
-      navigate('/profile')
+      navigate('/user-profile')
 
       // Handle additional actions based on the response if needed
     } catch (error) {
@@ -150,7 +150,7 @@ const UserForm = () => {
   </label>
   <FilePond
     files={filePondFiles}
-    allowMultiple={true} // Set to true if you want to allow multiple files
+    allowMultiple={false} // Set to true if you want to allow multiple files
     onupdatefiles={(fileItems) => {
       setFilePondFiles(fileItems.map((fileItem) => fileItem.file));
     }}
@@ -223,3 +223,5 @@ const UserForm = () => {
 }
 
 export default UserForm;
+
+

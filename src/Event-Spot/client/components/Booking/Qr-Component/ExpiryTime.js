@@ -6,7 +6,7 @@ const ExpiryTime = ({ detailsInfo, expiryTime }) => {
   const [qrData, setQrData] = useState('')
 
   useEffect(() => {
-    const expiryInfo = moment().add(parseInt(expiryTime), 'minutes')
+    const expiryInfo = moment().add(parseInt(expiryTime), 'days')
     console.log(expiryInfo, 'info')
 
     const updatedDetailsInfo = { ...detailsInfo, expiryInfo: expiryInfo.format() }

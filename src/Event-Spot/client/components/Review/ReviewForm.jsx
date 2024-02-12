@@ -1,40 +1,68 @@
-import React,{useState} from 'react'
-import Star from "./ReviewStar/Star"
-import z from 'zod'
-import { useDispatch,useSelector } from 'react-redux'
+import React, { useState } from 'react';
+import ReactStarsRating from 'react-awesome-stars-rating';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function ReviewForm() {
-    const dispatch = useDispatch()
+  const [review, setReview] = useState({
+    title: '',
+    body: '',
+    rating: 0,
+  });
 
-    const [review,setReview] = useState({
-        title: "",
-        body: "",
-        rating: ""
-    })
-    const handleReviewChange = (value,name)=>{
-        setReview((prev)=>({
-            ...prev,
-            [name]:value
-        }))
+  const handleReviewChange = (value, name) => {
+    setReview((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    }
-    const handleReviewSubmit = (e)=>{
-        e.preventDefault()
-        
-    }
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    
+  };
+
   return (
-    <div>ReviewForm
-        <form onSubmit={handleReviewSubmit}>
-            <input type='text' value={review.body} name="body" onChange={(e)=>handleReviewChange(e.target.value,e.target.name)} />
-            <input type='text' value={review.title} name="title" onChange={(e)=>handleReviewChange(e.target.value,e.target.name)} />
-            <input type='number' value={review.rating} name="rating" onChange={(e)=>handleReviewChange(e.target.value,e.target.name)} />
-            <input type="submit"></input>
-        </form>
+    <div>
+      <Form onSubmit={handleReviewSubmit} style={{width:"40%"}}>
+        <FormGroup>
+          <Label for="title">Title</Label>
+          <Input
+            type="text"
+            id="title"
+            placeholder="Enter title"
+            value={review.title}
+            onChange={(e) => handleReviewChange(e.target.value, 'title')}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="body">Body</Label>
+          <Input
+            type="textarea"
+            id="body"
+            placeholder="Enter review body"
+            value={review.body}
+            onChange={(e) => handleReviewChange(e.target.value, 'body')}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="rating">Rating</Label>
+          <ReactStarsRating
+            value={review.rating}
+            count={5}
+            onChange={(value) => handleReviewChange(value, 'rating')}
+            size={30}
+            isHalf={true}
+          />
+        </FormGroup>
+        <Button color="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
 
-        <div>
-            <Star/>
-        </div>
     </div>
-        )
+  );
 }
 
 export default ReviewForm
+

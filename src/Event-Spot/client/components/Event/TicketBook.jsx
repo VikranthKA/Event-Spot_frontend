@@ -3,9 +3,11 @@ import { Button, Card, Spinner, Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { startGetEvents } from '../../react-redux/action/eventAction';
-import { startCreateBooking, startPayment } from "../../react-redux/action/bookingAction";
+import { startCreateBooking, startPayment ,setClearTicket, startCancelBooking} from "../../react-redux/action/bookingAction";
+import { config } from '../Api_Resources/config';
+import axios from '../Api_Resources/axios';
+import { toast,ToastContainer } from 'react-toastify';
 
-// Action to update remaining ticket count in the Redux store
 const updateRemainingTickets = (eventId, updatedTickets) => ({
   type: 'UPDATE_REMAINING_TICKETS',
   payload: { eventId, updatedTickets },
@@ -39,10 +41,33 @@ const TicketBook = () => {
     };
 
     fetchData();
+    dispatch(setClearTicket())
   }, [])
 
+  useEffect(()=>{
+    (async ()=>{
+      try{
+        const stripeId = localStorage.getItem("stripeId") 
+        const response = await axios.delete(`/api/delete-payment/${stripeId}`,config)
+        if(response) localStorage.removeItem("stripeId")
+
+
+      }catch(err){
+        console.log(err)
+      }
+    })()
+  },[])
+  useEffect(()=>{
+    calculateTotalAmount()
+  },[tickets])
+
   const handlePayment =()=>{
+    console.log("payment")
       dispatch(startPayment(bookedTicket._id,card))   
+  }
+  const handleCancelPayment = ()=>{
+    if(bookedTicket) dispatch(startCancelBooking(bookedTicket._id))
+    setModalVisible(false)
   }
 
   const updateTicketsAndRemaining = (index, updateCount) => {
@@ -58,6 +83,7 @@ const TicketBook = () => {
             const updatedTicket = { ...ticket, remainingTickets, Quantity: ticket.ticketCount - remainingTickets };
 
             // Dispatch action to update remaining ticket count in the Redux store
+
             dispatch(updateRemainingTickets(eventId, [...eventDetails.ticketType.slice(0, i), updatedTicket, ...eventDetails.ticketType.slice(i + 1)]));
 
             return updatedTicket;
@@ -66,7 +92,7 @@ const TicketBook = () => {
         }),
       };
 
-      setEventDetails(updatedEventDetails);
+      setEventDetails(updatedEventDetails)
       return updatedTickets;
     });
   };
@@ -93,7 +119,7 @@ const TicketBook = () => {
   const handleBookTicket = () => {
     if (!eventDetails) {
       console.error('Event details not available.');
-      return;
+      toast.error("Ticket is unavailable")
     }
 
     const bookedTickets = tickets
@@ -109,10 +135,13 @@ const TicketBook = () => {
       // Calculate the total amount for the current ticket
       const totalAmountForTicket = bookedTicket ? bookedTicket.count * ticket.ticketPrice : 0;
 
-      return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount, totalAmount: totalAmountForTicket };
-    });
 
-    dispatch(startCreateBooking(eventId, updatedEventTickets));
+      return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount,ticketPrice:ticket.ticketPrice   }; //
+    });
+    const filteredTickets = updatedEventTickets.filter((ticket) => ticket.Quantity > 0);
+
+
+    dispatch(startCreateBooking(eventId, filteredTickets));
     setModalVisible(true); // Show modal after creating booking
   };
 
@@ -124,7 +153,7 @@ const TicketBook = () => {
           <Card key={index} style={{ width: '18rem', margin: '10px' }}>
             <Card.Body>
               <Card.Title>{ticket.ticketName}</Card.Title>
-              <Card.Text>Price: ${ticket.ticketPrice}</Card.Text>
+              <Card.Text>Price: ₹ {ticket.ticketPrice}</Card.Text>
               <Card.Text>Remaining: {ticket.remainingTickets}</Card.Text>
               <Card.Text>Quantity: {tickets[index]}</Card.Text>
               <Button variant="primary" onClick={() => incrementTicket(index)}>
@@ -136,9 +165,10 @@ const TicketBook = () => {
             </Card.Body>
           </Card>
         ))}
-      <Button onClick={handleBookTicket} style={{ display: 'flex', flexWrap: 'flex-end' }}>
-        Book
-      </Button>
+    <Button onClick={handleBookTicket} style={{ display: 'flex', flexWrap: 'flex-end' }}>
+    Book
+  </Button>
+  <h2>Total Amount: {totalPrice}</h2>
 
       <Modal show={modalVisible} >
         <Modal.Header >
@@ -159,19 +189,20 @@ const TicketBook = () => {
             </div>
           )}
         </Modal.Body>
+        <h2>Total Amount: {totalPrice}</h2>
+
         <Modal.Footer>
           <Button color="primary" onClick={handlePayment}>
             Confirm Payment
           </Button>{' '}
-          <Button color="secondary" onClick={() => setModalVisible(false)}>
+          <Button color="secondary" onClick={handleCancelPayment}>
             Cancel
           </Button>
         </Modal.Footer>
       </Modal>
 
-      <h2>Total Amount: {totalPrice}</h2>
     </div>
   );
 };
 
-export default TicketBook;
+export default TicketBook

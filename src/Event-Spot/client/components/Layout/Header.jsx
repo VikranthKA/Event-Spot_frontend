@@ -1,17 +1,15 @@
 import React, { useState,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
-import profieIcon from "../../Z_images/profile-icon.png";
 import { MyContext } from '../../ContextApi/Context';
-
-
-
+import eventLogo from "../../Z_images/event_logo.png"
 
 function Header() {
-  const {searchQuery,setSearchQuery} = useContext(MyContext)
+  const [search,setSearch] = useState(" ")
+  const {searchQuery,setSearchQuery,userData} = useContext(MyContext)
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
@@ -39,19 +37,21 @@ function Header() {
   };
 
   const handleSearch = () => {
-    // Implement search logic here
+    setSearchQuery(search.toLowerCase())
   };
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          Event-Spot
+          {/* <img style={{height:"50px",width:"0px",borderRadius:"20%"}} src={eventLogo}/> */}
+          LOGO
         </Link>
         
-        <Link className="navbar-brand" to="/event-form">
-          Create-Event
-        </Link>
+        {userData.role==="Organiser"&&<Link className="navbar-brand" to="/event-form">
+        <FontAwesomeIcon icon={faPlus} />Event
+        </Link>}
+    
         <button
           className="navbar-toggler"
           type="button"
@@ -77,9 +77,9 @@ function Header() {
           </ul>
           <form className="d-flex mx-auto justify-content-start">
             <input
-              className="form-control me-2 width-300px"
+              className="form-control me-2 "
               type="search"
-              style={{ width: '700px' }}
+              style={{ width: '250px'}}
               placeholder="Search"
               aria-label="Search"
               value={searchQuery}
@@ -93,20 +93,23 @@ function Header() {
               <FontAwesomeIcon icon={faSearch} />
             </button>
           </form>
-          <ul className="navbar-nav ml-auto">
+          <ul className="navbar-nav ml-auto" style={{ display:"flex"}}>
             {localStorage.getItem("token") ? (
               <>
                 <li className="nav-item">
-                  <Link to="/profile">
-                    <FontAwesomeIcon icon={faUser} />
+                  <Link to="/user-profile" >
+                    <FontAwesomeIcon icon={faUser} style={{ marginTop:"10px",marginRight:"10px"}}/>
                   </Link>
+                </li>
+                <li className="nav-item" style={{marginRight:"10px"}}>
+                <Darkmode/>
+
                 </li>
                 <li className="nav-item">
                   <button className="btn btn-outline-danger" onClick={handleChangeLogout}>
                     Logout
                   </button>
                 </li>
-                <Darkmode/>
               </>
             ) : (
               <>
@@ -120,7 +123,10 @@ function Header() {
                     Login
                   </Link>
                 </li>
+                <li className="nav-item">
                 <Darkmode/>
+
+                </li>
               </>
             )}
           </ul>
