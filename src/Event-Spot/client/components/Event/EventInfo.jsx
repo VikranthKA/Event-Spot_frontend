@@ -53,7 +53,7 @@ function EventInfo() {
                 style={{ height: "400px", width: "100%", objectFit: "cover" }}
                 className="d-block w-100"
                 // src={`${process.env.REACT_APP_IMAGE_URL}${poster.image}`}
-                src={`http://localhost:3333/Uploads/images/${poster.image}`}
+                src={`process.env.REACT_APP_EVENT_URL${poster.image}`}
 
 
                 alt={poster.ClipName || poster.BrochureName}
