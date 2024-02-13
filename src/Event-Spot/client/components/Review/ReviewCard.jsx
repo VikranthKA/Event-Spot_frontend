@@ -29,6 +29,7 @@ const ReviewCard = ({eventId,review}) => {
               )}
               <Button>delete</Button>
 
+            {reviewToggle && <ReviewForm eventId={eventId} updatingReview={review} />}
             </div>}
           </ListGroup.Item>
     </div>
