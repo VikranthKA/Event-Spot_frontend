@@ -32,7 +32,6 @@ import ViewHisBookings from './Event-Spot/client/components/ProfileHelpers/ViewH
 import Deactivate from './Event-Spot/client/components/UserProfile.js/Deactivate';
 import { config } from './Event-Spot/client/components/Api_Resources/config';
 import UserForm2 from './Event-Spot/client/components/UserProfile.js/UserForm2';
-import EventUpdate from './Event-Spot/client/components/Event/EventUpdate'
 
 function geoWithin(state,action){
   switch(action.type){
@@ -142,20 +141,6 @@ const App = () => {
           <Route path="/approved-list" element={<ApprovedList/>}/>
           <Route path="/user-deactivate" element={<Deactivate/>}/>
           <Route path="/create-profile" element={<UserForm2/>}/>
-          <Route path="/edit-profile" element={<UserForm/>}/>
-          <Route path="/all-events" element={<AllEvents/>}/>
-          <Route path="/forgot-password" element={<ForgotPassword/>} exact="true"/> 
-          <Route path="/resetPassword/:id/:token" element={<ResetPassword/>}/>
-          {/* <Route path="/user-booking" element={<ViewHisBookings/>}/> */}
-          <Route path="/event-form/:eventId" element={<EventUpdate/>}/>
-          <Route path="/approved-list" element={<ApprovedList/>}/>
-          <Route path="/user-deactivate" element={<Deactivate/>}/>
-
-          
-
-
-
-
 
       </Routes>
       <ToastContainer/>

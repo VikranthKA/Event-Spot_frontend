@@ -41,7 +41,6 @@ function EventInfo() {
   const handleBookTickets = () => {
     navigate(`/event-booking/${eventId}`);
   };
-  console.log(event,"in the eventInfo")
 
   return (
     <div>
@@ -53,7 +52,8 @@ function EventInfo() {
               <img
                 style={{ height: "400px", width: "100%", objectFit: "cover" }}
                 className="d-block w-100"
-                src={`${process.env.REACT_APP_IMAGE_URL}${poster.image}`}
+                // src={`${process.env.REACT_APP_IMAGE_URL}${poster.image}`}
+                src={`process.env.REACT_APP_EVENT_URL${poster.image}`}
 
 
                 alt={poster.ClipName || poster.BrochureName}
@@ -99,19 +99,20 @@ function EventInfo() {
       )}
     </Col> */}
     <div>
-      {userData.role === 'Organiser' && userData.id === event.organiserId ? (
-        <Button onClick={()=>navigate(`/event-form/${event._id}`)}>Edit</Button>
+      {userData.role === 'organiser' && userData.id === event.organiserId ? (
+        <Button onClick={()=>navigate}>Edit</Button>
       ) : (
         <Button onClick={handleBookTickets}>Book</Button>
       )}
+      <Button onClick={()=>navigate(`/event-form/${event._id}`)}>Edit</Button>
     </div>      </Row>
       <Row className="my-4">
       </Row>
       <ListGroup as="ol" numbered className="my-4">
-        <ListGroup.Item className="fw-bold" style={{width:"40%"}}>Reviews</ListGroup.Item>
+        <ListGroup.Item className="fw-bold">Reviews</ListGroup.Item>
         {/* userData.id==="Organiser" can u show the review for that event */}
-        { event.reviews?.length > 0 && event?.reviews?.map((review) => (
-          <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start" >
+        { event.reviews?.length < 0 && event?.reviews?.map((review) => (
+          <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
               <div className="fw-bold">{review.title}</div>
               {review.body}
@@ -119,20 +120,18 @@ function EventInfo() {
             <Badge bg="primary" pill>
               {review.rating}
             </Badge>
-            <div style={{ display: 'block' }}>
-              {reviewToggle ? (
-                <Button onClick={() => setReviewToggle(!reviewToggle)}>cancel</Button>
-              ) : (
-                <Button onClick={() => setReviewToggle(!reviewToggle)}>create</Button>
-              )}
-              {<div>
-              <Button>Edit</Button>
-              <Button>delete</Button>
-              </div>}
-            </div>
-            {reviewToggle && <ReviewForm eventId={event._id} updatingReview={review} reviewId={review._id}/>}
           </ListGroup.Item>
         ))}
+        <div style={{ display: 'block' }}>
+          {reviewToggle ? (
+            <Button onClick={() => setReviewToggle(!reviewToggle)}>cancel</Button>
+          ) : (
+            <Button onClick={() => setReviewToggle(!reviewToggle)}>create</Button>
+          )}
+          <Button>Edit</Button>
+          <Button>delete</Button>
+        </div>
+        {reviewToggle && <ReviewForm />}
       </ListGroup>
     </Container>
       {userData.role==="Organiser" ? <ViewHisEvents/>  :<EventCardsDisplay />}
@@ -141,3 +140,6 @@ function EventInfo() {
 }
 
 export default EventInfo;
+
+
+

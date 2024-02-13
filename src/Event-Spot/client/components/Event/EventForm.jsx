@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from "../Api_Resources/axios";
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container, Carousel, Spinner, ProgressBar,Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText, Alert } from 'react-bootstrap';
+import { Container, Carousel, Spinner, Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText, ProgressBar, Alert } from 'react-bootstrap';
 
 import "./EventForm.css"
 import NotFound from '../Utils/NotFound/NotFound';
@@ -10,11 +10,17 @@ import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eve
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { MyContext } from '../../ContextApi/Context';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 
-function formatDateToTimeLocal(date){
-  return date
+function formatDateToTimeLocal(dateString){
+  const date = new Date(dateString);
+    date.setDate(15);
+    date.setUTCHours(17); 
+    date.setUTCMinutes(6); 
+    const formattedDate = date.toISOString().substring(0, 16);
+  return formattedDate
+
 }
 const EventForm = () => {
   const {userData} = useContext(MyContext)
@@ -40,7 +46,7 @@ const EventForm = () => {
     description: " ",
     categoryId: null,
     ticketType: [
-      { ticketName: " ", ticketPrice: " ", ticketCount: '', remainingTickets: '' }, 
+      { ticketName: " ", ticketPrice: " ", ticketCount: '', remainingTickets: '' },
     ],
     venueName: "",
     ticketSaleStartTime: "",
@@ -71,7 +77,63 @@ const EventForm = () => {
       if (events.length > 0) {
         const foundEvent = events.find(ele => ele._id === eventId);
         setEvent(foundEvent);
+        if (
+          eventId &&
+          event &&
+          userData.id &&
+          userData.role === 'Organiser'
+        ) {
+          console.log(eventId)
 
+          try {
+            toast.info("Updating the state")
+            setForm({
+              title: event.title || '',
+              eventStartDateTime:
+                event.eventStartDateTime &&
+                formatDateToTimeLocal(event.eventStartDateTime),
+              description: event.description || '',
+              categoryId: '',
+              ticketType:
+                event.ticketType?.map(ticket => ({
+                  ticketName: ticket.ticketName || '',
+                  ticketPrice: parseInt(ticket.ticketPrice) || 0,
+                  ticketCount: parseInt(ticket.ticketCount) || 0,
+                })) || [],
+              venueName: event.venueName || '',
+              ticketSaleStartTime:
+                event.ticketSaleStartTime &&
+                formatDateToTimeLocal(event.ticketSaleStartTime),
+              ticketSaleEndTime:
+                event.ticketSaleEndTime &&
+                formatDateToTimeLocal(event.ticketSaleEndTime),
+            });
+
+            setPoster({
+              Clip: { name: event.posters?.ClipName || '', file: null },
+              Brochure: { name: event.posters?.Brochure || '', file: null },
+            });
+
+            setYouTube({
+              title: event.youTube?.title || '',
+              url: event.youTube?.url || '',
+            });
+
+            setLocObj(prevState => ({
+              ...prevState,
+              address: event.addressInfo?.address || '',
+              city: event.addressInfo?.city || '',
+            }));
+
+            setEdit(true);
+
+            toast.success("State updated successfully")
+
+            
+          } catch (error) {
+            console.error('Error updating:', error);
+          }
+        }
       }
     };
 
@@ -139,10 +201,10 @@ const EventForm = () => {
   }, []);
 
   const fetchAddresses = async () => {
-   
     try {
+      const GEO_CODE_API_KEY = '659f7b557feb5653368044xyz79cdbd';
       const response = await axios.get(
-        `https://geocode.maps.co/search?q=${searchTerm}&api_key=${process.env.REACT_APP_GEO_API}`
+        `https://geocode.maps.co/search?q=${searchTerm}&api_key=${GEO_CODE_API_KEY}`
       );//add this in the .env webpack
       setSearchResults(response.data);
       if (response.data.length === 0) {
@@ -263,10 +325,10 @@ const EventForm = () => {
       setForm(JSON.parse(storedForm));
     }
 
-    const storedYouTube = localStorage.getItem('youTube')
-    if (storedYouTube) {
-      setYouTube(JSON.parse(storedYouTube));
-    }
+  //   const storedYouTube = localStorage.getItem('youTube')
+  //   if (storedYouTube) {
+  //     setYouTube(JSON.parse(storedYouTube));
+  //   }
 
     const storedActors = localStorage.getItem('actors');
     if (storedActors) {
@@ -300,19 +362,19 @@ const EventForm = () => {
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
   // // useEffect to save to localStorage
-  useEffect(() => {
-    // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
-    if (form && youTube && actors && allCategory && searchTerm && locObj, searchResults, selectedAddress) {
-      localStorage.setItem('form', JSON.stringify(form));
-      localStorage.setItem('youTube', JSON.stringify(youTube));
-      localStorage.setItem('actors', JSON.stringify(actors));
-      localStorage.setItem('allCategory', JSON.stringify(allCategory));
-      localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
-      localStorage.setItem('locObj', JSON.stringify(locObj));
-      localStorage.setItem('searchResults', JSON.stringify(searchResults));
-      localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
-    }
-  }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
+  // useEffect(() => {
+  //   // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
+  //   if (form && youTube && actors && allCategory && searchTerm && locObj, searchResults, selectedAddress) {
+  //     localStorage.setItem('form', JSON.stringify(form));
+  //     // localStorage.setItem('youTube', JSON.stringify(youTube));
+  //     localStorage.setItem('actors', JSON.stringify(actors));
+  //     localStorage.setItem('allCategory', JSON.stringify(allCategory));
+  //     localStorage.setItem('searchTerm', JSON.stringify(searchTerm));
+  //     localStorage.setItem('locObj', JSON.stringify(locObj));
+  //     localStorage.setItem('searchResults', JSON.stringify(searchResults));
+  //     localStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+  //   }
+  // }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
 
 
   const validateStep = async () => {
@@ -359,8 +421,8 @@ const EventForm = () => {
 
         const errors = form.ticketType?.map((ticket) => ({
           ticketName: !ticket.ticketName?.trim(),
-          ticketPrice: ! ticket.ticketPrice?.trim(),
-          ticketCount: !ticket.ticketCount?.trim()
+          ticketPrice: typeof ticket.ticketPrice !== 'number',
+          ticketCount: typeof ticket.ticketCount !== 'number'
         }))
         try {
          await setTicketErrors([...errors])
@@ -476,9 +538,11 @@ const EventForm = () => {
       console.log([...eventFormData], "End Result")
 
       try {
- 
+        if (edit) {
+          dispatch(startUpdateEvent(eventFormData,event._id))
+        } else {
           dispatch(startCreateEvent(eventFormData))
-        
+        }
         // setForm("")
         // setActors("")
         // setPoster("")
@@ -491,12 +555,34 @@ const EventForm = () => {
         // setServerErrors("")
         // setTicketErrors("")
       } catch (err) {
-        toast.error(err)
+        ///write the dipated error here in toastify
       }
     };
   }
 
 
+  const calculateProgress = () => {
+    const formValues = Object.values(form).flat()
+    const posterValues = Object.values(poster).flatMap((p) => Object.values(p))
+    const youtubeValues = Object.values(youTube)
+    const actorsValues = actors.flat()
+    const locObjValues = Object.values(locObj).flat()
+
+    const allValues = [
+      ...formValues, ...posterValues, ...youtubeValues, ...actorsValues, ...locObjValues]
+
+    const filledFields = allValues?.filter((value) => {
+      return typeof value === 'string' && value?.trim() !== '';
+    }).length
+    const totalFields = allValues.length
+
+    if (totalFields === 0) {
+      return 0
+    }
+    const progress = (filledFields / totalFields) * 100
+    return Math.min(progress, 100)
+
+  }
 
   const renderFormSection = () =>{
     switch (step) {
@@ -958,13 +1044,12 @@ const EventForm = () => {
       <Container>
         <h1 style={{ textAlign: 'center', marginTop: "30px", color: "#333", backgroundColor: "#fff", padding: "10px", boxShadow: "2px 2px 5px 0px rgba(0, 0, 0, 0.2)", borderRadius: "8px" }}>Event Form</h1>
         <div style={{ display: "flex", justifyContent: 'center', textAlign: "center", marginBottom: "20px" }}>
-        <ProgressBar now={(step / 3) * 100} label={`${step} of ${3}`} style={{width:"300px"}} />
+          <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} style={{ width: "450px" }} />
         </div>
       </Container>
       <Container style={{ marginTop: "20px", padding: "20px", backgroundColor: "#fff", boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)", borderRadius: "5px" }}>
         {renderFormSection()}
       </Container>
-      <ToastContainer/>
     </div>
   );
 }
