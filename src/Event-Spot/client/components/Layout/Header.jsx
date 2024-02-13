@@ -7,13 +7,8 @@ import Darkmode from '../Z_Dark_Mode/Darkmode';
 import { MyContext } from '../../ContextApi/Context';
 import eventLogo from "../../Z_images/event_logo.png"
 
-
-
-
-
-
-
 function Header() {
+  const [search,setSearch] = useState(" ")
   const {searchQuery,setSearchQuery,userData} = useContext(MyContext)
   const navigate = useNavigate();
 
@@ -42,7 +37,7 @@ function Header() {
   };
 
   const handleSearch = () => {
-    // Implement search logic here
+    setSearchQuery(search.toLowerCase())
   };
 
   return (

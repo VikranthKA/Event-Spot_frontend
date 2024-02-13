@@ -15,27 +15,23 @@ import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
 import { jwtDecode } from 'jwt-decode';
 
 
-
 function reverseLatLon(arr) {
-  return [arr[1], arr[0]];
+  return [arr[1], arr[0]]
 }
 
 
 function EventInMap() {
   const eventData = useSelector((state) => state.events)
-  const [radius, setRadius] = useState(500);
+  const [radius, setRadius] = useState(1);
   const [lonlat, setLonLat] = useState([]);
   const [center, setCenter] = useState([]);
-  const {raduisEvents,handleGeoWithinEvents} = useContext(MyContext)
+  const {raduisEvents,handleGeoWithinEvents,searchQuery} = useContext(MyContext)
   const dispatch = useDispatch();
   const {userData} = useContext(MyContext)
-<<<<<<< HEAD
-=======
 
   const filterRadius =searchQuery &&  raduisEvents.filter(item=>item.title.toLowerCase().includes(searchQuery))
   const filterEvent =searchQuery && eventData.filter(item=>item.title.toLowerCase().includes(searchQuery))
 
->>>>>>> bc95efedd3bde181ca4d1ae44fe51624a8745c67
   
 
   useEffect(() => {
@@ -68,9 +64,9 @@ function EventInMap() {
   }, []);
 
   const user = {
-    name: 'User',
-    coordinates: [20, 89],
-  };
+    name: `Hello User`,
+    coordinates: lonlat.length >0 && lonlat,
+  }
 
   const eventIcon = new Icon({
     iconUrl: eventImage,
@@ -87,6 +83,10 @@ function EventInMap() {
 
   }
 
+  useEffect(()=>{
+    console.log(radius)
+  },[radius])
+
   return (
     <div className="div-container">
 
@@ -98,13 +98,13 @@ function EventInMap() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Circle center={lonlat} radius={radius} />
+<Circle center={lonlat} radius={(parseInt(radius) + 1) * 1000} /> {/* Convert to meters */}
 
           <Marker position={lonlat} icon={userIcon}>
             <Popup >{user.name}</Popup>
           </Marker>
           
-          {(raduisEvents.length>=0 ? raduisEvents: eventData)?.map((event) => (
+          {/* {(raduisEvents.length>=0 ? raduisEvents : eventData)?.map((event) => (
             <Marker
               key={event._id}
               position={reverseLatLon(event.location.coordinates)}
@@ -113,20 +113,65 @@ function EventInMap() {
               <Popup >{event.title }<br/><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
 
            </Marker>
-          ))}
+          ))} */}
+          {
+  filterRadius.length > 0 ? filterRadius.map((event) => (
+    <Marker
+      key={event._id}
+      position={reverseLatLon(event.location.coordinates)}
+      icon={eventIcon}
+    >
+      <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
+    </Marker>
+  )) : (
+    raduisEvents.length > 0 ? raduisEvents.map((event) => (
+      <Marker
+        key={event._id}
+        position={reverseLatLon(event.location.coordinates)}
+        icon={eventIcon}
+      >
+        <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
+      </Marker>
+    )) : (
+      filterEvent.length > 0 ? filterEvent.map((event) => (
+        <Marker
+          key={event._id}
+          position={reverseLatLon(event.location.coordinates)}
+          icon={eventIcon}
+        >
+          <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
+        </Marker>
+      )) : (
+        eventData.map((event) => (
+          <Marker
+            key={event._id}
+            position={reverseLatLon(event.location.coordinates)}
+            icon={eventIcon}
+          >
+            <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
+          </Marker>
+        ))
+      )
+    )
+  )
+}
+
         </MapContainer>
-        <label htmlFor="radiusInput">Radius:</label>
-      <input
-        type="range"
-        id="radiusInput"
-        min="100"
-        max="20000"
-        step="50"
-        value={radius}
-        onBlur={handleRadiusChange}
-        onChange={(e) => setRadius(parseInt(e.target.value, 10))}
-      />
-      <p>Radius: {radius} Meters</p>
+        <div>
+        <input
+    type="range"
+    id="radiusInput"
+    min="1"  
+    max="50"  
+    step="1"  
+    value={radius}
+    onBlur={handleRadiusChange}
+    onChange={(e) => setRadius(parseInt(e.target.value))}
+    style={{ width: "40%", height: "10%" }}
+/>
+</div>
+
+      <p>Radius: {radius} Km</p>
 
 
         </div>
@@ -138,7 +183,10 @@ function EventInMap() {
       <div>
         {userData.role=="Organiser" ?  <ViewHisEvents/> :<div>
       <div>
+        <div style={{backgroundColor:'lightskyblue'}}>
+        <h1>THESE ARE EVENTS IN RADIUS</h1>
         <RadiusEventDis/>
+        </div>
       </div>
       <div className="EventDisplay">
         <EventCardsDisplay/>

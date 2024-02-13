@@ -1,65 +1,19 @@
-// import React, { useState } from 'react';
-// import ReactStarsRating from 'react-awesome-stars-rating';
-
-// function ReviewForm() {
-//   const [review, setReview] = useState({
-//     title: '',
-//     body: '',
-//     rating: 5, 
-//   });
-
-//   const handleReviewChange = (value, name) => {
-//     setReview((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleReviewSubmit = (e) => {
-//     e.preventDefault();
-//     // Dispatch an action or perform any other necessary logic with the review state
-//     console.log('Submitted Review:', review);
-//   };
-
-//   return (
-//     <div>
-//       ReviewForm
-//       <form onSubmit={handleReviewSubmit}>
-//         <input type="text" value={review.body} name="body" onChange={(e) => handleReviewChange(e.target.value, e.target.name)} />
-//         <input type="text" value={review.title} name="title" onChange={(e) => handleReviewChange(e.target.value, e.target.name)} />
-//         <ReactStarsRating
-//           value={review.rating}
-//           onChange={(value) => handleReviewChange(value, 'rating')}
-//           count={5}
-//           size={30}
-//           isHalf={true}
-//           edit={true}
-//           className="custom-stars"
-//         />
-//         <input type="submit" value="Submit" />
-//       </form>
-//       <div>Rating: {review.rating}</div>
-
-//     </div>
-//   );
-// }
-
-// export default ReviewForm;
-
 import React, { useState } from 'react';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch } from 'react-redux';
+import { startCreateEvent, startCreateReview, startUpdateReview } from '../../react-redux/action/eventAction';
 
-function ReviewForm() {
-  const [review, setReview] = useState({
-    title: '',
-    body: '',
-    rating: 0,
-  });
-
+function ReviewForm({eventId,updatingReview}) {
+    const [reviewData, setReviewData] = useState({
+      title: updatingReview ? updatingReview.title : '',
+      body: updatingReview ? updatingReview.body : '',
+      rating: updatingReview ? updatingReview.rating : 0,
+    })
+const dispatch = useDispatch()
   const handleReviewChange = (value, name) => {
-    setReview((prev) => ({
+    setReviewData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -67,8 +21,13 @@ function ReviewForm() {
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitted Review:', review);
-  };
+if(reviewData._id && eventId){
+  dispatch(startUpdateReview(eventId,reviewData._id,reviewData))
+
+} else{
+  dispatch(startCreateReview(eventId,reviewData))
+}
+ };
 
   return (
     <div style={{width:"40%"}} >
@@ -79,7 +38,7 @@ function ReviewForm() {
             type="text"
             id="title"
             placeholder="Enter title"
-            value={review.title}
+            value={reviewData.title}
             onChange={(e) => handleReviewChange(e.target.value, 'title')}
           />
         </FormGroup>
@@ -89,7 +48,7 @@ function ReviewForm() {
             type="textarea"
             id="body"
             placeholder="Enter review body"
-            value={review.body}
+            value={reviewData.body}
             onChange={(e) => handleReviewChange(e.target.value, 'body')}
           />
         </FormGroup>
@@ -97,7 +56,7 @@ function ReviewForm() {
         <FormGroup>
           <Label for="rating">Rating</Label>
           <ReactStarsRating
-            value={review.rating}
+            value={reviewData.rating}
             count={5}
             onChange={(value) => handleReviewChange(value, 'rating')}
             size={30}
@@ -110,11 +69,9 @@ function ReviewForm() {
         </div> 
       </Form>
       <div>
-        <div>Rating: {review.rating}</div>
       </div>
     </div>
   );
 }
 
 export default ReviewForm
-

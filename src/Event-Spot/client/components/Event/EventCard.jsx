@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 
+
+
 function readableDate(inputDateString) {
   const momentObject = moment(inputDateString);
   return momentObject.format('LLLL');
@@ -14,18 +16,8 @@ function EventCard({title,image,start,categoryName,id}) {
 
   return (
     <Card style={{ width: '18rem',border:"1px solid black" }}>
-      <img 
-<<<<<<< HEAD
-        src={`http://localhost:3333/Uploads/images/${image}`}
 
-       style={{backgroundSize:"cover"}} />
-      <Card.Body style={{border:"2px solid white" }}>
-        <Card.Title>{title}</Card.Title>
-        <Card.Text>
-          {readableDate(start)}<br/>{categoryName}
-        </Card.Text>
-        <Link to={`/event-info/${id}`}>View</Link>
-=======
+      <img 
         src={`${process.env.REACT_APP_IMAGE_URL}${image}`}
                 onClick={()=>`/event-info/${id}`}
 
@@ -37,7 +29,6 @@ function EventCard({title,image,start,categoryName,id}) {
           GENRE:<h4 style={{color:'',display:"inline-block"}}>{categoryName}</h4><br/>
         <Link to={`/event-info/${id}`}>View</Link>
         </Card.Text>
->>>>>>> bc95efedd3bde181ca4d1ae44fe51624a8745c67
       </Card.Body>
     </Card>
   );

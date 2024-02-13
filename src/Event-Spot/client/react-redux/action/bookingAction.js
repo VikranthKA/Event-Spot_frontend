@@ -26,6 +26,9 @@ const setTicketBooked =(data)=>{
         payload:data
     }
 }
+
+
+
 export const setClearTicket =()=>{
     return{
         type:"CLEAR_BOOKING_IN_STATE"
@@ -39,6 +42,9 @@ const updateEventAfterBooking = (data)=>{
     }
 
 }
+
+
+
 export const startPayment = (bookingId,card)=>{
     return async(dispatch)=>{
         try{
@@ -51,61 +57,43 @@ export const startPayment = (bookingId,card)=>{
         }
     }
 }
+
 const setStartBooking = (data)=>{
     if(data){
         localStorage.setItem("stripeId",data.id)
         window.location = data.url
+    }else{
+
     }
-    // return{
-    //     type:"CREATE_PAYMENT_TRUE",
-    //     paylaod:data
-    // }
+
 
 }
-export const startPaymentStatus = (bookingId,card)=>{
+
+// export const startPaymentDelete = ()=>{
+//     return async(dispatch)=>{
+//         try{
+            
+//             // const response = await axios.delete(`/api/delete-payment/${}`)
+//             dispatch(setStartPaymnetDelete(response.data))
+//         }catch(err){
+//             console.log(err)
+//         }
+//     }
+// }
+// const setStartPaymnetDelete = (data)=>{
+//     return{
+//         type:"DELTE_PAYMENT_TRUE",
+//         paylaod:data
+//     }
+
+// }
+export const startCancelBooking = (bookingId)=>{
+    console.log(bookingId,"id")
     return async(dispatch)=>{
         try{
-            const response = await axios.post()
-            dispatch(setUpadateStatus(response.data))   
-        }catch(err){
-            toast.error(JSON.stringify(err.response.data.error))
-
-            console.log(err)
-        }
-    }
-}
-const setUpadateStatus = (data)=>{
-
-        //add the logic of the dont know
-    
-    // return{
-    //     type:"UPDATE_PAYMENT_TRUE",
-    //     paylaod:data
-    // }
-
-}
-export const startPaymentDelete = (eventId,bookingId,card)=>{
-    return async(dispatch)=>{
-        try{
-            const response = await axios.post(`/api/event/${eventId}`,{bookingId,card},paymentConfig)
-            dispatch(setStartBooking(response.data))   
-        }catch(err){
-            console.log(err)
-        }
-    }
-}
-const setPaymentDelate = (data)=>{
-    return{
-        type:"DELTE_PAYMENT_TRUE",
-        paylaod:data
-    }
-
-}
-export const startCancelPayment = (eventId,bookingId,card)=>{
-    return async(dispatch)=>{
-        try{
-            const response = await axios.delete(`/api/booking/${bookingId}`,paymentConfig)
+            const response = await axios.delete(`/api/booking/${bookingId}`,config)
             dispatch(setCancelPayment(response.data))   
+            dispatch(setClearTicket())
         }catch(err){
             toast.error(err.response.data.error)
             console.log(err)
