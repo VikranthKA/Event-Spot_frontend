@@ -30,6 +30,7 @@ export const startCreateEvent = (eventFormData)=>{
         try{
             const response = await axios.post('/api/event', eventFormData, fileConfig)
             dispatch(setCreateEvents(response.data))
+            toast.success( `${response.data.title} Event created successfully`)
 
         }catch(err){
             console.log(err)
@@ -89,8 +90,7 @@ const setDeleteEvents =(data)=>{
 export const startCreateReview = (eventId,reviewForm)=>{
     return async(dispatch)=>{
         try{
-            const response = await axios.post(`/api/events/${eventId}/reviews`, reviewForm, config)
-            if(response.data.event._id === eventId){
+            const response = await axios.post(`/api/event/${eventId}/review`, reviewForm, config)
                 dispatch({
                     type: "CREATE_REVIEW_FOR_EVENT",
                     payload:{
@@ -98,13 +98,16 @@ export const startCreateReview = (eventId,reviewForm)=>{
                         review:response.data
                     }
                 })
+                console.log({
+                    eventId,
+                    review:response.data
+                })
 
-            }
             toast.success("Review Created Successfully")
 
         }catch(err){
             console.log(err)
-            alert(err,"Cannot create a Reviw")
+            toast.error(err,"Cannot create a Reviw")
         }
     }
 }
@@ -114,42 +117,43 @@ export const startCreateReview = (eventId,reviewForm)=>{
 export const startUpdateReview = (eventId,reviewId,reviewForm)=>{
     return async(dispatch)=>{
         try{
-            const response = await axios.put(`/api/events/${eventId}/reviews/${reviewId}`, reviewForm, config)
-            dispatch(setUpdateReview(response.data))
+            const response = await axios.put(`/api/event/${eventId}/review/${reviewId}`, reviewForm, config)
+            dispatch({
+                type:"UPDATE_REVIEW_FOR_EVENT",
+                payload:{
+                    eventId,
+                    reviewId,
+                    updatedReview:response.data
+                }
+            })
             toast.success("Review Edited Successfully")
 
         }catch(err){
             console.log(err)
-            alert(err,"Cannot Edit a Review")
+            toast.error(err,"Cannot Edit a Review")
         }
     }
 }
 
-const setUpdateReview =(data)=>{
-    return {
-        type:"UPDATE_REVIEW_FOR_EVENT",
-        payload:data
-    }
-}
+
 
 export const startDeleteReview = (eventId,reviewId,reviewForm)=>{
     return async(dispatch)=>{
         try{
-            const response = await axios.delete(`/api/events/${eventId}/reviews/${reviewId}`, reviewForm, config)
-            dispatch(setDeleteReview(response.data))
-            toast.success("Review Edited Successfully")
+            const response = await axios.delete(`/api/event/${eventId}/review/${reviewId}`, config)
+            dispatch({
+                type:"DELETE_REVIEW_FOR_EVENT",
+                payload:{
+                    eventId,
+                    reviewId
+                }
+            })
+            toast.success("Review Deleted Successfully")
 
         }catch(err){
             console.log(err)
-            alert(err,"Cannot Edit a Review")
+            toast.error(err,"Cannot Edit a Review")
         }
-    }
-}
-
-const setDeleteReview =(data)=>{
-    return {
-        type:"UPDATE_REVIEW_FOR_EVENT",
-        payload:data
     }
 }
 

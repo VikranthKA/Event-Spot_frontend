@@ -1,5 +1,4 @@
 import { toast } from "react-toastify"
-import { toast } from "react-toastify"
 import axios from "../../components/Api_Resources/axios"
 import { config, paymentConfig } from "../../components/Api_Resources/config"
 
@@ -10,14 +9,9 @@ export const startCreateBooking = (eventId,tickets)=>{
             console.log(response.data,"i action")
             dispatch(setTicketBooked(response.data.booking))
             dispatch(updateEventAfterBooking(response.data.updatedEvent))
-            dispatch(setTicketBooked(response.data.booking))
-            dispatch(updateEventAfterBooking(response.data.updatedEvent))
         }catch(err){
             console.log(err)
             alert(err)
-            return{
-                type:"CLEAR_BOOKING_IN_STATE"
-            }
             return{
                 type:"CLEAR_BOOKING_IN_STATE"
             }
@@ -55,9 +49,6 @@ export const startPayment = (bookingId,card)=>{
     return async(dispatch)=>{
         try{
             const response = await axios.post(`/api/booking/${bookingId}/payment`,{card},paymentConfig)
-            console.log(response.data.id)
-            dispatch(setStartBooking(response.data)) 
-  
             console.log(response.data.id)
             dispatch(setStartBooking(response.data)) 
   
@@ -103,24 +94,6 @@ export const startCancelBooking = (bookingId)=>{
             const response = await axios.delete(`/api/booking/${bookingId}`,config)
             dispatch(setCancelPayment(response.data))   
             dispatch(setClearTicket())
-        }catch(err){
-            toast.error(err.response.data.error)
-            console.log(err)
-        }
-    }
-}
-const setCancelPayment = (data)=>{
-    return{
-        type:"DELTE_BOOKING_TRUE",
-        paylaod:data
-    }
-
-}
-export const startCancelPayment = (eventId,bookingId,card)=>{
-    return async(dispatch)=>{
-        try{
-            const response = await axios.delete(`/api/booking/${bookingId}`,paymentConfig)
-            dispatch(setCancelPayment(response.data))   
         }catch(err){
             toast.error(err.response.data.error)
             console.log(err)

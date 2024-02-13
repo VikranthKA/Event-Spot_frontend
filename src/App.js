@@ -32,6 +32,7 @@ import ViewHisBookings from './Event-Spot/client/components/ProfileHelpers/ViewH
 import Deactivate from './Event-Spot/client/components/UserProfile.js/Deactivate';
 import { config } from './Event-Spot/client/components/Api_Resources/config';
 import UserForm2 from './Event-Spot/client/components/UserProfile.js/UserForm2';
+import EventUpdate from './Event-Spot/client/components/Event/EventUpdate'
 
 function geoWithin(state,action){
   switch(action.type){

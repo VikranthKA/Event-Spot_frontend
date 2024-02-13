@@ -19,17 +19,32 @@ const eventReducer = (state=eventInitialState,action)=>{
         case "DELETE_EVENT":
             return state.filter((ele)=>ele._id !== action.payload)
              
+        // case "CREATE_REVIEW_FOR_EVENT":
+        //     return state.map((event)=>{
+        //         if(event._id === action.payload.eventId){
+        //             return {
+        //                 ...event,
+        //                 reviews:[action.payload.review,...event.review]
+        //             }
+        //         }else{
+        //             return event
+        //         }
+        //     })
+
         case "CREATE_REVIEW_FOR_EVENT":
-            return state.map((event)=>{
-                if(event._id === action.payload.eventId){
-                    return {
-                        ...event,
-                        reviews:[action.payload.review,...event.review]
-                    }
-                }else{
-                    return event
-                }
-            })
+    return state.map((event) => {
+        if (event._id === action.payload.eventId) {
+            // Ensure that event.review is initialized as an array
+            const reviews = Array.isArray(event.reviews) ? event.reviews : [];
+            return {
+                ...event,
+                reviews: [action.payload.review, ...reviews]
+            };
+        } else {
+            return event;
+        }
+    });
+
            
         case "UPDATE_REVIEW_FOR_EVENT":
             return state.map((event)=>{

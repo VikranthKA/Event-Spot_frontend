@@ -2,14 +2,7 @@ import Card from 'react-bootstrap/Card';
 import {Link} from 'react-router-dom'
 import moment from 'moment'
 
-function readableDate(inputDateString) {
-  const momentObject = moment(inputDateString);
-  return momentObject.format('LLLL');
-}
-function EventCard({title,image,start,categoryName,id}) {
 
-import {Link} from 'react-router-dom'
-import moment from 'moment'
 
 function readableDate(inputDateString) {
   const momentObject = moment(inputDateString);
@@ -37,5 +30,4 @@ function EventCard({title,image,start,categoryName,id}) {
   );
 }
 
-export default EventCard
 export default EventCard

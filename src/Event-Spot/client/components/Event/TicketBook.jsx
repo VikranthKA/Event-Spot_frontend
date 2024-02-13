@@ -42,7 +42,6 @@ const TicketBook = () => {
 
     fetchData();
     dispatch(setClearTicket())
-    dispatch(setClearTicket())
   }, [])
 
   useEffect(()=>{
@@ -63,7 +62,6 @@ const TicketBook = () => {
   },[tickets])
 
   const handlePayment =()=>{
-    console.log("payment")
     console.log("payment")
       dispatch(startPayment(bookedTicket._id,card))   
   }
@@ -86,7 +84,6 @@ const TicketBook = () => {
 
             // Dispatch action to update remaining ticket count in the Redux store
 
-
             dispatch(updateRemainingTickets(eventId, [...eventDetails.ticketType.slice(0, i), updatedTicket, ...eventDetails.ticketType.slice(i + 1)]));
 
             return updatedTicket;
@@ -95,7 +92,6 @@ const TicketBook = () => {
         }),
       };
 
-      setEventDetails(updatedEventDetails)
       setEventDetails(updatedEventDetails)
       return updatedTickets;
     });
@@ -141,15 +137,10 @@ const TicketBook = () => {
 
 
       return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount,ticketPrice:ticket.ticketPrice   }; //
-
-      return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount,ticketPrice:ticket.ticketPrice   }; //
     });
     const filteredTickets = updatedEventTickets.filter((ticket) => ticket.Quantity > 0);
 
-    const filteredTickets = updatedEventTickets.filter((ticket) => ticket.Quantity > 0);
 
-
-    dispatch(startCreateBooking(eventId, filteredTickets));
     dispatch(startCreateBooking(eventId, filteredTickets));
     setModalVisible(true); // Show modal after creating booking
   };
@@ -205,7 +196,6 @@ const TicketBook = () => {
             Confirm Payment
           </Button>{' '}
           <Button color="secondary" onClick={handleCancelPayment}>
-          <Button color="secondary" onClick={handleCancelPayment}>
             Cancel
           </Button>
         </Modal.Footer>
@@ -215,5 +205,4 @@ const TicketBook = () => {
   );
 };
 
-export default TicketBook
 export default TicketBook
