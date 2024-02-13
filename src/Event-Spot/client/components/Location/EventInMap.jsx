@@ -29,6 +29,13 @@ function EventInMap() {
   const {raduisEvents,handleGeoWithinEvents} = useContext(MyContext)
   const dispatch = useDispatch();
   const {userData} = useContext(MyContext)
+<<<<<<< HEAD
+=======
+
+  const filterRadius =searchQuery &&  raduisEvents.filter(item=>item.title.toLowerCase().includes(searchQuery))
+  const filterEvent =searchQuery && eventData.filter(item=>item.title.toLowerCase().includes(searchQuery))
+
+>>>>>>> bc95efedd3bde181ca4d1ae44fe51624a8745c67
   
 
   useEffect(() => {

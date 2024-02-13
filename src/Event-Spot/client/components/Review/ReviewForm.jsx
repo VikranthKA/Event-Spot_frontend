@@ -71,7 +71,7 @@ function ReviewForm() {
   };
 
   return (
-    <div>
+    <div style={{width:"40%"}} >
       <Form onSubmit={handleReviewSubmit}>
         <FormGroup>
           <Label for="title">Title</Label>
@@ -93,6 +93,7 @@ function ReviewForm() {
             onChange={(e) => handleReviewChange(e.target.value, 'body')}
           />
         </FormGroup>
+        <div style={{display:"flex"}}>
         <FormGroup>
           <Label for="rating">Rating</Label>
           <ReactStarsRating
@@ -103,9 +104,10 @@ function ReviewForm() {
             isHalf={true}
           />
         </FormGroup>
-        <Button color="primary" type="submit">
+        <Button color="primary" type="submit" style={{marginLeft:"20%"}}>
           Submit
         </Button>
+        </div> 
       </Form>
       <div>
         <div>Rating: {review.rating}</div>

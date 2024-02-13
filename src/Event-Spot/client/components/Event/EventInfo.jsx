@@ -10,6 +10,7 @@ import ReviewForm from '../Review/ReviewForm';
 import EventCardsDisplay from './EventCardsDisplay';
 import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
 import { MyContext } from '../../ContextApi/Context';
+import ReviewCard from '../Review/ReviewCard';
 
 // Import statements...
 function countRemainingTicket(tickets){
@@ -20,7 +21,6 @@ return totalRemainingTickets
 function EventInfo() {
   const { eventId } = useParams();
   const [event, setEvent] = useState('');
-  const [reviewToggle, setReviewToggle] = useState(false);
   const dispatch = useDispatch();
   const events = useSelector((state) => state.events)
   const {userData} = useContext(MyContext)
@@ -85,8 +85,11 @@ function EventInfo() {
       <Row>
         <Col>
           <h2 className="my-3">{event?.title}</h2>
+          <h3>ORGANISER:{event?.organiserId?.username}</h3>
+
           <h5>Venue: {event?.venueName}</h5>
           <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
+          
         </Col>
 
         {/* <Col>
@@ -104,10 +107,21 @@ function EventInfo() {
       ) : (
         <Button onClick={handleBookTickets}>Book</Button>
       )}
+<<<<<<< HEAD
       <Button onClick={()=>navigate(`/event-form/${event._id}`)}>Edit</Button>
     </div>      </Row>
+=======
+    </div>
+    </Row>
+>>>>>>> bc95efedd3bde181ca4d1ae44fe51624a8745c67
       <Row className="my-4">
+        <Col>
+        Actors :{event.actor}
+        </Col>
+        <Col>
+        </Col>
       </Row>
+<<<<<<< HEAD
       <ListGroup as="ol" numbered className="my-4">
         <ListGroup.Item className="fw-bold">Reviews</ListGroup.Item>
         {/* userData.id==="Organiser" can u show the review for that event */}
@@ -132,9 +146,20 @@ function EventInfo() {
           <Button>delete</Button>
         </div>
         {reviewToggle && <ReviewForm />}
+=======
+      <ListGroup numbered className="my-4">
+        <ListGroup.Item className="fw-bold" style={{width:"40%"}}>Reviews</ListGroup.Item>
+        <ReviewForm eventId={event._id}/>
+        <div style={{width:"40%"}}>
+        { event.reviews?.length > 0 && event?.reviews?.map((review) =><ReviewCard
+          eventId={event._id}
+          review={review}
+        />)}
+        </div>
+>>>>>>> bc95efedd3bde181ca4d1ae44fe51624a8745c67
       </ListGroup>
     </Container>
-      {userData.role==="Organiser" ? <ViewHisEvents/>  :<EventCardsDisplay />}
+      {userData.role==="Organiser" && <ViewHisEvents/> }
     </div>
   );
 }
