@@ -10,6 +10,7 @@ import ReviewForm from '../Review/ReviewForm';
 import EventCardsDisplay from './EventCardsDisplay';
 import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
 import { MyContext } from '../../ContextApi/Context';
+import ReviewCard from '../Review/ReviewCard';
 
 // Import statements...
 function countRemainingTicket(tickets){
@@ -20,7 +21,6 @@ return totalRemainingTickets
 function EventInfo() {
   const { eventId } = useParams();
   const [event, setEvent] = useState('');
-  const [reviewToggle, setReviewToggle] = useState(false);
   const dispatch = useDispatch();
   const events = useSelector((state) => state.events)
   const {userData} = useContext(MyContext)
@@ -85,8 +85,11 @@ function EventInfo() {
       <Row>
         <Col>
           <h2 className="my-3">{event?.title}</h2>
+          <h3>ORGANISER:{event?.organiserId?.username}</h3>
+
           <h5>Venue: {event?.venueName}</h5>
           <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
+          
         </Col>
 
         {/* <Col>
@@ -104,38 +107,27 @@ function EventInfo() {
       ) : (
         <Button onClick={handleBookTickets}>Book</Button>
       )}
-    </div>      </Row>
+    </div>
+    </Row>
       <Row className="my-4">
+        <Col>
+        Actors :{event.actor}
+        </Col>
+        <Col>
+        </Col>
       </Row>
-      <ListGroup as="ol" numbered className="my-4">
+      <ListGroup numbered className="my-4">
         <ListGroup.Item className="fw-bold" style={{width:"40%"}}>Reviews</ListGroup.Item>
-        {/* userData.id==="Organiser" can u show the review for that event */}
-        { event.reviews?.length > 0 && event?.reviews?.map((review) => (
-          <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start" >
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">{review.title}</div>
-              {review.body}
-            </div>
-            <Badge bg="primary" pill>
-              {review.rating}
-            </Badge>
-            <div style={{ display: 'block' }}>
-              {reviewToggle ? (
-                <Button onClick={() => setReviewToggle(!reviewToggle)}>cancel</Button>
-              ) : (
-                <Button onClick={() => setReviewToggle(!reviewToggle)}>create</Button>
-              )}
-              {<div>
-              <Button>Edit</Button>
-              <Button>delete</Button>
-              </div>}
-            </div>
-            {reviewToggle && <ReviewForm eventId={event._id} updatingReview={review} reviewId={review._id}/>}
-          </ListGroup.Item>
-        ))}
+        <ReviewForm eventId={event._id}/>
+        <div style={{width:"40%"}}>
+        { event.reviews?.length > 0 && event?.reviews?.map((review) =><ReviewCard
+          eventId={event._id}
+          review={review}
+        />)}
+        </div>
       </ListGroup>
     </Container>
-      {userData.role==="Organiser" ? <ViewHisEvents/>  :<EventCardsDisplay />}
+      {userData.role==="Organiser" && <ViewHisEvents/> }
     </div>
   );
 }

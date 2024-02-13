@@ -29,8 +29,8 @@ function EventInMap() {
   const dispatch = useDispatch();
   const {userData} = useContext(MyContext)
 
-  const filterRadius = raduisEvents.filter(item=>item.title.toLowerCase().includes(searchQuery))
-  const filterEvent = eventData.filter(item=>item.title.toLowerCase().includes(searchQuery))
+  const filterRadius =searchQuery &&  raduisEvents.filter(item=>item.title.toLowerCase().includes(searchQuery))
+  const filterEvent =searchQuery && eventData.filter(item=>item.title.toLowerCase().includes(searchQuery))
 
   
 

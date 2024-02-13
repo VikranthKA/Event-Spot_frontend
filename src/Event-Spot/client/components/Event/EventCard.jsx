@@ -1,6 +1,10 @@
 import Card from 'react-bootstrap/Card';
 import {Link} from 'react-router-dom'
 import moment from 'moment'
+import { faInfo} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
 
 
 
@@ -15,16 +19,16 @@ function EventCard({title,image,start,categoryName,id}) {
 
       <img 
         src={`${process.env.REACT_APP_IMAGE_URL}${image}`}
+                onClick={()=>`/event-info/${id}`}
 
        style={{backgroundSize:"cover"}} />
       <Card.Body style={{border:"2px solid white" }}>
-        <Card.Title>{title}</Card.Title>
-        <Card.Text>
-          {readableDate(start)}<br/>{categoryName}
-          {readableDate(start)}<br/>{categoryName}
+        <Card.Title onClick={()=>`/event-info/${id}`}>{title}</Card.Title>
+        <Card.Text onClick={()=>`/event-info/${id}`}>
+          {readableDate(start)}<br/>
+          GENRE:<h4 style={{color:'',display:"inline-block"}}>{categoryName}</h4><br/>
+        <Link to={`/event-info/${id}`}>View</Link>
         </Card.Text>
-        <Link to={`/event-info/${id}`}>View</Link>
-        <Link to={`/event-info/${id}`}>View</Link>
       </Card.Body>
     </Card>
   );

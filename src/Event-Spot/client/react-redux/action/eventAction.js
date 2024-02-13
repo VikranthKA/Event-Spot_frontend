@@ -7,8 +7,8 @@ export const startGetEvents = ()=>{
        
             try{
                 const response = await axios.get(`/api/event`)
-                dispatch(setEvents(response.data))
-                console.log(response.data,"data")
+                dispatch(setEvents(response.data.events))
+                console.log(response.data.events,"data action")
             }catch(err){
                 console.log(err)
                 alert(err)

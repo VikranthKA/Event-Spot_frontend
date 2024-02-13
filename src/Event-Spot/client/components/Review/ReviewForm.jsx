@@ -30,7 +30,7 @@ if(reviewId && eventId){
  };
 
   return (
-    <div>
+    <div style={{width:"40%"}} >
       <Form onSubmit={handleReviewSubmit}>
         <FormGroup>
           <Label for="title">Title</Label>
@@ -52,6 +52,7 @@ if(reviewId && eventId){
             onChange={(e) => handleReviewChange(e.target.value, 'body')}
           />
         </FormGroup>
+        <div style={{display:"flex"}}>
         <FormGroup>
           <Label for="rating">Rating</Label>
           <ReactStarsRating
@@ -62,9 +63,10 @@ if(reviewId && eventId){
             isHalf={true}
           />
         </FormGroup>
-        <Button color="primary" type="submit">
+        <Button color="primary" type="submit" style={{marginLeft:"20%"}}>
           Submit
         </Button>
+        </div> 
       </Form>
       <div>
       </div>
