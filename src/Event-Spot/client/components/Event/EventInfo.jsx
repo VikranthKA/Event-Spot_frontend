@@ -111,9 +111,10 @@ function EventInfo() {
     </Row>
       <Row className="my-4">
         <Col>
-        Actors :{event.actor}
+        Actors :{event?.actors?.map((actor)=>actor?.name)}
         </Col>
-        <Col>
+        <Col >
+        Description :{event?.description}
         </Col>
       </Row>
       <ListGroup numbered className="my-4">

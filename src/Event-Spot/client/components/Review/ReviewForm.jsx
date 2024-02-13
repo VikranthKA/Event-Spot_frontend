@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { startCreateEvent, startCreateReview, startUpdateReview } from '../../react-redux/action/eventAction';
 
-function ReviewForm(eventId,updatingReview=null,reviewId=null) {
+function ReviewForm({eventId,updatingReview}) {
     const [reviewData, setReviewData] = useState({
       title: updatingReview ? updatingReview.title : '',
       body: updatingReview ? updatingReview.body : '',
@@ -21,16 +21,17 @@ const dispatch = useDispatch()
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-if(reviewId && eventId){
-  dispatch(startUpdateReview(eventId,reviewId,reviewData))
+if(reviewData._id && eventId){
+  dispatch(startUpdateReview(eventId,reviewData._id,reviewData))
 
 } else{
   dispatch(startCreateReview(eventId,reviewData))
 }
+setReviewData("")
  };
 
   return (
-    <div style={{width:"40%"}} >
+    <div style={{width:"40%"}}>
       <Form onSubmit={handleReviewSubmit}>
         <FormGroup>
           <Label for="title">Title</Label>

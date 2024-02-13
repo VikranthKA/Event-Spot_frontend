@@ -11,13 +11,16 @@ const ReviewCard = ({eventId,review}) => {
   return (
     <div style={{width:"100%",marginTop:"10%",borderRadius:"5%"}}>
         <ListGroup.Item key={review._id} as="li" className="d-flex justify-content-between align-items-start"  >
-            <div className="ms-2 me-auto">
+            {reviewToggle ?<ReviewForm eventId={eventId} updatingReview={review} />:<div className="ms-2 me-auto">
+                <div>
+                Name:{review.userId.username}
               <div className="fw-bold">Title:{review.title}</div>
               Body:{review.body}
             </div>
             <Badge bg="primary" pill>
               {review.rating}
             </Badge>
+            </div>}
             { userData.id===review.userId._id && <div style={{ display: 'block' }}>
               {reviewToggle ? (
                 <Button onClick={() => setReviewToggle(!reviewToggle)}>cancel</Button>
@@ -27,7 +30,6 @@ const ReviewCard = ({eventId,review}) => {
               <Button>delete</Button>
 
             </div>}
-            {reviewToggle && <ReviewForm eventId={eventId} updatingReview={review} reviewId={review._id}/>}
           </ListGroup.Item>
     </div>
   )
