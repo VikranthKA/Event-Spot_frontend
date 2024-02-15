@@ -22,6 +22,7 @@ function EventCard({title,image,start,categoryName,id}) {
                 onClick={()=>`/event-info/${id}`}
 
        style={{backgroundSize:"cover"}} />
+       {console.log(`${process.env.REACT_APP_IMAGE_URL}`)}
       <Card.Body style={{border:"2px solid white" }}>
         <Card.Title onClick={()=>`/event-info/${id}`}>{title}</Card.Title>
         <Card.Text onClick={()=>`/event-info/${id}`}>

@@ -6,7 +6,7 @@ export default function Organizer() {
     <div className="container mt-5">
       <div className="row justify-content-center">
           <div style={{width:"400px"}}>
-            <h1 className="card-title">Organiser Profile</h1>
+            <h1 style={{ borderBottom: '3px solid black', paddingBottom: '1px'}}>Organiser Profile</h1>
           </div>
         </div>
       <Profile />

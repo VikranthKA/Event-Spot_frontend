@@ -17,17 +17,17 @@ export default function Admin() {
   return (
     <div className="container mt-5">
       <div>
-        <h1>Admin Profile</h1>
+        <h1 style={{ borderBottom: '3px solid black', paddingBottom: '1px'}}>Admin Profile</h1>
       </div>
       <Profile />
       <Create />
       <div className="text-center mt-3">
-        <button className="btn btn-primary" onClick={onClick}>
+        <button className="btn btn-warning" onClick={onClick}>
           Approve or disapprove events here
         </button>
         <br/>
         <br/>
-        <button className="btn btn-primary" onClick={handleDeactivate}>Click here to deactivate users</button>
+        <button className="btn btn-warning" onClick={handleDeactivate}>Click here to deactivate users</button>
       </div>
       <br />
       <br />
