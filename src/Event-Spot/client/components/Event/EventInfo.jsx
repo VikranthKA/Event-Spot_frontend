@@ -27,9 +27,14 @@ function EventInfo() {
 
   useEffect(() => {
     dispatch(startGetEvents());
+  }, []);
+  
+  useEffect(() => {
     const eventData = events.find((ele) => ele._id === eventId);
-    setEvent(eventData);
-  }, [eventId]);
+    if (eventData) {
+      setEvent(eventData);
+    }
+  }, [events, eventId])
 
   function readableDate(inputDateString) {
     const momentObject = moment(inputDateString);
@@ -119,11 +124,11 @@ function EventInfo() {
       </Row>
       <ListGroup numbered className="my-4">
         <ListGroup.Item className="fw-bold" style={{width:"40%"}}>Reviews</ListGroup.Item>
-        <ReviewForm eventId={event._id}/>
+        <ReviewForm eventId={event?._id}/>
         <div style={{width:"40%"}}>
-        { event.reviews?.length > 0 && event?.reviews?.map((review) =><ReviewCard
+        { event?.reviews?.length > 0 && event?.reviews?.map((review) =><ReviewCard
           eventId={event._id}
-          review={review}
+          reviewinfo={review.reviewId}
         />)}
         </div>
       </ListGroup>

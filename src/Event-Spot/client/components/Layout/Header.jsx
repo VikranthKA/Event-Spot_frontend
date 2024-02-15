@@ -5,7 +5,7 @@ import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
 import { MyContext } from '../../ContextApi/Context';
-import eventLogo from "../../Z_images/event_logo.png"
+import eventLogo from "../../Z_images/EVENT_LOGO_FINAL.png"
 
 function Header() {
   const [search,setSearch] = useState(" ")
@@ -44,8 +44,7 @@ function Header() {
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          {/* <img style={{height:"50px",width:"0px",borderRadius:"20%"}} src={eventLogo}/> */}
-          LOGO
+          <img style={{height:"50px",width:"150px",border:"4px solid orange",borderRadius:"30%"}}  src={eventLogo}/>
         </Link>
         
         {userData.role==="Organiser"&&<Link className="navbar-brand" to="/event-form">
@@ -68,8 +67,8 @@ function Header() {
             {localStorage.getItem("token") && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link active" aria-current="page" to="/">
-                    Home
+                  <Link className="nav-link active" aria-current="page" to="/" >
+                    M A P
                   </Link>
                 </li>
               </>
