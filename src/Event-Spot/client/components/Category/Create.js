@@ -61,7 +61,7 @@ function Create() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-dark">
                 Create
               </button>
               {formErrors.name && <div className="invalid-feedback">{formErrors.name}</div>}

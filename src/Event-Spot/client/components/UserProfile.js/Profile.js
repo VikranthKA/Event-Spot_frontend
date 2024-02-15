@@ -7,28 +7,35 @@ import { MyContext } from '../../ContextApi/Context';
 export default function Profile() {
   const { profile, error } = useContext(MyContext);
 
+  
 
-  if (error) {
-    return (
-      <div className="container mt-5">
-        <div className="card text-center bg-light p-3">
-          <h1 className="card-title">Hello</h1>
-          <p className="card-text text-danger">Create your profile</p>
-          <div>
-            <Link to="/create-profile" className="btn btn-success">
-              Create
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
+  // if (error) {
+  //   return (
+  //     <div className="container mt-5">
+  //       <div className="card text-center bg-light p-3">
+  //         <h1 className="card-title">Hello</h1>
+  //         <p className="card-text text-danger">Create your profile</p>
+  //         <div>
+  //           <Link to="/create-profile" className="btn btn-success">
+  //             Create
+  //           </Link>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (!profile) {
     return (
-      <div className="container mt-5">
-        <div className="card text-center bg-light p-3">
-          <h1 className="card-title">Loading...</h1>
+      <div className="container mt-5" >
+        <div className="card text-center bg-light p-3" style={{width:"500px", marginLeft:"275px"}}>
+          <img src="https://cdn.pixabay.com/animation/2022/08/06/11/56/11-56-56-209_512.gif" alt="" 
+          style={{height:"300px"}}></img>
+          <h3>Hey there, you can create your profile now by clicking the button below</h3>
+          <Link to="/create-profile" className="btn btn-success">
+                Create
+              </Link>
         </div>
       </div>
     );
@@ -45,11 +52,11 @@ export default function Profile() {
                 Edit
               </Link>
             )}
-            {!profile && (
+            {/* {!profile && (
               <Link to="/edit-profile" className="btn btn-success">
                 Create
               </Link>
-            )}
+            )} */}
           </div>
         </div>
         <div className="card-body">
@@ -57,11 +64,12 @@ export default function Profile() {
             <div className="col-md-4 text-center" style={{ marginTop: '20px' }}>
               <img
                 className="rounded-circle mb-3"
-                src={`http://localhost:3333/Uploads/images/${profile.profilePic}`}
+                src={`${process.env.REACT_APP_IMAGE_URL}${profile.profilePic}`}
                 alt="Profile"
                 width="150"
                 height="150"
               />
+              {console.log(`${process.env.REACT_APP_IMAGE_URL}`)}
             </div>
             <div className="col-md-8">
               <p className="card-text">

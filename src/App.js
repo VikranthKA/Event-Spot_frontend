@@ -104,7 +104,7 @@ const App = () => {
     };
 
     fetchProfileData();
-  }, [localStorage.getItem('token')]);
+  }, [userData]);
 
 
 
