@@ -67,11 +67,12 @@ function ReviewForm({ eventId, updatingReview, handleReviewToggle }) {
     };
 
     return (
-        <div style={{ width: '40%' }}>
+        <div style={{ width: '70%', marginLeft:"150px" }}>
             <Form onSubmit={handleReviewSubmit}>
                 <FormGroup>
-                    <Label for="title">Title</Label>
+                    <Label className='fw-bold' for="title">Title</Label>
                     <Input
+                        style={{width:"300px"}}
                         type="text"
                         id="title"
                         placeholder="Enter title"
@@ -81,8 +82,9 @@ function ReviewForm({ eventId, updatingReview, handleReviewToggle }) {
                     {errors.title && <span style={{ color: 'red' }}>{errors.title}</span>}
                 </FormGroup>
                 <FormGroup>
-                    <Label for="body">Body</Label>
+                    <Label className='fw-bold' for="body">Body</Label>
                     <Input
+                        style={{width:"600px"}}
                         type="textarea"
                         id="body"
                         placeholder="Enter review body"
@@ -93,7 +95,7 @@ function ReviewForm({ eventId, updatingReview, handleReviewToggle }) {
                 </FormGroup>
                 <div style={{ display: 'flex' }}>
                     <FormGroup>
-                        <Label for="rating">Rating</Label>
+                        <Label className='fw-bold' for="rating">Rating: </Label>
                         <ReactStarsRating
                             value={reviewData.rating}
                             count={5}
@@ -103,7 +105,7 @@ function ReviewForm({ eventId, updatingReview, handleReviewToggle }) {
                         />
                     </FormGroup>
                     {errors.rating && <span style={{ color: 'red' }}>{errors.rating}</span>}
-                    <Button color="primary" type="submit" style={{ marginLeft: '20%' }}>
+                    <Button color="dark" type="submit" style={{ marginLeft: '52%' }}>
                         Submit
                     </Button>
                 </div>

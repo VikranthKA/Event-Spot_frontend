@@ -44,7 +44,7 @@ function Header() {
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img style={{height:"50px",width:"150px",border:"4px solid orange",borderRadius:"30%"}}  src={eventLogo}/>
+          <img style={{height:"30px",width:"150px",border:"4px solid orange",borderRadius:"30%"}}  src={eventLogo}/>
         </Link>
         
         {userData.role==="Organiser"&&<Link className="navbar-brand" to="/event-form">

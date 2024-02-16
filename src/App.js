@@ -105,13 +105,8 @@ const App = () => {
 
     fetchProfileData();
   }, [userData]);
-
-
-
   return (
-    <div>
-
-      
+    <div>   
     <MyContext.Provider value={
                               {raduisEvents,handleGeoWithinEvents,//handling the radius events
                                 searchQuery,setSearchQuery,//handling the search query
@@ -150,13 +145,6 @@ const App = () => {
           <Route path="/event-form/:eventId" element={<EventUpdate/>}/>
           <Route path="/approved-list" element={<ApprovedList/>}/>
           <Route path="/user-deactivate" element={<Deactivate/>}/>
-
-          
-
-
-
-
-
       </Routes>
       <ToastContainer/>
     </MyContext.Provider>
@@ -164,4 +152,3 @@ const App = () => {
   )
 }
 export default App
-

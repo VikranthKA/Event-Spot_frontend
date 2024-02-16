@@ -16,13 +16,13 @@ const ReviewCard = ({eventId,reviewinfo}) => {
     }
 
   return (
-    <div style={{width:"100%",marginTop:"10%",borderRadius:"5%"}}>
+    <div style={{width:"500px",marginTop:"10%",borderRadius:"5%"}}>
         <ListGroup.Item key={reviewinfo._id} as="li" className="d-flex justify-content-between align-items-start"  >
             {reviewToggle ?<ReviewForm eventId={eventId} updatingReview={reviewinfo} handleReviewToggle={handleReviewToggle} />:<div className="ms-2 me-auto">
                 <div>
                 Name:{reviewinfo?.userId?.username}
               <div className="fw-bold">Title:{reviewinfo?.title}</div>
-              Body:{reviewinfo.body}
+              {reviewinfo.body}
             </div>
             <Badge bg="primary" pill>
               {reviewinfo?.rating}
@@ -30,11 +30,11 @@ const ReviewCard = ({eventId,reviewinfo}) => {
             </div>}
             { userData?.id===reviewinfo?.userId?._id && <div style={{ display: 'block' }}>
               {reviewToggle ? (
-                <Button onClick={() => setReviewToggle(!reviewToggle)}>cancel</Button>
+                <Button className='btn btn-danger' onClick={() => setReviewToggle(!reviewToggle)}>cancel</Button>
               ) : (
-                <Button onClick={() => setReviewToggle(!reviewToggle)}>Edit</Button>
+                <Button className='btn btn-warning' onClick={() => setReviewToggle(!reviewToggle)}>Edit</Button>
               )}
-              <Button onClick={()=>dispatch(startDeleteReview(eventId,reviewinfo._id))}>delete</Button>
+              <Button className='btn btn-danger' onClick={()=>dispatch(startDeleteReview(eventId,reviewinfo._id))}>delete</Button>
 
             </div>}
           </ListGroup.Item>
