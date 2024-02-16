@@ -1,17 +1,29 @@
 import React from 'react';
+import {Provider} from "react-redux"
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { MyContext } from './Event-Spot/client/ContextApi/Context';
+
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import configureStore from './Event-Spot/client/store/configureStore';
+import { BrowserRouter } from 'react-router-dom';
+import { startGetEvents } from './Event-Spot/client/react-redux/action/eventAction';
+
+const store = configureStore()
+console.log('state',store.getState())
+store.subscribe(()=>{
+    console.log('state updated', store.getState())
+})
+
+store.dispatch(startGetEvents())
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <BrowserRouter>
+    <Provider store={store}>
+
+        <App />
+    </Provider> 
+    </BrowserRouter>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
