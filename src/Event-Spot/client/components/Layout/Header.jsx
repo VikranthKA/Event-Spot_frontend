@@ -26,6 +26,7 @@ function Header() {
       if (result.isConfirmed) {
         // Perform the logout logic
         localStorage.removeItem('token');
+        //empty the profile state in the app
         navigate('/login');
         
         Swal.fire({
@@ -45,10 +46,10 @@ function Header() {
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img style={{height:"50px",width:"150px",border:"4px solid orange",borderRadius:"30%"}}  src={eventLogo}/>
+          <img style={{height:"50px",width:"150px",border:"4px solid orange",borderRadius:"10px"}}  src={eventLogo}/>
         </Link>
         
-        {userData.role==="Organiser"&&<Link className="navbar-brand" to="/event-form">
+        {userData.role==="Organiser"&&<Link className=" nav-link navbar-brand" to="/event-form">
         <FontAwesomeIcon icon={faPlus} />Event
         </Link>}
     
@@ -96,7 +97,7 @@ function Header() {
           <ul className="navbar-nav ml-auto" style={{ display:"flex"}}>
             {localStorage.getItem("token") ? (
               <>
-                <li className="nav-item">
+                <li className="nav-item ">
                   <Link to="/user-profile" >
                     <FontAwesomeIcon icon={faUser} style={{ marginTop:"10px",marginRight:"10px"}}/>
                   </Link>

@@ -7,7 +7,7 @@ import { MyContext } from '../../ContextApi/Context';
 import { useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 
-function ReviewForm({ eventId, updatingReview, handleReviewToggle }) {
+function ReviewForm({ eventId, updatingReview }) {
     const { userData } = useContext(MyContext);
     const [reviewData, setReviewData] = useState({
         title: updatingReview ? updatingReview.title : '',
@@ -54,7 +54,6 @@ function ReviewForm({ eventId, updatingReview, handleReviewToggle }) {
         if (eventId && userData.role === 'Customer') {
             if (updatingReview?._id) {
                 dispatch(startUpdateReview(eventId, updatingReview?._id, reviewData));
-                handleReviewToggle();
             } else {
                 dispatch(startCreateReview(eventId, reviewData));
             }

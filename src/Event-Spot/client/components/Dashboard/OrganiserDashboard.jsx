@@ -1,79 +1,79 @@
 import React, { useState } from 'react';
 import Chart from 'react-apexcharts';
+import { Container, Table} from 'react-bootstrap';
 
 const OrganiserDashboard = ({ event }) => {
-  const ticketNames = event?.ticketType?.map(ticket => ticket.ticketName);
-  const ticketsSold = event?.ticketType?.map(ticket => ticket.ticketCount - ticket.remainingTickets);
+  const ticketNames = Array.isArray(event.ticketType) &&  event?.ticketType?.map(ticket => ticket.ticketName);
+  const ticketsSold = Array.isArray(event.ticketType) && event?.ticketType?.map(ticket => ticket.ticketCount - ticket.remainingTickets);
+  console.log(ticketNames,ticketsSold)
 
   const renderTicketTypes = () => {
-    return event?.ticketType?.map(ticket => (
-      <tr key={ticket._id}>
-        <td>{ticket.ticketName}</td>
-        <td>{ticket.ticketCount}</td>
-        <td>{ticket.remainingTickets}</td>
-        <td>{ticket.ticketPrice}</td>
-        <td>{ticket.ticketCount - ticket.remainingTickets}</td>
-        <td>{(ticket.ticketCount - ticket.remainingTickets) * ticket.ticketPrice}</td>
-      </tr>
-    ));
-  };
+ return (
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>Ticket Name</th>
+          <th>Total Tickets</th>
+          <th>Remaining Tickets</th>
+          <th>Ticket Price</th>
+          <th>Tickets Sold</th>
+          <th>Total Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        {event?.ticketType?.map(ticket => (
+          <tr key={ticket._id}>
+            <td>{ticket.ticketName}</td>
+            <td>{ticket.ticketCount}</td>
+            <td>{ticket.remainingTickets}</td>
+            <td>{ticket.ticketPrice}</td>
+            <td>{ticket.ticketCount - ticket.remainingTickets}</td>
+            <td>{(ticket.ticketCount - ticket.remainingTickets) * ticket.ticketPrice}</td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  );
+}
 
   const totalRevenue = event?.ticketType?.reduce((acc, ticket) => {
     return acc + (ticket.ticketCount - ticket.remainingTickets) * ticket.ticketPrice;
   }, 0)
 
-  const data = {
-    labels: ticketNames,
-    datasets: [
-      {
-        label: 'Tickets Sold',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderWidth: 1,
-        hoverBackgroundColor: 'rgba(75,192,192,0.4)',
-        hoverBorderColor: 'rgba(75,192,192,1)',
-        data: ticketsSold
-      }
-    ]
-  };
 
-  const options = {
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true
-          }
-        }
-      ]
+
+
+const options =  {
+      colors: ['#66DA26', "red"],
+      chart: {
+        id: 'Ticket Type'
+      },
+      xaxis: {
+        categories:ticketNames
+      }
     }
-  };
+   const series= [
+      {
+        name: 'Ticket Purchase',
+        data: ticketsSold// Initialize data arrays with empty arrays
+      },
+
+    ]
+  
 
   // Check if ticketsSold is an array before calling every method
   // const allSoldOut = Array.isArray(ticketsSold) && ticketsSold?.every(count => count === 0);
 
   return (
     <div>
-      {/* <h2>{event.title}</h2>
-      {console.log(options,data)}
-      <Chart options={options} series={data} type="bar" height={350} /> */} 
+      
+      <Chart options={options} series={series} type="bar" height={350} /> 
 
       <div>
-        <h2>{event.title}</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Ticket Name</th>
-              <th>Total Tickets</th>
-              <th>Remaining Tickets</th>
-              <th>Ticket Price</th>
-              <th>Tickets Sold</th>
-              <th>Total Revenue</th>
-            </tr>
-          </thead>
-          <tbody>{renderTicketTypes()}</tbody>
-        </table>
-        <p>Total Revenue: {totalRevenue}</p>
+        <Container>
+          {renderTicketTypes()}
+          <tfooter >Total Revenue: {totalRevenue}</tfooter>
+          </Container>
         {/* {allSoldOut && <p>All tickets sold out!</p>} */}
       </div>
     </div>
@@ -81,3 +81,5 @@ const OrganiserDashboard = ({ event }) => {
 };
 
 export default OrganiserDashboard;
+
+

@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import axios from '../../Api_Resources/axios'
-import { config } from '../../Api_Resources/config'
+import { config } from '../../components/Api_Resources/config'
+import axios from '../../components/Api_Resources/axios'
 
 function Cancel() {
   useEffect(()=>{

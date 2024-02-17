@@ -8,7 +8,7 @@ export const startCreateBooking = (eventId,tickets)=>{
             const response = await axios.post(`/api/event/${eventId}/booking`,{ tickets} ,config)
             console.log(response.data,"i action")
             dispatch(setTicketBooked(response.data.booking))
-            dispatch(updateEventAfterBooking(response.data.updatedEvent))
+            dispatch(updateEventsAfterBooking(response.data.updatedEvents))
         }catch(err){
             console.log(err)
             alert(err)
@@ -35,9 +35,9 @@ export const setClearTicket =()=>{
     }
 }
 
-const updateEventAfterBooking = (data)=>{
+const updateEventsAfterBooking = (data)=>{
     return {
-        type:"UPDATE_EVENT_AFTER_BOOKING",
+        type:"GET_ALL_EVENTS_BY_API",
         payload:data
     }
 
@@ -47,11 +47,15 @@ const updateEventAfterBooking = (data)=>{
 
 export const startPayment = (bookingId,card)=>{
     return async(dispatch)=>{
+
         try{
+            if(bookingId) {
             const response = await axios.post(`/api/booking/${bookingId}/payment`,{card},paymentConfig)
             console.log(response.data.id)
             dispatch(setStartBooking(response.data)) 
-  
+            }else{
+                toast.info("Please select the seats")
+            }
         }catch(err){
             console.log(err)
         }
@@ -60,6 +64,7 @@ export const startPayment = (bookingId,card)=>{
 
 const setStartBooking = (data)=>{
     if(data){
+        console.log(data.id)
         localStorage.setItem("stripeId",data.id)
         window.location = data.url
     }else{
@@ -92,18 +97,19 @@ export const startCancelBooking = (bookingId)=>{
     return async(dispatch)=>{
         try{
             const response = await axios.delete(`/api/booking/${bookingId}`,config)
-            dispatch(setCancelPayment(response.data))   
+            console.log(response.data.updatedEvent,"delete tickets")
             dispatch(setClearTicket())
+            dispatch(setCancelPayment(response.data.updatedEvent))   
         }catch(err){
-            toast.error(err.response.data.error)
             console.log(err)
+            // toast.error(err.response.data.error)
         }
     }
 }
 const setCancelPayment = (data)=>{
-    return{
-        type:"DELTE_BOOKING_TRUE",
-        paylaod:data
+    console.log(data._id,"in action")
+    return {
+        type:"UPDATE_EVENT_AFTER_BOOKING",
+        payload:data
     }
-
 }

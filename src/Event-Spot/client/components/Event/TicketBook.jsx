@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, Spinner, Modal } from 'react-bootstrap';
+import { Button, Card, Spinner, Modal, Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { startGetEvents } from '../../react-redux/action/eventAction';
@@ -17,7 +17,7 @@ const TicketBook = () => {
   const { eventId } = useParams();
   const [eventDetails, setEventDetails] = useState(null);
   const [tickets, setTickets] = useState([]);
-  const card = useRef("CARD")
+  const card = "CARD"
   const [totalPrice, setTotalPrice] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -27,9 +27,15 @@ const TicketBook = () => {
   const checkObject = Object.keys(bookedTicket).length;
 
   useEffect(() => {
+    dispatch(setClearTicket())
+
+    dispatch(startGetEvents())
+  }, [])
+
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch(startGetEvents());
         const eventData = await events.find((ele) => ele._id === eventId);
         if (eventData) {
           setEventDetails(eventData);
@@ -41,8 +47,7 @@ const TicketBook = () => {
     };
 
     fetchData();
-    dispatch(setClearTicket())
-  }, [])
+  }, [events])
 
   useEffect(()=>{
     (async ()=>{
@@ -82,7 +87,6 @@ const TicketBook = () => {
             const remainingTickets = ticket.remainingTickets - updateCount;
             const updatedTicket = { ...ticket, remainingTickets, Quantity: ticket.ticketCount - remainingTickets };
 
-            // Dispatch action to update remaining ticket count in the Redux store
 
             dispatch(updateRemainingTickets(eventId, [...eventDetails.ticketType.slice(0, i), updatedTicket, ...eventDetails.ticketType.slice(i + 1)]));
 
@@ -126,13 +130,11 @@ const TicketBook = () => {
       .map((count, index) => ({ count, ticket: eventDetails.ticketType[index] }))
       .filter((ticket) => ticket.count > 0);
 
-    // Update remainingTickets based on booked tickets
     const updatedEventTickets = eventDetails.ticketType.map((ticket, index) => {
       const bookedTicket = bookedTickets.find((booked) => booked.ticket._id === ticket._id);
       const bookedCount = bookedTicket ? bookedTicket.count : 0;
       const remainingCount = ticket.ticketCount - bookedCount;
 
-      // Calculate the total amount for the current ticket
       const totalAmountForTicket = bookedTicket ? bookedTicket.count * ticket.ticketPrice : 0;
 
 
@@ -145,64 +147,146 @@ const TicketBook = () => {
     setModalVisible(true); // Show modal after creating booking
   };
 
-  return (
-    <div>
-      <h2>Ticket Booking</h2>
-      {eventDetails &&
-        eventDetails.ticketType.map((ticket, index) => (
-          <Card key={index} style={{ width: '18rem', margin: '10px' }}>
-            <Card.Body>
-              <Card.Title>{ticket.ticketName}</Card.Title>
-              <Card.Text>Price: ₹ {ticket.ticketPrice}</Card.Text>
-              <Card.Text>Remaining: {ticket.remainingTickets}</Card.Text>
-              <Card.Text>Quantity: {tickets[index]}</Card.Text>
-              <Button variant="primary" onClick={() => incrementTicket(index)}>
-                Increment
-              </Button>{' '}
-              <Button variant="danger" onClick={() => decrementTicket(index)}>
-                Decrement
-              </Button>
-            </Card.Body>
-          </Card>
-        ))}
-    <Button onClick={handleBookTicket} style={{ display: 'flex', flexWrap: 'flex-end' }}>
-    Book
-  </Button>
-  <h2>Total Amount: {totalPrice}</h2>
+//   return (
+//     <div style={{marginTop:"50px"}} >
+//       <Container>
+//       <h2 style={{textAlign:"center"}}>Ticket Booking</h2>
+//       <div style={{display:"flex" ,justifyContent:"space-evenly",flexWrap: 'wrap'}}>
+//       {eventDetails &&
+//         eventDetails.ticketType.map((ticket, index) => (
+//           <div style={{marginTop:"30px"}}>
+//           <Card key={index} style={{ width: '18rem', margin: '10px' }}>
+//             <Card.Body>
+//               <Card.Title>{ticket.ticketName}</Card.Title>
+//               <Card.Text>Price: ₹ {ticket.ticketPrice}</Card.Text>
+//               <Card.Text>Remaining: {ticket.remainingTickets}</Card.Text>
+//               <Card.Text>Quantity: {tickets[index]}</Card.Text>
+//               <Button variant="primary" onClick={() => incrementTicket(index)}>
+//                 Increment
+//               </Button>{' '}
+//               <Button variant="danger" onClick={() => decrementTicket(index)}>
+//                 Decrement
+//               </Button>
+//             </Card.Body>
+//           </Card>
+//           </div>
+//         ))}
+      
+//       </div>
+//       <div style={{display:"flex" ,justifyContent:"space-evenly",flexWrap: 'wrap',border:"2px solid black",height:"70px",width:"50%px",marginLeft:"20%",borderRadius:"5px"}}>
 
-      <Modal show={modalVisible} >
-        <Modal.Header >
+//   <h2 style={{marginTop:"10px"}}>Total Amount: {totalPrice}</h2>
+//       <Button variant='success' style={{width:"100px",height:"40px",marginTop:"10px"}} onClick={handleBookTicket} >
+//     Book
+//   </Button>
+// </div>
+//       <Modal show={modalVisible} >
+//         <Modal.Header >
+//           <Modal.Title>Seats are Confirmed</Modal.Title>
+//         </Modal.Header>
+//         <Modal.Body>
+//           {checkObject >= 0 && (
+//             <Card>
+//               <Card.Body>
+//               <Card.Text><h3>{bookedTicket?.eventId?.Title}</h3></Card.Text>
+//               <Card.Text>{bookedTicket?.eventId?.eventStartDateTime}</Card.Text>
+//               <ol>
+//                 {bookedTicket?.tickets?.map((ele) => (
+//                   <li key={ele._id}>
+//                    <Card.Text> TicketType : {ele.ticketType} </Card.Text><br />
+//                    <Card.Text>Quantity : {ele.quantity}</Card.Text><br />
+//                    <Card.Footer> Total Price : {ele.totalAmount}</Card.Footer>
+//                   </li>
+//                 ))}
+//               </ol>
+//               </Card.Body>
+//             </Card>
+//           )}
+//         </Modal.Body>
+//         <h2>Total Amount: {totalPrice}</h2>
+
+//         <Modal.Footer>
+//           <Button color="primary" onClick={handlePayment}>
+//             Confirm Payment
+//           </Button>{' '}
+//           <Button color="secondary" onClick={handleCancelPayment}>
+//             Cancel
+//           </Button>
+//         </Modal.Footer>
+//       </Modal>
+//       </Container>
+
+//     </div>
+//   );
+return (
+  <div style={{ marginTop: "50px" }}>
+    <Container>
+      <h2 style={{ textAlign: "center" }}>Ticket Booking</h2>
+      <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: 'wrap' }}>
+        {eventDetails &&
+          eventDetails.ticketType.map((ticket, index) => (
+            <div style={{ marginTop: "30px" }} key={index}>
+              <Card style={{ width: '18rem', margin: '10px' }}>
+                <Card.Body>
+                  <Card.Title>{ticket.ticketName}</Card.Title>
+                  <Card.Text>Price: ₹ {ticket.ticketPrice}</Card.Text>
+                  <Card.Text>Remaining: {ticket.remainingTickets}</Card.Text>
+                  <Card.Text>Quantity: {tickets[index]}</Card.Text>
+                  {ticket.remainingTickets ? 
+                  <div>
+                    <Button variant="primary" onClick={() => incrementTicket(index)}>
+                    Increment
+                  </Button>  
+                  <Button variant="danger" onClick={() => decrementTicket(index)}>
+                    Decrement
+                  </Button></div>:<span style={{color:'red'}}>Tickets are Sold</span>}
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: 'wrap', border: "2px solid black", borderRadius: "5px", padding: "10px", marginTop: "20px" }}>
+        <h2 style={{ marginTop: "10px" }}>Total Amount: {totalPrice}</h2>
+        <Button variant='success' style={{ width: "100px", height: "40px", marginTop: "10px" }} onClick={handleBookTicket}>
+          Book
+        </Button>
+      </div>
+      <Modal show={modalVisible} onHide={handleCancelPayment}>
+        <Modal.Header closeButton>
           <Modal.Title>Seats are Confirmed</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {checkObject >= 0 && (
-            <div>
-              <h2>{bookedTicket?.eventId?.Title}</h2>
-              <h4>{bookedTicket?.eventId?.eventStartDateTime}</h4>
-              <ul>
-                {bookedTicket?.tickets?.map((ele) => (
-                  <li key={ele._id}>
-                    TicketType : {ele.ticketType} <br /> Quantity : {ele.quantity}<br /> Total Price : {ele.totalAmount}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {checkObject >= 0 ? (
+            <Card style={{width:"95%"}}>
+              <Card.Body>
+                <Card.Text><h3>{bookedTicket?.eventId?.Title}</h3></Card.Text>
+                <Card.Text>{bookedTicket?.eventId?.eventStartDateTime}</Card.Text>
+                <ul>
+                  {bookedTicket?.tickets?.map((ele, index) => (
+                    <li key={index}>
+                      <Card.Text> TicketType : {ele.ticketType} </Card.Text>
+                      <Card.Text> Quantity : {ele.quantity}</Card.Text>
+                      <Card.Text> Total Price : {ele.totalAmount}</Card.Text>
+                    </li>
+                  ))}
+                </ul>
+              </Card.Body>
+            </Card>
+          ):<img style={{width:"100%",height:"100%"}} src={`https://eventpot.s3.ap-south-1.amazonaws.com/Animation+-+ticeket.gif`}/>}
+          <h2>Total Amount: {totalPrice}</h2>
         </Modal.Body>
-        <h2>Total Amount: {totalPrice}</h2>
-
         <Modal.Footer>
-          <Button color="primary" onClick={handlePayment}>
+          <Button variant="primary" onClick={handlePayment}>
             Confirm Payment
-          </Button>{' '}
-          <Button color="secondary" onClick={handleCancelPayment}>
+          </Button>
+          <Button variant="secondary" onClick={handleCancelPayment}>
             Cancel
           </Button>
         </Modal.Footer>
       </Modal>
-
-    </div>
-  );
+    </Container>
+  </div>
+);
 };
 
 export default TicketBook

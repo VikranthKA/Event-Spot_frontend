@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react'
-import { config } from '../../Api_Resources/config'
 import { ToastContainer } from 'react-bootstrap'
-import axios from '../../Api_Resources/axios'
+import { config } from '../../components/Api_Resources/config'
+import axios from '../../components/Api_Resources/axios'
 import {Link} from "react-router-dom"
 
 function Success() {
@@ -16,17 +16,19 @@ function Success() {
 
 
       }catch(err){
+        console.log(err)
         // toast.error(JSON.stringify(err))
       }
     })()
-  })
+  },[])
   return (
-    <div>
-      <img src={`https://www.freepik.com/free-vector/man-transferring-money-woman-via-smartphone-online-transaction-banking-flat-vector-illustration-finance-digital-technology-concept_10613198.htm#query=payment%20successful&position=0&from_view=keyword&track=ais&uuid=bc27d54a-1c86-414f-9289-ffc326f74a10`}/>
+    <div style={{backgroundImage: "url(https://eventpot.s3.ap-south-1.amazonaws.com/Default_TICKET_CONFIRM_SUCCESS_3.jpg)"}}>
       <Link to="/">Home</Link>
+      <Link to="/profile">Profile</Link>
       <ToastContainer/>
     </div>
-  )
+  );
+  
 }
 
 export default Success

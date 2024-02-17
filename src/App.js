@@ -18,8 +18,8 @@ import Login from './Event-Spot/client/components/UserAuthenticate.js/Login'
 import UserProfile from './Event-Spot/client/components/UserProfile.js/UserProfile'
 import EventForm from './Event-Spot/client/components/Event/EventForm'
 import EventInMap from './Event-Spot/client/components/Location/EventInMap'
-import Success from './Event-Spot/client/components/Booking/Payment/Success'
-import Cancel from './Event-Spot/client/components/Booking/Payment/Cancel'
+import Success from './Event-Spot/client/pages/Payment/Success'
+import Cancel from './Event-Spot/client/pages/Payment/Cancel'
 import axios from './Event-Spot/client/components/Api_Resources/axios'
 import UserForm from './Event-Spot/client/components/UserProfile.js/UserForm'
 import AllEvents from './Event-Spot/client/components/Event/AllEvents'
@@ -32,6 +32,8 @@ import Deactivate from './Event-Spot/client/components/UserProfile.js/Deactivate
 import { config } from './Event-Spot/client/components/Api_Resources/config';
 import UserForm2 from './Event-Spot/client/components/UserProfile.js/UserForm2';
 import EventUpdate from './Event-Spot/client/components/Event/EventUpdate'
+import AboutUS from './Event-Spot/client/pages/AboutUS';
+import ContactUs from './Event-Spot/client/pages/ContactUS';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -58,6 +60,7 @@ const App = () => {
   const [searchQuery,setSearchQuery] = useState("")
   const [userData,setUserData] = useState("")
   const [profile, profileDispatch] = useReducer(profileFunction,"")
+  const [cardSearch,setCardSearch] =  useState("")
 
   const handleGeoWithinEvents = async(radius,lon,lat) =>{
     try{
@@ -115,7 +118,8 @@ const App = () => {
                               {raduisEvents,handleGeoWithinEvents,//handling the radius events
                                 searchQuery,setSearchQuery,//handling the search query
                                 userData,//obj of the user info id,role,expriesIn
-                                profile //displaying user profile
+                                profile, //displaying user profile
+                                cardSearch,setCardSearch,//these are the search for the card display
                               }
     }>
       <Header/>
@@ -149,6 +153,8 @@ const App = () => {
           <Route path="/event-form/:eventId" element={<EventUpdate/>}/>
           <Route path="/approved-list" element={<ApprovedList/>}/>
           <Route path="/user-deactivate" element={<Deactivate/>}/>
+          <Route path="/about-us" element={<AboutUS/>}/>
+          <Route path="/contact-us" element={<ContactUs/>}/>
 
           
 

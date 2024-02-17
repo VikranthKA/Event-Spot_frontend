@@ -29,7 +29,7 @@ export default function EventInfo() {
 
   useEffect(() => {
     dispatch(startGetEvents());
-  }, []);
+  }, [])
   
   useEffect(() => {
     const eventData = events.find((ele) => ele._id === eventId);
@@ -55,14 +55,13 @@ export default function EventInfo() {
 
   return (
     <div>
-      <OrganiserDashboard event={event}/>
     <Container className="my-5">
     {event ? (
-        <Carousel style={{ height: "400px", width: "100%", margin: "auto" }}>
+        <Carousel style={{ height: "400px", width: "100%", margin: "auto" ,}}>
           {event.posters.map((poster) => (
-            <Carousel.Item key={poster._id}>
+            <Carousel.Item key={poster._id} style={{}}>
               <img
-                style={{ height: "400px", width: "100%", objectFit: "cover" }}
+                style={{ height: "400px", width: "100%", objectFit: "cover",borderRadius:"20px" }}
                 className="d-block w-100"
                 src={`${process.env.REACT_APP_IMAGE_URL}${poster.image}`}
 
@@ -77,11 +76,12 @@ export default function EventInfo() {
           {event.youTube && (
             <Carousel.Item>
 <iframe
-            width="100%"
-            height="400px"
+            
             src={event.youTube.url}
             title="youTube-video-player"
             allowFullScreen
+            style={{ height: "400px", width: "100%", objectFit: "cover",borderRadius:"20px" }}
+
   ></iframe>              <Carousel.Caption>
                 <h3>{event.youTube.title}</h3>
               </Carousel.Caption>
@@ -135,6 +135,8 @@ export default function EventInfo() {
         Description :{event?.description}
         </Col>
       </Row>
+      {userData.role==="Organiser" && <OrganiserDashboard event={event}/>}
+
       <ListGroup numbered className="my-4">
         <ListGroup.Item className="fw-bold" style={{width:"40%"}}>Reviews</ListGroup.Item>
         <ReviewForm eventId={event?._id}/>
@@ -146,7 +148,6 @@ export default function EventInfo() {
         </div>
       </ListGroup>
     </Container>
-      {userData.role==="Organiser" && <ViewHisEvents/> }
     </div>
   );
 }
