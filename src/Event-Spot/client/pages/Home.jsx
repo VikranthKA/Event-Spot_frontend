@@ -15,10 +15,11 @@ const {userData} = useContext(MyContext)
       <div className="header">
       </div>
       <div className="body">
-        {userData.role && 
-        userData.role === "Admin" ? <Dashboard />
-         : userData.role === "Customer" ? <EventInMap/> 
-          : userData.role === "Organiser" && <OrganiserHomeDashboard/>
+        {userData.role === "Admin" ? <Dashboard />
+                        : 
+        userData.role === "Organiser" ? <OrganiserHomeDashboard/>
+                        :  
+                  <EventInMap/> 
         }
       </div>
       <div className="footer">

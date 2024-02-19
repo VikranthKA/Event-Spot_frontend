@@ -9,6 +9,7 @@ import 'filepond/dist/filepond.min.css';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import { fileConfig } from "../Api_Resources/config";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -94,14 +95,10 @@ const UserForm = () => {
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
       // const profileId = "65bcdb6560b7e035c0987dc6"
-      const response = await axios.put(`/api/profile`, formData, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await axios.put(`/api/profile`, formData, fileConfig);
 
-      console.log('Backend response:', response.data);
+      console.log('Backend response:', response.data)
+      
       navigate('/user-profile')
 
       // Handle additional actions based on the response if needed

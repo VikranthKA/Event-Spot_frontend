@@ -54,7 +54,7 @@ const AllEvents = () => {
             {data.filter(event => !event.isApproved).map((event) => (
               <div key={event._id} className="col-md-4 mb-4">
                 <div className="card" style={{ width: '18rem' }}>
-                  <img src={`http://localhost:3333/Uploads/images/${event.posters[0].image}`} className="card-img-top" alt="card" />
+                  <img src={`${process.env.REACT_APP_IMAGE_URL}${event.posters[0].image}`} className="card-img-top" alt="card" />
                   <div className="card-body">
                     <h5 className="card-title">{event.title}</h5>
                     <p className="card-text">Category: {event.categoryId.name}</p>

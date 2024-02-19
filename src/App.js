@@ -51,6 +51,8 @@ function profileFunction (state, action){
   switch(action.type){
     case "SET_PROFILE_DATA":
       return action.payload
+    case "CLEAR_PROFILE_DATA":
+      return " "
       default:
         return { ...state }
   }
@@ -119,7 +121,7 @@ const App = () => {
                               {raduisEvents,handleGeoWithinEvents,//handling the radius events
                                 searchQuery,setSearchQuery,//handling the search query
                                 userData,//obj of the user info id,role,expriesIn
-                                profile, //displaying user profile
+                                profile,profileDispatch, //displaying user profile and its function
                                 cardSearch,setCardSearch,//these are the search for the card display
                               }
     }>

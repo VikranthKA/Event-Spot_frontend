@@ -10,7 +10,7 @@ import "./Header.css"
 
 function Header() {
   const [search,setSearch] = useState(" ")
-  const {searchQuery,setSearchQuery,userData} = useContext(MyContext)
+  const {searchQuery,setSearchQuery,userData,profileDispatch} = useContext(MyContext)
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
@@ -27,7 +27,10 @@ function Header() {
         // Perform the logout logic
         localStorage.removeItem('token');
         //empty the profile state in the app
-        navigate('/login');
+        profileDispatch({ type: 'CLEAR_PROFILE_DATA'})
+
+        navigate('/login')
+
         
         Swal.fire({
           title: 'Logged Out!',

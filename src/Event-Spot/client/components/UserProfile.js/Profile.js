@@ -76,16 +76,16 @@ export default function Profile() {
                 <strong>Username:</strong> {profile.userId.username}
               </p>
               <p className="card-text">
-                <strong>Role:</strong> {profile.userId.role}
+                <strong>Role:</strong> {profile?.userId?.role}
               </p>
               <p className="card-text">
-                <strong>Email:</strong> {profile.userId.email}
+                <strong>Email:</strong> {profile?.userId?.email}
               </p>
               <p className="card-text">
-                <strong>Description:</strong> {profile.description}
+                <strong>Description:</strong> {profile?.description}
               </p>
               <p className="card-text">
-                <strong>Address:</strong> {profile.addressInfo.address}
+                <strong>Address:</strong> {profile?.addressInfo?.address}
               </p>
             </div>
           </div>

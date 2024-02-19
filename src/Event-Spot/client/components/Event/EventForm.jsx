@@ -8,14 +8,11 @@ import "./EventForm.css"
 import NotFound from '../Utils/NotFound/NotFound';
 import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eventAction"
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MyContext } from '../../ContextApi/Context';
 import { ToastContainer, toast } from 'react-toastify';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 
-function formatDateToTimeLocal(date){
-  return date
-}
 const EventForm = () => {
   const {userData} = useContext(MyContext)
   const { eventId } = useParams()
@@ -27,6 +24,7 @@ const EventForm = () => {
   const [ticketStartHelp, setTicketStartHelp] = useState(false)
   const [ticketEndHelp, setTicketEndHelp] = useState(false)
   const [edit,setEdit] = useState(false)
+
 
   const events = useSelector((state) => {
     return state.events
@@ -65,6 +63,8 @@ const EventForm = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -265,6 +265,7 @@ const EventForm = () => {
 
     const storedYouTube = localStorage.getItem('youTube')
     if (storedYouTube) {
+      console.log(storedYouTube)
       setYouTube(JSON.parse(storedYouTube));
     }
 
@@ -301,7 +302,7 @@ const EventForm = () => {
 
   // // useEffect to save to localStorage
   useEffect(() => {
-    // Save form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to localStorage
+    // save  the . form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress to lS
     if (form && youTube && actors && allCategory && searchTerm && locObj, searchResults, selectedAddress) {
       localStorage.setItem('form', JSON.stringify(form));
       localStorage.setItem('youTube', JSON.stringify(youTube));
@@ -478,18 +479,20 @@ const EventForm = () => {
       try {
  
           dispatch(startCreateEvent(eventFormData))
-        
-        // setForm("")
-        // setActors("")
-        // setPoster("")
-        // setLocObj("")
-        // setSelectedAddress("")
-        // setSearchTerm("")
-        // setActors("")
-        // setYouTube("")
-        // setErrors("")
-        // setServerErrors("")
-        // setTicketErrors("")
+          navigate('/')
+        setForm("")
+        setActors("")
+        setPoster("")
+        setLocObj("")
+        setSelectedAddress("")
+        setSearchTerm("")
+        setActors("")
+        setYouTube("")
+        setErrors("")
+        setServerErrors("")
+        setTicketErrors("")
+
+
       } catch (err) {
         toast.error(err)
       }

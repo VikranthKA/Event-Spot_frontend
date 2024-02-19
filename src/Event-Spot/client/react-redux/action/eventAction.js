@@ -31,6 +31,14 @@ export const startCreateEvent = (eventFormData)=>{
             const response = await axios.post('/api/event', eventFormData, fileConfig)
             dispatch(setCreateEvents(response.data))
             toast.success( `${response.data.title} Event created successfully`)
+            localStorage.removeItem('form');
+            localStorage.removeItem('youTube');
+            localStorage.removeItem('actors', );
+            localStorage.removeItem('allCategory');
+            localStorage.removeItem('searchTerm');
+            localStorage.removeItem('locObj');
+            localStorage.removeItem('searchResults')
+            localStorage.removeItem('selectedAddress');
 
         }catch(err){
             console.log(err)
