@@ -51,13 +51,13 @@ export default function Login() {
       <Row className='maxi'>
         <Col md={6}>
           <div>
-            <h1 style={{ marginLeft: '60px', marginTop: '15px' }}>Login</h1>
+            <h1 style={{ marginLeft: '60px', marginTop: '50px' }}>Login in to your account</h1>
             <Form onSubmit={formik.handleSubmit} style={{ marginLeft: '60px', marginTop: '20px' }}>
 
               <FormGroup>
                 <strong for='email' className="form-label">Email:</strong>
                 <Input
-                  style={{width:"500px"}}
+                  style={{ width: "500px" }}
                   type='text'
                   id='email'
                   name='email'
@@ -72,7 +72,7 @@ export default function Login() {
               <FormGroup>
                 <strong for='password'>Password:</strong>
                 <Input
-                  style={{width:"500px"}}
+                  style={{ width: "500px" }}
                   type='password'
                   id='password'
                   name='password'
@@ -89,17 +89,21 @@ export default function Login() {
                 <ToastContainer />
               </div>
 
-              <div>
-                
-                <button type='submit' className='btn btn-dark'>
-                  Login
-                </button>
-                <br/>
-                <br/>
-                <div>
-                  Not Yet Registered ?<Link to='/register'>Register</Link><br/><Link to="/forgot-password" style={{textAlign:"center"}}>forgot-password</Link>
-                </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+                <div>Don't have an account ? <Link to='/register'>Register</Link></div>
+                <div style={{marginRight: "10%"}}> <Link to="/forgot-password">Forgot your password?</Link></div>
               </div>
+
+              <div style={{ display: "flex", justifyContent: "flex-end",margin:"5% 10% 0 0 " }}>
+                  <button type='submit' className='btn btn-dark'>
+
+
+                    Login in
+                  </button>
+                </div>
+
+
             </Form>
           </div>
         </Col>
@@ -121,7 +125,7 @@ export default function Login() {
           </div>
         </Col>
       </Row>
-        <Snackbar ref={snackbarRef} />
+      <Snackbar ref={snackbarRef} />
     </div>
   );
 }
