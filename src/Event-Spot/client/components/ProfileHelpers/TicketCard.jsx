@@ -9,49 +9,43 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpiryTime from '../Booking/Qr-Component/ExpiryTime';
 import { Button } from '@mui/material';
+import moment from 'moment' 
 
-export default function TicketCard({eventInfo,quantity,ticketPrice,ticketType,totalAmount,id}) {
+export default function TicketCard({eventInfo,quantity,ticketPrice,ticketType,totalAmount,id,createdAt}) {
   const [qrToggle,setQrToggle] = useState(false)
   const expiryTime = 2
-  const theme = useTheme();
   const detailsInfo = {
     quantity,ticketPrice,ticketType,totalAmount,id
   }
+  function readableDate(inputDateString) {
+    const momentObject = moment(inputDateString);
+    return momentObject.format('L');
+  }
 
   return (
-    <div>
+    <div style={{margin:"0 0 10% 25 %"}}>
+        <h4 style={{display:"inline-block",marginBottom: "3%"}}>Tickets you have booked at - {readableDate(createdAt)}</h4>
+
       {qrToggle ? <Button onClick={()=>setQrToggle(false)}>Hide</Button> : <Button onClick={()=>setQrToggle(true)}>Show</Button>}
-    {qrToggle && <Card key={id} sx={{ display: 'flex',border:"2px solid black",marginTop:"2px" ,width:"500px"}}>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    {qrToggle && <Card key={id} sx={{ display: 'flex',border:"2px solid black",marginTop:"2%" ,width:"45%"}}>
+      <Box sx={{ display: 'flex',justifyContent:"space-between" }}>
         <CardContent sx={{ flex: '1 0 auto' }}>
         <Typography component="div" variant="h5" key={eventInfo._id}>
-            EVENT:{eventInfo.title} <br/>Starts At:{eventInfo.eventStartDateTime}
+            Event:{eventInfo.title} <br/>Starts At:{readableDate(eventInfo.eventStartDateTime)}
           </Typography>
           <Typography component="div" variant="h5">
-            CLASS:{ticketType}
+            Class:{ticketType}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" component="div">
-            QUANTITY:{quantity}
+          <Typography component="div" variant="h5">
+            Quantity:{quantity}
           </Typography>
         </CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-          <IconButton aria-label="previous">
+        <Box sx={{ display: 'flex', alignItems: 'center'}}>
           <ExpiryTime detailsInfo={detailsInfo} expiryTime={expiryTime}/>
 
-          </IconButton>
-          <IconButton aria-label="play/pause">
-          </IconButton>
-          <IconButton aria-label="next">
-            
-          </IconButton>
         </Box>
       </Box>
-      {/* <CardMedia
-        component="img"
-        sx={{ width: 151 }}
-        // image={image}
-        alt="Live from space album cover"
-      /> */}
+
     </Card> }
     </div>
   );

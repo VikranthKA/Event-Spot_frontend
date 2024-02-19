@@ -99,7 +99,7 @@ export default function Login() {
                   <button type='submit' className='btn btn-dark'>
 
 
-                    Login in
+                    Login
                   </button>
                 </div>
 

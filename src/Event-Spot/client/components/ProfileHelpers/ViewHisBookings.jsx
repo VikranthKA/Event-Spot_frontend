@@ -3,10 +3,8 @@ import TicketCard from "./TicketCard"
 export default function ViewHisBooking({profileData}) {
   return (
 <div>
-    {Object.keys(profileData).lenght>0 && 
+  {console.log(profileData.bookings,"in the bookings")}
     <div className="tickets">
-      <h4>Tickets you have booked</h4>
-      {console.log(profileData,"in the bookings")}
       {profileData.bookings.map((value)=>value.tickets.map((ticket)=><TicketCard
             eventInfo={value.eventId}
             id={ticket._id} 
@@ -14,11 +12,12 @@ export default function ViewHisBooking({profileData}) {
             ticketPrice={ticket.ticketPrice}
             ticketType={ticket.ticketType}
             totalAmount={ticket.totalAmount}
+            createdAt={value.createdAt}
           />
         ))
       } 
 
-    </div>}
+    </div>
     </div>
   );
 }
