@@ -99,6 +99,8 @@ function Header() {
               <>
                 <li className="nav-item ">
                   <Link to="/user-profile" >
+                  {/* <Link to="/profile-canvas" > */}
+
                     <FontAwesomeIcon icon={faUser} style={{ marginTop:"10px",marginRight:"10px"}}/>
                   </Link>
                 </li>

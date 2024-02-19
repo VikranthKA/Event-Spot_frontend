@@ -5,7 +5,7 @@ import { config } from '../Api_Resources/config';
 import { Typography, Grid, Container } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faUser ,faPlus,faRefresh} from '@fortawesome/free-solid-svg-icons';
+import { faRefresh} from '@fortawesome/free-solid-svg-icons';
 import SpinnerComponent from '../Utils/Spinner/SpinnerComponent';
 
 
@@ -131,14 +131,14 @@ const Charts = () => {
     try {
       
       const response = await axios.get('/api/dashboard', config);
+      console.log(response.data)
       const { popularEvent } =response.data
-      const {totalAmount} =  response.data.totalAmount[0]
+      const totalAmount =  response.data?.totalAmount[0]?.totalAmount 
       const { activeUsers, notActiveUsers } = response.data.userInfo
       const {categoryEvents} = response.data.category
       const {paymentType} = response.data
       const {totalBooking} = response.data
 
-      console.log(response.data)
 
       setTodayTotalRevenue(totalAmount)
       setTotalBooking(totalBooking[0].totalBookings)
@@ -248,13 +248,13 @@ const Charts = () => {
       <Typography variant="h3" style={{textAlign:"center",textDecoration:"underline"}}>Dashboard<Button onClick={handleRefresh}>  <FontAwesomeIcon icon={faRefresh} /></Button></Typography>
     <div style={{display:"flex",marginTop:"50px",justifyContent: "space-evenly"}}>
       <Typography variant="body1" style={{ marginBottom: '20px' ,border:"5px solid lightblue"}}>
-        Total Revenue: {TodayTotalRevenue}/day
+        Total Revenue: {TodayTotalRevenue ? TodayTotalRevenue : 0}/day
       </Typography>
       <Typography variant="body1" style={{ marginBottom: '20px' ,border:"5px solid orange"}}>
-        Total Tickets sold: {totalAmount} 
+        Total Tickets sold: {totalAmount ? totalAmount : 0} 
       </Typography>
       <Typography variant="body1" style={{ marginBottom: '20px' ,border:"5px solid yellow"}}>
-        Total Booking: {totalBooking}/day 
+        Total Booking: {totalBooking ? totalBooking : 0}/day 
       </Typography>
       </div>
 

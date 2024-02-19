@@ -14,6 +14,7 @@ import RadiusEventDis from '../Event/RadiusEventDis';
 import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
 import { jwtDecode } from 'jwt-decode';
 import { Container } from 'react-bootstrap';
+import SpinnerComponent from '../Utils/Spinner/SpinnerComponent';
 
 
 function reverseLatLon(arr) {
@@ -183,11 +184,11 @@ function EventInMap() {
         </div>
 
       ) : (
-        <p>Loading map...</p>
+        <p><SpinnerComponent/>
+          Loading map...</p>
       )}
-
       <div>
-        {userData.role == "Organiser" ? <ViewHisEvents /> : <div>
+        <div>
           <div style={{}}>
             <Container style={{ backgroundColor: "lightblue", borderRadius: "15px 15px 0 15px ", marginBottom: "40px" }}>
               <RadiusEventDis raduisEvents={filterRadius ? filterRadius : raduisEvents} />
@@ -203,7 +204,7 @@ function EventInMap() {
 
           </div>
 
-        </div>}
+        </div>
       </div>
     </div>
   );

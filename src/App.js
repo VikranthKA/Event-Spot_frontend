@@ -34,6 +34,7 @@ import UserForm2 from './Event-Spot/client/components/UserProfile.js/UserForm2';
 import EventUpdate from './Event-Spot/client/components/Event/EventUpdate'
 import AboutUS from './Event-Spot/client/pages/AboutUS';
 import ContactUs from './Event-Spot/client/pages/ContactUS';
+import OffCanvasProfile from './Event-Spot/client/components/ProfileHelpers/OffCanvasProfile';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -155,6 +156,8 @@ const App = () => {
           <Route path="/user-deactivate" element={<Deactivate/>}/>
           <Route path="/about-us" element={<AboutUS/>}/>
           <Route path="/contact-us" element={<ContactUs/>}/>
+          <Route path="/profile-canvas" element={<OffCanvasProfile/>}/>
+
 
           
 
