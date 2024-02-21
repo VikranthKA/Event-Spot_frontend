@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { pagination } from '../../react-redux/action/paginateAction';
 import axios from '../Api_Resources/axios';
 import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 const AllEvents = () => {
   const navigate = useNavigate();
@@ -10,7 +12,8 @@ const AllEvents = () => {
   const { data, totalPages, currentPage, error } = useSelector((state) => state.pagination);
 
   const [currentPageNum, setCurrentPageNum] = useState(1);
-  const [expandedEventId, setExpandedEventId] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     dispatch(pagination(currentPageNum));
@@ -20,22 +23,24 @@ const AllEvents = () => {
     setCurrentPageNum(page);
   };
 
-  const handleToggleDescription = (eventId) => {
-    setExpandedEventId(expandedEventId === eventId ? null : eventId);
-  };
-
   const handleApprove = async (eventId) => {
     try {
       await axios.put(`/api/event/approve/${eventId}`);
       // Refetch the API data for the current page
       dispatch(pagination(currentPage));
+      Swal.fire({
+        title: "Approved!",
+        icon: "success"
+      });
     } catch (error) {
       console.error('Error approving event:', error);
     }
   };
-  
-  
-  
+
+  const handleViewDetails = (event) => {
+    setSelectedEvent(event);
+    setShowModal(true);
+  };
 
   const handleNavigate = () => {
     navigate('/approved-list');
@@ -43,14 +48,14 @@ const AllEvents = () => {
 
   return (
     <div className="container mt-5">
-      <div className="card text-center bg-light p-3" style={{width:"1050px"}}>
-        <h1 className="card-title">Approval list</h1>
+      <div>
+        <h1 style={{ borderBottom: '3px solid black', paddingBottom: '1px'}}>Approval list</h1>
       </div>
       <div className="row" style={{ marginTop: '20px' }}>
         {error && <p>Error: {error}</p>}
         {data && (
           <>
-            {/* events with isApproed: false */}
+            {/* events with isApproved: false */}
             {data.filter(event => !event.isApproved).map((event) => (
               <div key={event._id} className="col-md-4 mb-4">
                 <div className="card" style={{ width: '18rem' }}>
@@ -59,20 +64,15 @@ const AllEvents = () => {
                     <h5 className="card-title">{event.title}</h5>
                     <p className="card-text">Category: {event.categoryId.name}</p>
                     <div className="card-text">
-                      {expandedEventId === event._id ? (
-                        <div>{event.description}</div>
-                      ) : (
-                        <div>{event.description.slice(0, 100)}...</div>
-                      )}
+                      Description: {event.description}...
                     </div>
-                    <button
-                      className="btn btn-link"
-                      onClick={() => handleToggleDescription(event._id)}
-                    >
-                      {expandedEventId === event._id ? 'Read Less' : 'Read More'}
-                    </button>
-                    <button className='btn btn-success' onClick={()=>handleApprove(event._id)}>
+                    <button className='btn btn-success' onClick={() => handleApprove(event._id)}>
                       Approve
+                    </button>
+                    <br/>
+                    <br/>
+                    <button className='btn btn-warning' onClick={() => handleViewDetails(event)}>
+                      View Details
                     </button>
                   </div>
                 </div>
@@ -82,7 +82,7 @@ const AllEvents = () => {
         )}
 
         {/* pagination controls */}
-        <div className="row justify-content-center mt-4" style={{marginBottom:"20px"}}>
+        <div className="row justify-content-center mt-4" style={{ marginBottom: "20px" }}>
           <div className="btn-group">
             <button
               className={`btn ${currentPageNum === 1 ? 'btn-dark' : 'btn-dark'}`}
@@ -109,11 +109,29 @@ const AllEvents = () => {
             </button>
           </div>
         </div>
-        
       </div>
-      <button className='btn btn-primary' style={{marginBottom:"20px"}} onClick={handleNavigate}>
-          Click here for already approved events
-          </button>
+
+      {/* Modal for displaying event details */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Event Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>{selectedEvent?.title}</h5>
+          <p>Category: {selectedEvent?.categoryId?.name}</p>
+          <p>{selectedEvent?.description}</p>
+          {/* Add more details if needed */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <button className='btn btn-primary' style={{ marginBottom: "20px" }} onClick={handleNavigate}>
+        Click here for already approved events
+      </button>
     </div>
   );
 };

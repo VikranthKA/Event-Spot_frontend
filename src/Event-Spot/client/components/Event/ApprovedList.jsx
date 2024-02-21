@@ -22,7 +22,7 @@ function Approved({ events }) {
 
   return (
     <div className="container mt-5">
-      <div style={{width:"1050px"}}>
+      <div>
         <h1 style={{ borderBottom: '3px solid black', paddingBottom: '1px'}}>Approved list</h1>
       </div>
       <div className="row events-list" style={{ marginTop: '20px' }}>

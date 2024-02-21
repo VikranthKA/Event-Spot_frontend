@@ -1,23 +1,21 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "../Api_Resources/axios";
 import Select from 'react-select';
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
+import Swal from 'sweetalert2'; // Import SweetAlert
 
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import { config } from "../Api_Resources/config";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-
-
-
 const UserForm2 = () => {
   const navigate = useNavigate()
-  // const {profileId} = useParams()
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -27,14 +25,12 @@ const UserForm2 = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [profilePic, setProfilePic] = useState(null);
   const [description, setDescription] = useState('');
-  const [displayPic, setDisplayPic] = useState('');
-  const [userDetails, setUserDetails] = useState('');
   const [filePondFiles, setFilePondFiles] = useState([]);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchAddresses(); // Call fetchAddresses when the component mounts
+    fetchAddresses();
   }, []);
 
   const fetchAddresses = async () => {
@@ -74,10 +70,6 @@ const UserForm2 = () => {
     }));
   };
 
-  // const handleFileChange = (e) => {
-  //   setProfilePic(e.target.files[0]);
-  // };
-
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
@@ -94,45 +86,34 @@ const UserForm2 = () => {
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
 
-      const response = await axios.post('/api/profile', formData, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await axios.post('/api/profile', formData, config);
 
       console.log('Backend response:', response.data);
-      navigate('/user-profile')
+      navigate('/user-profile');
 
-      // Handle additional actions based on the response if needed
+      // Show SweetAlert after successful submission
+      Swal.fire("SweetAlert2 is working!");
     } catch (error) {
       console.error('Error sending data to the backend:', error);
-      // Handle error scenarios
     }
   };
 
-
   return (
     <div className="container mt-5">
-
       <form encType="multipart/form-data">
-      <div className="mb-3">
-  <label htmlFor="profilePic" className="form-label">
-    Change Profile Picture
-  </label>
-  <FilePond
-    files={filePondFiles}
-    allowMultiple={false} // Set to true if you want to allow multiple files
-    onupdatefiles={(fileItems) => {
-      setFilePondFiles(fileItems.map((fileItem) => fileItem.file));
-    }}
-  />
-</div>
+        <div className="mb-3">
+          <label htmlFor="profilePic" className="form-label">Change Profile Picture</label>
+          <FilePond
+            files={filePondFiles}
+            allowMultiple={false}
+            onupdatefiles={(fileItems) => {
+              setFilePondFiles(fileItems.map((fileItem) => fileItem.file));
+            }}
+          />
+        </div>
 
         <div className="mb-3">
-          <label htmlFor="description" className="form-label">
-            Description
-          </label>
+          <label htmlFor="description" className="form-label">Description</label>
           <input
             type="text"
             className="form-control"
@@ -142,9 +123,7 @@ const UserForm2 = () => {
           />
         </div>
 
-        <label htmlFor="address" className="form-label">
-          Address
-        </label>
+        <label htmlFor="address" className="form-label">Address</label>
         <div className="mb-3">
           <input
             type="text"
@@ -156,9 +135,7 @@ const UserForm2 = () => {
         </div>
 
         <div className="mb-3">
-          <button type="button" className="btn btn-dark" onClick={fetchAddresses}>
-            Search
-          </button>
+          <button type="button" className="btn btn-dark" onClick={fetchAddresses}>Search</button>
         </div>
 
         <div className="mb-3">
@@ -173,6 +150,7 @@ const UserForm2 = () => {
             placeholder="Select an address"
           />
         </div>
+
         <label htmlFor="city" className="form-label">Type city name here</label>
         <div className="mb-3">
           <input
@@ -184,10 +162,7 @@ const UserForm2 = () => {
         </div>
 
         <div className="mb-3">
-          <button type="button" className="btn btn-dark" onClick={formSubmit}>
-            Submit
-          </button>
-          {/* <button type="button" className="btn btn-dark" onClick={updateForm}>Update</button> */}
+          <button type="button" className="btn btn-dark" onClick={formSubmit}>Submit</button>
         </div>
       </form>
     </div>
@@ -195,4 +170,3 @@ const UserForm2 = () => {
 }
 
 export default UserForm2;
-
