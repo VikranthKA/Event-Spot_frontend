@@ -6,6 +6,7 @@ import { MyContext } from '../../ContextApi/Context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Container } from '@mui/material'
+import MultiCarousel from './multi-Carousel/MultiCarousel'
 
 function EventCardsDisplay() {
   const { cardSearch, setCardSearch } = useContext(MyContext)
@@ -27,17 +28,18 @@ function EventCardsDisplay() {
         </div>
 
         <div style={{ bottom: 20, right: 20, textAlign: 'right', marginBottom: "20px", marginTop: "20px" }}>
-          <input type='text' style={{ textAlign: 'left',border:"2px solid black",borderRadius:"5px" }} value={userSearchQuery} onChange={(e) => setUserSearchQuery(e.target.value)} placeholder='Search...' />
+          <input type='text' style={{ textAlign: 'left',border:"2px solid black",borderRadius:"5px" ,width:"15%"}} value={userSearchQuery} onChange={(e) => setUserSearchQuery(e.target.value)} placeholder=' Search...' />
           <button onClick={handleSearch} style={{ height: "30px", width: "30px", color: "blue", borderRadius: "20%" }}><FontAwesomeIcon icon={faSearch} /></button>
         </div>
         <div className='cards-display'>
 
           {(Object.keys(filterEvent).length > 0 ? filterEvent : events).map(ele => <EventCard
-            image={ele.posters[0].image}
-            title={ele.title}
-            start={ele.eventStartDateTime}
-            categoryName={ele.categoryId.name}
-            id={ele._id}
+            image={ele.posters[0]?.image}
+            title={ele?.title}
+            start={ele?.eventStartDateTime}
+            categoryName={ele.categoryId?.name}
+            id={ele?._id}
+
 
 
           />)}

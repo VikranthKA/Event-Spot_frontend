@@ -27,6 +27,7 @@ const Darkmode = () => {
 
   return (
     <div>
+      {console.log("in dark")}
       <button className="btn text-white" onClick={toggleDarkMode}>
         <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
       </button>

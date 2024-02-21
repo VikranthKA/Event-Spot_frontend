@@ -48,16 +48,16 @@ export default function Login() {
 
   return (
     <div>
-      <Row className='maxi'>
-        <Col md={6}>
-          <div>
-            <h1 style={{ marginLeft: '60px', marginTop: '50px' }}>Login in to your account</h1>
+      <Row className='maxi'  >
+        <Col md={6}  >
+          <div >
+            <h1 style={{margin:"50px 0 50px 20%" }}>Login in to your account</h1>
             <Form onSubmit={formik.handleSubmit} style={{ marginLeft: '60px', marginTop: '20px' }}>
 
               <FormGroup>
                 <strong for='email' className="form-label">Email:</strong>
                 <Input
-                  style={{ width: "500px" }}
+                  style={{ width: "80%" }}
                   type='text'
                   id='email'
                   name='email'
@@ -72,7 +72,7 @@ export default function Login() {
               <FormGroup>
                 <strong for='password'>Password:</strong>
                 <Input
-                  style={{ width: "500px" }}
+                  style={{ width: "80%" }}
                   type='password'
                   id='password'
                   name='password'
@@ -92,14 +92,14 @@ export default function Login() {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
 
                 <div>Don't have an account ? <Link to='/register'>Register</Link></div>
-                <div style={{marginRight: "10%"}}> <Link to="/forgot-password">Forgot your password?</Link></div>
+                <div style={{marginRight: "20%"}}> <Link to="/forgot-password">Forgot your password?</Link></div>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end",margin:"5% 10% 0 0 " }}>
+              <div style={{ display: "flex", justifyContent: "flex-end",margin:"5% 20% 0 0 " }}>
                   <button type='submit' className='btn btn-dark'>
 
 
-                    Login in
+                    Login
                   </button>
                 </div>
 

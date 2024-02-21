@@ -40,7 +40,7 @@ export default function EventInfo() {
 
   function readableDate(inputDateString) {
     const momentObject = moment(inputDateString);
-    return momentObject.format('LLLL');
+    return momentObject.format('L');
   }
 
   const navigate = useNavigate();
@@ -100,6 +100,8 @@ export default function EventInfo() {
 
           <h5>Venue: {event?.venueName}</h5>
           <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
+          <p>            Address : {event?.addressInfo?.address}<br/>
+            city : {event?.addressInfo?.city}</p>
           
         </Col>
         <Col>

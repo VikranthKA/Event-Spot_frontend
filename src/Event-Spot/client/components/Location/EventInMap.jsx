@@ -6,15 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import eventImage from '../Utils/icon.png';
 import userImage from '../Utils/userIcon.png';
-import { startRaduisEvents, startGetEvents } from '../../react-redux/action/eventAction';
+import {startGetEvents } from '../../react-redux/action/eventAction';
 import 'leaflet/dist/leaflet.css'
 import EventCardsDisplay from '../Event/EventCardsDisplay';
 import { MyContext } from '../../ContextApi/Context';
 import RadiusEventDis from '../Event/RadiusEventDis';
-import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
-import { jwtDecode } from 'jwt-decode';
 import { Container } from 'react-bootstrap';
 import SpinnerComponent from '../Utils/Spinner/SpinnerComponent';
+import MultiCarousel from '../Event/multi-Carousel/MultiCarousel';
 
 
 function reverseLatLon(arr) {
@@ -39,7 +38,6 @@ function EventInMap() {
   useEffect(() => {
     const success = (position) => {
       const { latitude, longitude } = position.coords;
-      console.log(latitude, longitude);
       setCenter([latitude, longitude]);
       setLonLat([latitude, longitude]);
     };
@@ -56,9 +54,8 @@ function EventInMap() {
   }, []);
 
   useEffect(() => {
-    if (radius === 500 || radius >= 5000 || radius >= 50000) {
-    }
-  }, [radius, lonlat]);
+    handleRadiusChange()
+  }, [lonlat]);
 
   useEffect(() => {
     dispatch(startGetEvents());
@@ -81,13 +78,14 @@ function EventInMap() {
   });
 
   const handleRadiusChange = () => {
-    handleGeoWithinEvents(radius, lonlat[1], lonlat[0])
+   
+    if(radius && lonlat[1] && lonlat[0]) {
+      handleGeoWithinEvents(radius, lonlat[1], lonlat[0])}
+    }
 
-  }
 
-  useEffect(() => {
-    console.log(radius)
-  }, [radius])
+
+
 
   return (
     <div className="div-container">
@@ -144,7 +142,7 @@ function EventInMap() {
                       <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
                     </Marker>
                   )) : (
-                    eventData.map((event) => (
+                    eventData?.map((event) => (
                       <Marker
                         key={event._id}
                         position={reverseLatLon(event.location.coordinates)}
@@ -195,6 +193,11 @@ function EventInMap() {
             </Container>
 
           </div>
+
+          <div className="multi-car">
+          <MultiCarousel/>
+
+          </div>
           <div className="EventDisplay">
             <Container style={{ color: "blue" }}>
 
@@ -203,7 +206,6 @@ function EventInMap() {
 
 
           </div>
-
         </div>
       </div>
     </div>
