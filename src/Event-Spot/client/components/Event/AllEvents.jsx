@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const AllEvents = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, data, totalPages, currentPage, error } = useSelector((state) => state.pagination);
+  const { data, totalPages, currentPage, error } = useSelector((state) => state.pagination);
 
   const [currentPageNum, setCurrentPageNum] = useState(1);
   const [expandedEventId, setExpandedEventId] = useState(null);
@@ -50,7 +50,7 @@ const AllEvents = () => {
         {error && <p>Error: {error}</p>}
         {data && (
           <>
-            {/* Map over your paginated events where isApproved is false and display them */}
+            {/* events with isApproed: false */}
             {data.filter(event => !event.isApproved).map((event) => (
               <div key={event._id} className="col-md-4 mb-4">
                 <div className="card" style={{ width: '18rem' }}>
@@ -81,7 +81,7 @@ const AllEvents = () => {
           </>
         )}
 
-        {/* Display pagination controls */}
+        {/* pagination controls */}
         <div className="row justify-content-center mt-4" style={{marginBottom:"20px"}}>
           <div className="btn-group">
             <button
