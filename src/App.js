@@ -5,7 +5,6 @@ import { MyContext } from './Event-Spot/client/ContextApi/Context'
 import DisplayUser from './Event-Spot/client/components/UserProfile.js/DisplayUser'
 import Darkmode from './Event-Spot/client/components/Z_Dark_Mode/Darkmode'
 import Map from './Event-Spot/client/components/Location/Map'
-import CreateBookingInfo from './Event-Spot/client/components/Booking/Qr-Component/CreateBookingInfo'
 import Test from './Event-Spot/client/components/Location/Test'
 import MapWithPolyline from './Event-Spot/client/components/Location/MapWithPolyline'
 import EventInfo from './Event-Spot/client/components/Event/EventInfo'
@@ -35,6 +34,9 @@ import EventUpdate from './Event-Spot/client/components/Event/EventUpdate'
 import AboutUS from './Event-Spot/client/pages/AboutUS';
 import ContactUs from './Event-Spot/client/pages/ContactUS';
 import OffCanvasProfile from './Event-Spot/client/components/ProfileHelpers/OffCanvasProfile';
+import MultiCarousel from './Event-Spot/client/components/Event/multi-Carousel/MultiCarousel';
+import "./App.css"
+import CatCardDis from './Event-Spot/client/components/Event/multi-Carousel/CatCardDis';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -52,11 +54,13 @@ function profileFunction (state, action){
     case "SET_PROFILE_DATA":
       return action.payload
     case "CLEAR_PROFILE_DATA":
-      return " "
+      console.log("In App")
+      return {}
       default:
         return { ...state }
   }
 }
+
 
 const App = () => {
   const [raduisEvents,radiusDispatch] = useReducer(geoWithin,[])
@@ -67,6 +71,7 @@ const App = () => {
 
   const handleGeoWithinEvents = async(radius,lon,lat) =>{
     try{
+      console.log(radius,lon,lat)
         const response = await axios.get(`/api/event/${radius}/${lon}/${lat}`)
         console.log(response.data)
         radiusDispatch(
@@ -109,7 +114,9 @@ const App = () => {
     };
 
     fetchProfileData();
-  }, [userData]);
+  }, [userData])
+
+  useEffect(()=>{console.log(profile,raduisEvents)},[profile,raduisEvents])
 
 
 
@@ -136,7 +143,6 @@ const App = () => {
               {/* <div style={{height:"100vh"}}><EventInMap/></div> */}
           <Route path='/event-info/:eventId' element={<EventInfo/>}/>
           <Route path='/event-booking/:eventId' element={<TicketBook/>}/>
-          <Route path='/show-QrCode' element={<CreateBookingInfo/>}/>
           <Route path="/success" element={<Success/>}/>
           <Route path="/cancel" element={<Cancel/>}/>
           <Route path="/edit-profile" element={<UserForm/>}/>
@@ -159,6 +165,9 @@ const App = () => {
           <Route path="/about-us" element={<AboutUS/>}/>
           <Route path="/contact-us" element={<ContactUs/>}/>
           <Route path="/profile-canvas" element={<OffCanvasProfile/>}/>
+          <Route path="/categry-events" element={<MultiCarousel/>}/>
+          <Route path="/category/:categoryId" element={<CatCardDis/>}/>
+
 
 
           

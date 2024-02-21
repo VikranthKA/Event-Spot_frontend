@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{memo, useState} from 'react'
 import QRCode from "react-qr-code";
 
 function QrGenerator({QrData}) {
@@ -24,4 +24,4 @@ function QrGenerator({QrData}) {
   )
 }
 
-export default QrGenerator
+export default memo(QrGenerator)

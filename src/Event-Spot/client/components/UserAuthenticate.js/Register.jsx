@@ -140,17 +140,16 @@ export default function Register() {
                 <ToastContainer />
               </div>
 
-              <div>
+              <div style={{display:"flex",justifyContent:"space-between"}}>
                 
-                <button type='submit' className='btn btn-dark'>
-                  Signup
-                </button>
-                <br/>
-                <br/>
                 <div>
                 Already have an account?<Link to='/login'>Login</Link>
                   
                 </div>
+                <button type='submit' className='btn btn-dark sign-up' >
+                  Signup
+                </button>
+
               </div>
             </Form>
           </div>
@@ -176,3 +175,5 @@ export default function Register() {
     </div>
   );
 }
+
+

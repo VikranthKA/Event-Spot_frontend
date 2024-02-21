@@ -1,15 +1,12 @@
-import * as React from 'react'
 import {useState} from 'react'
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import ExpiryTime from '../Booking/Qr-Component/ExpiryTime';
 import { Button } from '@mui/material';
 import moment from 'moment' 
+import ExpiryTime from '../Booking/Qr-Component/ExpiryTime';
 
 export default function TicketCard({eventInfo,quantity,ticketPrice,ticketType,totalAmount,id,createdAt}) {
   const [qrToggle,setQrToggle] = useState(false)
@@ -23,7 +20,7 @@ export default function TicketCard({eventInfo,quantity,ticketPrice,ticketType,to
   }
 
   return (
-    <div style={{margin:"0 0 10% 25 %"}}>
+    <div style={{margin:"0 0 10% 25%"}}>
         <h4 style={{display:"inline-block",marginBottom: "3%"}}>Tickets you have booked at - {readableDate(createdAt)}</h4>
 
       {qrToggle ? <Button onClick={()=>setQrToggle(false)}>Hide</Button> : <Button onClick={()=>setQrToggle(true)}>Show</Button>}

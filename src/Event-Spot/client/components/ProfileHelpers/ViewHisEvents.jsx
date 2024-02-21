@@ -46,12 +46,12 @@ console.log(foundEvent,"these are the events i created")
       </div>
     <div className='cards-display'>
         {organizerEvents?.length > 0 ? userData?.id && organizerEvents?.map(ele=><EventCard
-          image={ele.posters[0].image}
-          title={ele.title}
-          start={ele.eventStartDateTime}
-          categoryName={ele.categoryId.name}
-          id={ele._id}
-          organizerId={ele.organizerId}
+          image={ele.posters[0]?.image}
+          title={ele?.title}
+          start={ele?.eventStartDateTime}
+          categoryName={ele?.categoryId?.name}
+          id={ele?._id}
+          organizerId={ele?.organizerId}
         />): <Spinner/>}
       
     </div>

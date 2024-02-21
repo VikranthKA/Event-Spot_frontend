@@ -1,20 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from "../Api_Resources/axios";
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container, Carousel, Spinner, ProgressBar,Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText, Alert } from 'react-bootstrap';
+import { Container, ProgressBar,Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText, Alert } from 'react-bootstrap';
 
 import "./EventForm.css"
 import NotFound from '../Utils/NotFound/NotFound';
-import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eventAction"
+import { startCreateEvent } from "../../react-redux/action/eventAction"
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MyContext } from '../../ContextApi/Context';
 import { ToastContainer, toast } from 'react-toastify';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 
 const EventForm = () => {
-  const {userData} = useContext(MyContext)
+
   const { eventId } = useParams()
 
   const [event, setEvent] = useState([])
@@ -316,6 +315,7 @@ const EventForm = () => {
   }, [form, youTube, actors, allCategory, searchTerm, locObj, searchResults, selectedAddress]);
 
 
+
   const validateStep = async () => {
     switch (step) {
       case 1:
@@ -364,7 +364,7 @@ const EventForm = () => {
           ticketCount: !ticket.ticketCount?.trim()
         }))
         try {
-         await setTicketErrors([...errors])
+          setTicketErrors([...errors])
           return !step2Errors.category && !ticketErrors.some((error) => Object.values(error).some((value) => value));
         } catch (err) {
           console.log(err)
@@ -410,7 +410,7 @@ const EventForm = () => {
         })
 
         try {
-          await setErrors({ ...step3Errors })
+          setErrors({ ...step3Errors })
           console.log("in try catch")
           return Object.keys(step3Errors).length === 0;
         } catch (err) {
@@ -478,8 +478,8 @@ const EventForm = () => {
 
       try {
  
-          dispatch(startCreateEvent(eventFormData))
-          navigate('/')
+        dispatch(startCreateEvent(eventFormData))
+        navigate('/')
         setForm("")
         setActors("")
         setPoster("")
@@ -578,7 +578,7 @@ const EventForm = () => {
                     />
                     {ticketStartHelp &&
                       <Form.Text muted>Ticket Sale Start Time where users can start booking the event.</Form.Text>
-                    }                    <Form.Control.Feedback type="invalid">
+                    } <Form.Control.Feedback type="invalid">
                       {errors.ticketSaleStartTime && <div>{errors.ticketSaleStartTime}</div>}
                     </Form.Control.Feedback>
                   </Form.Group>
@@ -700,9 +700,9 @@ const EventForm = () => {
                       </Col>
                     </Row>
                   ))}
-                  <Button variant="primary" onClick={handleAddSlot}>
+                  {form.ticketType.length < 10 && <Button variant="primary" onClick={handleAddSlot}>
                     + Add
-                  </Button>
+                  </Button>}
                 </Form.Group>
 
 
@@ -879,7 +879,7 @@ const EventForm = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Form.Group controlId="selectAddress">
+                <Form.Group controlId="selectAddress" className='actor-form-group'>
                   <Form.Label>Select an Address:</Form.Label>
                   <Select
                     options={searchResults.map((addr) => ({
@@ -899,10 +899,11 @@ const EventForm = () => {
 
 
 
-                <div className="actors">
+                <div className="actors" >
+                  <div className='actor-div'>
                   {actors.map((actor, index) => (
                     <div className="actor" key={index}>
-                      <Form.Group controlId={`actorName${index}`}>
+                      <Form.Group controlId={`actorName${index}`} className='actor-form-group'>
                         <Form.Label>Enter the Actor name:</Form.Label>
                         <Form.Control type="text" value={actor.name} onChange={(e) => handleActorChange(index, "name", e.target.value)} isInvalid={!!errors[`actorName${index}`]} />
                         <Form.Control.Feedback type="invalid">
@@ -910,17 +911,18 @@ const EventForm = () => {
                         </Form.Control.Feedback>
                       </Form.Group>
                       {index >= 1 && (
-                        <Button variant="danger" onClick={() => handleDeleteActor(index)}>
+                        <Button variant="danger" style={{marginTop:"3%",width:"7%",height:"5%",marginRight:"10%"}} onClick={() => handleDeleteActor(index)}>
                           Delete
                         </Button>
                       )}
                     </div>
                   ))}
                   {actors.length < 6 && (
-                    <Button variant="primary" onClick={hanldeAddActors}>
+                    <Button variant="primary" onClick={hanldeAddActors} style={{marginTop:"2%"}}>
                       + Actors
                     </Button>
                   )}
+                  </div>
                 </div>
 
                 <div className="serverErrors">
@@ -934,19 +936,19 @@ const EventForm = () => {
                 </div>
 
                 <Row className="mb-3">
+                    <div style={{ display: "flex", justifyContent: "space-around" }}>
                   <Col>
 
-                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
 
-                      <Button variant="secondary" style={{ height: "40px", width: "90px", marginTop: "10px" }} onClick={() => prevStep()}>
-                        Previous
+                      <Button variant="secondary" style={{ height: "100%", width: "20%", marginTop: "2%" }} onClick={() => prevStep()}>
+                         Previous
                       </Button>
-                    </div>
                   </Col>
                   <Col>
-                  {edit ? <Button variant="primary" style={{ height: "60px", width: "120px" }} onClick={handleSubmit}>Confirm Edit</Button> : <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={handleSubmit}>Submit</Button>}
+                 <Button variant="primary" style={{ height: "100%", width: "20%" ,marginLeft:"60%"}} onClick={handleSubmit}>Submit</Button> 
 
                   </Col>
+                    </div>
                 </Row>
               </Form>
             </Container>
@@ -973,4 +975,4 @@ const EventForm = () => {
 }
 
 
-export default EventForm;
+export default EventForm

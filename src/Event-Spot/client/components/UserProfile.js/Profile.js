@@ -73,7 +73,7 @@ export default function Profile() {
             </div>
             <div className="col-md-8">
               <p className="card-text">
-                <strong>Username:</strong> {profile.userId.username}
+                <strong>Username:</strong> {profile?.userId?.username}
               </p>
               <p className="card-text">
                 <strong>Role:</strong> {profile?.userId?.role}

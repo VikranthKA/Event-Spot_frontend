@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { memo } from 'react';
+
 import moment from 'moment'
 import QrGenerator from "./QrGenerator"
 
@@ -32,4 +34,4 @@ const ExpiryTime = ({ detailsInfo, expiryTime }) => {
   )
 }
 
-export default ExpiryTime
+export default memo(ExpiryTime)
