@@ -67,7 +67,7 @@ export const startEditCategory = (id, formData) => {
       return;
     }
     try {
-      const response = await axios.put(`/api/category${id}`, formData,config);
+      const response = await axios.put(`/api/category/${id}`, formData,config);
       dispatch(editCategory(response.data));
     } catch (e) {
       console.log(e);
