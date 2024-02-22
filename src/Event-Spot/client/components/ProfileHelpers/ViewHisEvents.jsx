@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useContext} from 'react'
+import React,{useState,useEffect, useContext,memo} from 'react'
 import { useSelector } from 'react-redux';
 import EventCard from '../Event/EventCard';
 import { MyContext } from '../../ContextApi/Context';
@@ -59,4 +59,4 @@ console.log(foundEvent,"these are the events i created")
   )
 }
 
-export default ViewHisEvents
+export default  memo(ViewHisEvents)

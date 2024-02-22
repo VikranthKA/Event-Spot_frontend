@@ -1,5 +1,4 @@
-import {useState} from 'react'
-import { useTheme } from '@mui/material/styles';
+import {useState,memo} from 'react'
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -8,7 +7,7 @@ import { Button } from '@mui/material';
 import moment from 'moment' 
 import ExpiryTime from '../Booking/Qr-Component/ExpiryTime';
 
-export default function TicketCard({eventInfo,quantity,ticketPrice,ticketType,totalAmount,id,createdAt}) {
+ function TicketCard({eventInfo,quantity,ticketPrice,ticketType,totalAmount,id,createdAt}) {
   const [qrToggle,setQrToggle] = useState(false)
   const expiryTime = 2
   const detailsInfo = {
@@ -47,3 +46,5 @@ export default function TicketCard({eventInfo,quantity,ticketPrice,ticketType,to
     </div>
   );
 }
+
+export default memo(TicketCard)

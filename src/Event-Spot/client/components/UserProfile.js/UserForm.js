@@ -28,10 +28,7 @@ const UserForm = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [profilePic, setProfilePic] = useState(null);
   const [description, setDescription] = useState('');
-  const [displayPic, setDisplayPic] = useState('');
-  const [userDetails, setUserDetails] = useState('');
   const [filePondFiles, setFilePondFiles] = useState([]);
     const dispatch = useDispatch()
   useEffect(() => {

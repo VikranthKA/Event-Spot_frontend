@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{memo} from 'react';
 import Rating from 'react-rating-stars-component';
 
 const StarRating2 = ({ rating }) => {
@@ -22,4 +22,4 @@ const StarRating2 = ({ rating }) => {
   );
 };
 
-export default StarRating2;
+export default memo(StarRating2);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { pagination } from '../../react-redux/action/paginateAction';
 import axios from '../Api_Resources/axios';
@@ -118,4 +118,4 @@ const AllEvents = () => {
   );
 };
 
-export default AllEvents;
+export default memo(AllEvents);

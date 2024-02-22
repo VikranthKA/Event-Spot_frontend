@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,memo} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
@@ -35,4 +35,4 @@ const Darkmode = () => {
   );
 };
 
-export default Darkmode
+export default memo(Darkmode)

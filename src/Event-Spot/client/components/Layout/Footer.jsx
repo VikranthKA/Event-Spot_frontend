@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{memo} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Footer (){
@@ -12,4 +12,4 @@ function Footer (){
   );
 };
 
-export default Footer
+export default memo(Footer)

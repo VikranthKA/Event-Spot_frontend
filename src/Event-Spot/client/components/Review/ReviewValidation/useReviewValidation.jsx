@@ -135,4 +135,4 @@ const navigate = useNavigate()
   );
 }
 
-export default ReviewForm
+export default memo(ReviewForm)

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState ,memo} from 'react'
 import { useSelector } from 'react-redux'
 import EventCard from "./EventCard"
 import "./EventCardsDisplay.css"
@@ -49,4 +49,4 @@ function EventCardsDisplay() {
   )
 }
 
-export default EventCardsDisplay
+export default memo(EventCardsDisplay)

@@ -1,4 +1,5 @@
 import Spinner from 'react-bootstrap/Spinner';
+import {memo} from 'react'
 
 function SpinnerComponent() {
   return (
@@ -8,4 +9,4 @@ function SpinnerComponent() {
   );
 }
 
-export default SpinnerComponent
+export default memo(SpinnerComponent)

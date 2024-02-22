@@ -37,4 +37,4 @@ const StarRating = ({ rating, totalStars=5 }) => {
   );
 };
 
-export default StarRating;
+export default memo(StarRating);

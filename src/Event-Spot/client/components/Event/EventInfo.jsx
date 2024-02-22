@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState,memo } from 'react';
 import moment from 'moment';
 import CountDown from '../Utils/CountDown/CountDown';
 import { useParams,useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ const totalRemainingTickets = tickets?.reduce((total, ticket) => total + ticket?
 return totalRemainingTickets
 }
 
-export default function EventInfo() {
+function EventInfo() {
   const { eventId } = useParams();
   const [event, setEvent] = useState('');
   const dispatch = useDispatch();
@@ -153,5 +153,7 @@ export default function EventInfo() {
     </div>
   );
 }
+
+export default EventInfo
 
 

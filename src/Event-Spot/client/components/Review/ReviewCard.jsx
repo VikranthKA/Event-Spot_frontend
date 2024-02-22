@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useContext} from 'react'
+import React,{useState,useEffect, useContext,memo} from 'react'
 import ReviewForm from './ReviewForm'
 import { Container, Carousel, Spinner, Row, Col, Card, ListGroup, Badge, Button,Form, CardText } from 'react-bootstrap';
 import { MyContext } from '../../ContextApi/Context';
@@ -44,4 +44,4 @@ const ReviewCard = ({eventId,reviewinfo}) => {
   )
 }
 
-export default ReviewCard
+export default memo(ReviewCard)

@@ -1,6 +1,6 @@
 import TicketCard from "./TicketCard"
-
-export default function ViewHisBooking({profileData}) {
+import {memo} from 'react'
+function ViewHisBooking({profileData}) {
   return (
 <div>
     <div className="tickets">
@@ -20,3 +20,4 @@ export default function ViewHisBooking({profileData}) {
     </div>
   );
 }
+export default memo(ViewHisBooking)

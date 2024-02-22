@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { startRemoveCategory, addCategoryAsync, startGetCategory } from '../../react-redux/action/categoryAction';
@@ -92,4 +92,4 @@ function Create() {
   );
 }
 
-export default Create;
+export default memo(Create);

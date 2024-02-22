@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState,memo } from 'react';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useDispatch } from 'react-redux';
@@ -113,4 +113,4 @@ function ReviewForm({ eventId, updatingReview }) {
     );
 }
 
-export default ReviewForm;
+export default memo(ReviewForm);

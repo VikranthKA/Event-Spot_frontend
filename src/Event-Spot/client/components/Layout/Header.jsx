@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext,memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
@@ -142,4 +142,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default memo(Header);

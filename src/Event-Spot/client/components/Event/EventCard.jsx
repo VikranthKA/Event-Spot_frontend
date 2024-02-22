@@ -1,3 +1,4 @@
+import {memo} from 'react'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -30,4 +31,4 @@ function EventCard({ title, image, start, categoryName, id }) {
   )
 }
 
-export default EventCard;
+export default memo(EventCard);

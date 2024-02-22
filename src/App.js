@@ -1,4 +1,4 @@
-import React, { useEffect ,useReducer,useState} from 'react'
+import React, { useCallback, useEffect ,useReducer,useState} from 'react'
 import {Routes,Route,Link} from 'react-router-dom' 
 import { jwtDecode } from 'jwt-decode';
 import { MyContext } from './Event-Spot/client/ContextApi/Context'
@@ -69,7 +69,7 @@ const App = () => {
   const [profile, profileDispatch] = useReducer(profileFunction,"")
   const [cardSearch,setCardSearch] =  useState("")
 
-  const handleGeoWithinEvents = async(radius,lon,lat) =>{
+  const handleGeoWithinEvents =useCallback( async(radius,lon,lat) =>{
     try{
       console.log(radius,lon,lat)
         const response = await axios.get(`/api/event/${radius}/${lon}/${lat}`)
@@ -85,7 +85,8 @@ const App = () => {
       console.log(err)
         toast.error(err.response.data.err)
     }
-  }
+  },[radiusDispatch,raduisEvents])
+
 
   useEffect(()=>{
     if(localStorage.getItem('token')){

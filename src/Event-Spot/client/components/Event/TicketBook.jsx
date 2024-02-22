@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,useMemo } from 'react';
 import { Button, Card, Spinner, Modal, Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -18,7 +18,6 @@ const TicketBook = () => {
   const [eventDetails, setEventDetails] = useState(null);
   const [tickets, setTickets] = useState([]);
   const card = "CARD"
-  const [totalPrice, setTotalPrice] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
   const events = useSelector((state) => state.events);
@@ -62,9 +61,7 @@ const TicketBook = () => {
       }
     })()
   },[])
-  useEffect(()=>{
-    calculateTotalAmount()
-  },[tickets])
+
 
   const handlePayment =()=>{
     console.log("payment")
@@ -111,14 +108,14 @@ const TicketBook = () => {
     }
   };
 
-  const calculateTotalAmount = () => {
+  const calculateTotalAmount = useMemo(() => {
+    console.log("in the cal")
     const totalAmount = tickets.reduce((total, count, index) => {
       const ticket = eventDetails.ticketType[index];
       return total + count * ticket.ticketPrice;
     }, 0);
-    setTotalPrice(totalAmount);
     return totalAmount;
-  };
+  },[tickets])
 
   const handleBookTicket = () => {
     if (!eventDetails) {
@@ -134,9 +131,6 @@ const TicketBook = () => {
       const bookedTicket = bookedTickets.find((booked) => booked.ticket._id === ticket._id);
       const bookedCount = bookedTicket ? bookedTicket.count : 0;
       const remainingCount = ticket.ticketCount - bookedCount;
-
-      const totalAmountForTicket = bookedTicket ? bookedTicket.count * ticket.ticketPrice : 0;
-
 
       return { ...ticket, remainingTickets: remainingCount, Quantity: ticket.ticketCount - remainingCount,ticketPrice:ticket.ticketPrice   }; //
     });
@@ -246,7 +240,7 @@ return (
           ))}
       </div>
       <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: 'wrap', border: "2px solid black", borderRadius: "5px", padding: "10px", marginTop: "20px" }}>
-        <h2 style={{ marginTop: "10px" }}>Total Amount: {totalPrice}</h2>
+        <h2 style={{ marginTop: "10px" }}>Total Amount: {calculateTotalAmount}</h2>
         <Button variant='success' style={{ width: "100px", height: "40px", marginTop: "10px" }} onClick={handleBookTicket}>
           Book
         </Button>
@@ -273,7 +267,7 @@ return (
               </Card.Body>
             </Card>
           ):<img style={{width:"100%",height:"100%"}} src={`https://eventpot.s3.ap-south-1.amazonaws.com/Animation+-+ticeket.gif`}/>}
-          <h2>Total Amount: {totalPrice}</h2>
+          <h2>Total Amount: {calculateTotalAmount }</h2>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handlePayment}>

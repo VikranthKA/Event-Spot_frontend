@@ -11,7 +11,7 @@ export const startCreateBooking = (eventId,tickets)=>{
             dispatch(updateEventsAfterBooking(response.data.updatedEvents))
         }catch(err){
             console.log(err)
-            alert(err)
+            toast.info(err.map((ele)=>ele.msg))
             return{
                 type:"CLEAR_BOOKING_IN_STATE"
             }

@@ -1,5 +1,5 @@
 import './EventInMap.css';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState,memo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -212,4 +212,4 @@ function EventInMap() {
   );
 }
 
-export default EventInMap;
+export default memo(EventInMap);

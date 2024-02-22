@@ -27,10 +27,7 @@ const UserForm2 = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [profilePic, setProfilePic] = useState(null);
   const [description, setDescription] = useState('');
-  const [displayPic, setDisplayPic] = useState('');
-  const [userDetails, setUserDetails] = useState('');
   const [filePondFiles, setFilePondFiles] = useState([]);
   const dispatch = useDispatch()
   useEffect(() => {
@@ -39,9 +36,8 @@ const UserForm2 = () => {
 
   const fetchAddresses = async () => {
     try {
-      const GEO_CODE_API_KEY = '659f7b557feb5653368044xyz79cdbd';
       const response = await axios.get(
-        `https://geocode.maps.co/search?q=${searchTerm}&api_key=${GEO_CODE_API_KEY}`
+        `https://geocode.maps.co/search?q=${searchTerm}&api_key=${process.env.REACT_APP_GEO_API}`
       );
 
       setSearchResults(response.data);
@@ -51,10 +47,10 @@ const UserForm2 = () => {
             place_id: '404',
             display_name: 'Try typing different or check typo',
           },
-        ]);
+        ])
       }
     } catch (error) {
-      console.error('Error fetching addresses:', error);
+      console.error('Error fetching addresses:', error)
     }
   };
 
