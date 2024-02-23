@@ -25,7 +25,7 @@ const ReviewCard = ({eventId,reviewinfo}) => {
               <div className="fw-bold">Title:{reviewinfo?.title}</div>
               Body:{reviewinfo.body}
             </div>
-            <Badge bg="primary" pill>
+            <Badge bg="dark" pill>
               {/* {reviewinfo?.rating} */}
               <StarRating2 rating={reviewinfo?.rating}/>
             </Badge>
@@ -34,9 +34,10 @@ const ReviewCard = ({eventId,reviewinfo}) => {
               {reviewToggle ? (
                 <Button onClick={() => setReviewToggle(!reviewToggle)}>cancel</Button>
               ) : (
-                <Button onClick={() => setReviewToggle(!reviewToggle)}>Edit</Button>
-              )}
-              <Button onClick={()=>dispatch(startDeleteReview(eventId,reviewinfo._id))}>delete</Button>
+                <Button className='btn btn-warning' onClick={() => setReviewToggle(!reviewToggle)}>Edit</Button>
+                
+              )}{ }
+              <Button className='btn btn-danger' onClick={()=>dispatch(startDeleteReview(eventId,reviewinfo._id))}>Delete</Button>
 
             </div>}
           </ListGroup.Item>

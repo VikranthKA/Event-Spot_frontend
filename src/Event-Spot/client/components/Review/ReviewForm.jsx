@@ -66,7 +66,7 @@ function ReviewForm({ eventId, updatingReview }) {
     };
 
     return (
-        <div style={{ width: '40%' }}>
+        <div style={{ width: '90%' }}>
             <Form onSubmit={handleReviewSubmit}>
                 <FormGroup>
                     <Label for="title">Title</Label>
@@ -102,7 +102,7 @@ function ReviewForm({ eventId, updatingReview }) {
                         />
                     </FormGroup>
                     {errors.rating && <span style={{ color: 'red' }}>{errors.rating}</span>}
-                    <Button color="primary" type="submit" style={{ marginLeft: '20%' }}>
+                    <Button color="dark" type="submit" style={{ marginLeft: '20%' }}>
                         Submit
                     </Button>
                 </div>
