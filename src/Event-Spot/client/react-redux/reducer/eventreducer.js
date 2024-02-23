@@ -6,7 +6,8 @@ const eventReducer = (state=eventInitialState,action)=>{
         
         case "CREATE_NEW_EVENT":
             return [action.payload,...state]
-        case "UPDATE_EVENT_AFTER_BOOKING": 
+
+        case "UPDATE_EVENT": 
             const updatedEvent = state.map((ele) => {
                     console.log(ele._id,action.payload._id)
               if (ele._id ===  action.payload._id) {

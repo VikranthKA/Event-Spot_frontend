@@ -39,6 +39,7 @@ function EventCardsDisplay() {
             start={ele?.eventStartDateTime}
             categoryName={ele.categoryId?.name}
             id={ele?._id}
+            tickets = {ele?.ticketType}
 
 
 

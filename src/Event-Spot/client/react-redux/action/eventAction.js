@@ -17,6 +17,9 @@ export const startGetEvents = ()=>{
     }
 }
 
+
+
+
 const setEvents = (data)=>{
     console.log(data,"in userAction")
     return{
@@ -25,11 +28,19 @@ const setEvents = (data)=>{
     }
 }
 
+const setEventsToOrganise = (data)=>{
+    console.log(data,"in userAction")
+    return{
+        type:"CREATE_A_NEW_EVENT",
+        payload:data
+    }
+}
+
 export const startCreateEvent = (eventFormData)=>{
     return async(dispatch)=>{
         try{
             const response = await axios.post('/api/event', eventFormData, fileConfig)
-            dispatch(setCreateEvents(response.data))
+            dispatch(setEventsToOrganise(response.data))
             toast.success( `${response.data.title} Event created successfully`)
             localStorage.removeItem('form');
             localStorage.removeItem('youTube');
@@ -47,12 +58,14 @@ export const startCreateEvent = (eventFormData)=>{
     }
 }
 
-const setCreateEvents =(data)=>{
+const setCreateEvents =(data)=>{//because the event must be approved then only i want to show the event
     return {
         type:"CREATE_NEW_EVENT",
         payload:data
     }
 }
+
+//this upating the existing event and also whenever a user create a new booking i am getting back the new updated on to show how much seats are left
 
 export const startUpdateEvent = (eventFormData,eventId)=>{
     return async(dispatch)=>{
@@ -70,7 +83,7 @@ export const startUpdateEvent = (eventFormData,eventId)=>{
 
 const setUpdateEvents =(data)=>{
     return {
-        type:"UPDATE_EVENT_AFTER_BOOKING",
+        type:"UPDATE_EVENT",
         payload:data
     }
 }
@@ -96,7 +109,6 @@ export const startCreateReview = (eventId,reviewForm)=>{
         }
     }
 }
-
 
 
 export const startUpdateReview = (eventId, reviewId, reviewForm) => {

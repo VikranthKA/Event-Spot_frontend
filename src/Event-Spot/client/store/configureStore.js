@@ -7,6 +7,7 @@ import bookingReducer from "../react-redux/reducer/bookingReducer"
 import paginateReducer from "../react-redux/reducer/paginateReducer"
 import bookingDetailsReducer from "../react-redux/reducer/bookedFalseDetailsReducer"
 import categoryCarouselReducer from "../react-redux/reducer/categoryCarousel"
+import organiserReducer from "../react-redux/reducer/organiserReducer"
 
 
 const rootReducer = {
@@ -17,7 +18,8 @@ const rootReducer = {
     booking: bookingReducer,
     pagination: paginateReducer,
     notbookedDetails : bookingDetailsReducer,
-    categoryCarousel: categoryCarouselReducer
+    categoryCarousel: categoryCarouselReducer,
+    organiserDetails:organiserReducer
     
 }
 

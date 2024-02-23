@@ -83,7 +83,7 @@ const App = () => {
         
     }catch(err){
       console.log(err)
-        toast.error(err.response.data.err)
+        // toast.error(JSON.stringify(err))
     }
   },[radiusDispatch,raduisEvents])
 
@@ -151,7 +151,7 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword/>} exact="true"/> 
           <Route path="/resetPassword/:id/:token" element={<ResetPassword/>}/>
           {/* <Route path="/user-booking" element={<ViewHisBookings/>}/> */}
-          <Route path="/event-form/:eventId" element={<EventForm/>}/>
+          {/* <Route path="/event-form/:eventId" element={<EventForm/>}/> */}
           <Route path="/approved-list" element={<ApprovedList/>}/>
           <Route path="/user-deactivate" element={<Deactivate/>}/>
           <Route path="/create-profile" element={<UserForm2/>}/>

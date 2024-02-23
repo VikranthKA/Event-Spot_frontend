@@ -98,7 +98,7 @@ function EventInMap() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Circle center={lonlat} radius={(parseInt(radius) + 1) * 1000} /> {/* Convert to meters */}
+            <Circle center={lonlat} radius={(parseInt(radius) + 1) * 650} /> {/* Convert to meters */}
 
             <Marker position={lonlat} icon={userIcon}>
               <Popup >{user.name}</Popup>
@@ -115,46 +115,29 @@ function EventInMap() {
            </Marker>
           ))} */}
             {
-              filterRadius.length > 0 ? filterRadius.map((event) => (
-                <Marker
-                  key={event._id}
-                  position={reverseLatLon(event.location.coordinates)}
-                  icon={eventIcon}
-                >
-                  <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
-                </Marker>
-              )) : (
-                raduisEvents.length > 0 ? raduisEvents.map((event) => (
-                  <Marker
-                    key={event._id}
-                    position={reverseLatLon(event.location.coordinates)}
-                    icon={eventIcon}
-                  >
-                    <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
-                  </Marker>
-                )) : (
-                  filterEvent.length > 0 ? filterEvent.map((event) => (
-                    <Marker
-                      key={event._id}
-                      position={reverseLatLon(event.location.coordinates)}
-                      icon={eventIcon}
-                    >
-                      <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
-                    </Marker>
-                  )) : (
-                    eventData?.map((event) => (
-                      <Marker
-                        key={event._id}
-                        position={reverseLatLon(event.location.coordinates)}
-                        icon={eventIcon}
-                      >
-                        <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
-                      </Marker>
-                    ))
-                  )
-                )
-              )
-            }
+  filterRadius.length > 0 ? filterRadius.map((event) => (
+    <Marker
+      key={event._id}
+      position={reverseLatLon(event.location.coordinates)}
+      icon={eventIcon}
+    >
+      <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
+    </Marker>
+  )) : (
+    raduisEvents.length > 0 ? raduisEvents.map((event) => (
+      <Marker
+        key={event._id}
+        position={reverseLatLon(event.location.coordinates)}
+        icon={eventIcon}
+      >
+        <Popup>{event.title}<br /><Link to={`/event-info/${event._id}`}>View More</Link></Popup>
+      </Marker>
+    )) : <SpinnerComponent/>   // Added null to handle case when raduisEvents is empty
+  )
+}
+
+              
+            
 
           </MapContainer>
           <div style={{ }}> 

@@ -4,7 +4,6 @@ import Charts from './Charts'
 function Dashboard() {
   return (
     <div>
-      Dashboard
       <Charts/>
     </div>
   )

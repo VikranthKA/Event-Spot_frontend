@@ -11,7 +11,24 @@ const formatDate = (dateString) => {
   return format(date, 'EEE, MMM d • h:mm a');
 }
 
-function EventCard({ title, image, start, categoryName, id }) {
+function findCheapestTicketClass(ticketArray){
+  const totalCost = ticketArray.reduce((acc,cv)=>{
+      acc+=cv.ticketPrice
+      return acc
+  },0)
+
+  let result = null 
+
+  const dataToMap = ticketArray.forEach((ticket)=>{
+      if(!result || ticket.ticketPrice < totalCost){
+          result = ticket.ticketPrice
+      }
+  })
+
+  return result
+}
+
+function EventCard({ title, image, start, categoryName, id,tickets }) {
   return (
     <Link to={`/event-info/${id}`} style={{ textDecoration: 'none'}} >
       <Card style={{ width: '18rem', border: '1px solid black' }}>
@@ -23,6 +40,9 @@ function EventCard({ title, image, start, categoryName, id }) {
           </Card.Text>
           {categoryName && <Card.Text style={{ fontSize: '0.9rem', marginBottom: '5px' }}>
             <span style={{ fontWeight: 'bold' }}>Genre:</span> <span style={{ color: 'blue' }}>{categoryName && categoryName}</span>
+          </Card.Text>}
+          {tickets?.length > 0 && <Card.Text style={{ fontSize: '0.9rem', marginBottom: '5px' }}>
+            <span style={{ fontWeight: 'bold' }}>{findCheapestTicketClass(tickets)} ₹ </span> 
           </Card.Text>}
           <Link to={`/event-info/${id}`} style={{ color: 'blue', textDecoration: 'none', fontSize: '0.9rem' }}>View Details</Link>
         </Card.Body>

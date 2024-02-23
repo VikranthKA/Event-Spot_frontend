@@ -40,8 +40,8 @@ const EventForm = () => {
     })
 
     const [form, setForm] = useState({
-        eventStartDateTime: event && event.title ? event.title : "",
-        title: " ",
+        eventStartDateTime: "",
+        title:event?.title ?  event?.title : " ",
         description: " ",
         categoryId: null,
         ticketType: [
@@ -86,38 +86,39 @@ const EventForm = () => {
         (async()=>{
         if (
             eventId &&
-            userData.role === "Organiser"
+            userData.role === "Organiser" &&
+            event
         ) {
             console.log("Inside the useEffect")
             console.log(event,"Event")
              setForm({
-                title: await event.title && event.title,
-                 eventStartDateTime:await event.eventStartDateTime && formatDateToTimeLocal(event.eventStartDateTime),
-                description:await event.description || "", 
-                categoryId:await event.categoryId || "", 
-                ticketType:await event.ticketType?.map(ticket => ({
+                title:  event.title && event.title,
+                 eventStartDateTime: event.eventStartDateTime && formatDateToTimeLocal(event.eventStartDateTime),
+                description: event.description || "", 
+                categoryId: event.categoryId || "", 
+                ticketType: event.ticketType?.map(ticket => ({
                   ticketName: ticket.ticketName || "",
                   ticketPrice: parseInt(ticket.ticketPrice) || 0,
                   ticketCount: parseInt(ticket.ticketCount) || 0
                 })) || [],
-                venueName:await event.venueName || "",
-                ticketSaleStartTime:await event.ticketSaleStartTime && formatDateToTimeLocal(event.ticketSaleStartTime),
-                ticketSaleEndTime:await event.ticketSaleEndTime && formatDateToTimeLocal(event.ticketSaleEndTime),
+                venueName: event.venueName || "",
+                ticketSaleStartTime: event.ticketSaleStartTime && formatDateToTimeLocal(event.ticketSaleStartTime),
+                ticketSaleEndTime: event.ticketSaleEndTime && formatDateToTimeLocal(event.ticketSaleEndTime),
               });
         
                setPoster({
-                Clip: { name:await event.posters?.ClipName
+                Clip: { name: event.posters?.ClipName
                     , file: null },
-                Brochure: { name:await event.posters?.Brochure ,
+                Brochure: { name: event.posters?.Brochure ,
                      file: null },
               });
                setYouTube({
-                title:await event.youTube.title,
-                url:await event.youTube?.url 
+                title: event.youTube.title,
+                url: event.youTube?.url 
               });
         
         
-              await setLocObj(prevState => ({
+               setLocObj(prevState => ({
                 ...prevState,
                 address: event.addressInfo.address || "",
                 city: event.addressInfo.city || ""

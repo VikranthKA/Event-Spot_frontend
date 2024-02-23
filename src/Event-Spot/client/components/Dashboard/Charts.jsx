@@ -149,7 +149,7 @@ const Charts = () => {
           ...prevState.options,
           xaxis: {
             ...prevState.options.xaxis,
-            categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => num * activeUsers + notActiveUsers)
+            categories: ["Active", "inActive"]
           }
         },
         series: [
@@ -247,15 +247,15 @@ const Charts = () => {
       
       <Typography variant="h3" style={{textAlign:"center",textDecoration:"underline"}}>Dashboard<Button onClick={handleRefresh}>  <FontAwesomeIcon icon={faRefresh} /></Button></Typography>
     <div style={{display:"flex",marginTop:"50px",justifyContent: "space-evenly"}}>
-      <Typography variant="body1" style={{ marginBottom: '20px' ,border:"5px solid lightblue"}}>
+      <Button variant="body1" style={{ marginBottom: '20px' ,border:"2px solid black",backgroundColor:"lightblue"}}>
         Total Revenue: {TodayTotalRevenue ? TodayTotalRevenue : 0}/day
-      </Typography>
-      <Typography variant="body1" style={{ marginBottom: '20px' ,border:"5px solid orange"}}>
+      </Button>
+      <Button variant="body1" style={{ marginBottom: '20px' ,border:"2px solid black",backgroundColor:"lightblue"}}>
         Total Tickets sold: {totalAmount ? totalAmount : 0} 
-      </Typography>
-      <Typography variant="body1" style={{ marginBottom: '20px' ,border:"5px solid yellow"}}>
+      </Button>
+      <Button variant="body1" style={{ marginBottom: '20px' ,border:"2px solid black",backgroundColor:"lightblue"}}>
         Total Booking: {totalBooking ? totalBooking : 0}/day 
-      </Typography>
+      </Button>
       </div>
 
       <Grid container spacing={3}>
@@ -285,7 +285,7 @@ const Charts = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <Typography variant="h6">Most Tickets Purchased</Typography>
-          <Chart options={eventState.options} series={eventState.series} type="bar" width="100%" />
+          <Chart options={eventState.options} series={eventState.series} type="line" width="100%" />
         </Grid>
 
         <Grid item xs={12} sm={6}>
