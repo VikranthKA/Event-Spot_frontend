@@ -103,12 +103,7 @@ export const startCategoryCategryId = (categoryId) => {
   } 
 }
 
-const setcategoryCategoryId=(data)=>{
-  return({
-    type:"GET_CATEGORY_CAROUSEL",
-    payload:data
-  })
-}
+
 
 const setcategoryCarousel=(data)=>{
   return({

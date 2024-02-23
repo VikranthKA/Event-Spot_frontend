@@ -2,6 +2,8 @@ import React,{useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import { config } from '../../components/Api_Resources/config'
 import axios from '../../components/Api_Resources/axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHomeAlt} from '@fortawesome/free-solid-svg-icons';
 
 function Cancel() {
   useEffect(()=>{
@@ -18,10 +20,10 @@ function Cancel() {
     })()
   },[])
   return (
-    <div style={{display:"flex"}}> 
-    <div style={{backgroundImage:(`https://www.freepik.com/premium-vector/boy-looking-mobile-unlock-alert_51574639.htm#page=2&query=payment%20failure&position=8&from_view=search&track=ais&uuid=407009e3-3da6-4bda-b3fb-6044cc5bc0b5`)}}>
-    </div>
-      <Link to='/'>Home</Link>
+    <div style={{}}> 
+    <div>
+      <Link to='/' style={{display:"flex",justifyContent:"center",marginTop:"2%"}}><FontAwesomeIcon icon={faHomeAlt} style={{marginTop:".3%"}}/>HOME</Link></div>
+    <img src={`https://eventpot.s3.ap-south-1.amazonaws.com/payment-error-info-message-smartphone-customer-cross-marks-failure_106788-2322.jpg`} style={{width:"90%",height:"50%",marginLeft:"5%"}}/>
       </div>
   )
 }

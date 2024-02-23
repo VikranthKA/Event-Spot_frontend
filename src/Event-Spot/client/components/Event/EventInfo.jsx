@@ -13,6 +13,7 @@ import { MyContext } from '../../ContextApi/Context';
 import ReviewCard from '../Review/ReviewCard';
 import { toast } from 'react-toastify';
 import OrganiserDashboard from '../Dashboard/OrganiserDashboard';
+import { startOragniserEvents } from '../../react-redux/action/organiserAction';
 
 // Import statements...
 function countRemainingTicket(tickets){
@@ -26,17 +27,29 @@ function EventInfo() {
   const dispatch = useDispatch();
   const events = useSelector((state) => state.events)
   const {userData} = useContext(MyContext)
+  const organizerEvents = useSelector((state)=>state.organiserDetails.organiserEvents)
+
 
   useEffect(() => {
-    dispatch(startGetEvents());
-  }, [])
-  
-  useEffect(() => {
-    const eventData = events.find((ele) => ele._id === eventId);
-    if (eventData) {
-      setEvent(eventData);
+    if(userData.role==='Organiser'){
+      dispatch(startOragniserEvents())
+    }else{
+      dispatch(startGetEvents())
     }
-  }, [events, eventId])
+  }, [])
+
+ useEffect(() => {
+    if(userData.role==='Organiser' && organizerEvents.length > 0){
+      const eventData = organizerEvents.find((ele) => ele._id === eventId);
+      setEvent(eventData)
+    }else if(events.length > 0){
+      const eventData = events.find((ele) => ele._id === eventId);
+      if (eventData) {
+        setEvent(eventData)
+      }
+      
+    }
+  }, [events,organizerEvents, eventId])
 
   function readableDate(inputDateString) {
     const momentObject = moment(inputDateString);

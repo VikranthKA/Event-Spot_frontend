@@ -31,7 +31,7 @@ import "./Card.css"
       </CardContent>
 
     </Card>
-    <Typography gutterBottom variant="h6" component="div" sx={{marginLeft:"22%"}}>
+    <Typography gutterBottom variant="h6" component="div" sx={{marginLeft:"7%",fontStyle:"oblique"}}>
           {name}
         </Typography>
     </Link>

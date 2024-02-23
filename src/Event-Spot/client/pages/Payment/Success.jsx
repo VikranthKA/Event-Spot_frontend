@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import { ToastContainer } from 'react-bootstrap'
+import { Button, ToastContainer } from 'react-bootstrap'
 import { config } from '../../components/Api_Resources/config'
 import axios from '../../components/Api_Resources/axios'
 import {Link} from "react-router-dom"
@@ -22,12 +22,18 @@ function Success() {
     })()
   },[])
   return (
-    <div style={{backgroundImage: "url(https://eventpot.s3.ap-south-1.amazonaws.com/Default_TICKET_CONFIRM_SUCCESS_3.jpg)"}}>
-      <Link to="/">Home</Link>
-      <Link to="/profile">Profile</Link>
+    <div style={{backgroundImage:"url(https://eventpot.s3.ap-south-1.amazonaws.com/success-gif.gif)"}}>
+      <div style={{display:"flex",justifyContent:"space-around",backgroundImage:"url(https://eventpot.s3.ap-south-1.amazonaws.com/success-gif.gif)"}} >
+
+      <Link to="/"><Button>Home</Button></Link>
+      <Link to="/user-profile"><Button>Profile</Button></Link>
+      </div>
+      <img src={`https://eventpot.s3.ap-south-1.amazonaws.com/success-gif.gif`} style={{width:"80%",height:"40%",margin:"0 0 0 10%"}}/>
       <ToastContainer/>
     </div>
   );
+
+  
   
 }
 

@@ -74,24 +74,11 @@ const setStartBooking = (data)=>{
 
 }
 
-// export const startPaymentDelete = ()=>{
-//     return async(dispatch)=>{
-//         try{
-            
-//             // const response = await axios.delete(`/api/delete-payment/${}`)
-//             dispatch(setStartPaymnetDelete(response.data))
-//         }catch(err){
-//             console.log(err)
-//         }
-//     }
-// }
-// const setStartPaymnetDelete = (data)=>{
-//     return{
-//         type:"DELTE_PAYMENT_TRUE",
-//         paylaod:data
-//     }
+export const updateRemainingTickets = (eventId, updatedTickets) => ({
+    type: 'UPDATE_REMAINING_TICKETS',
+    payload: { eventId, updatedTickets },
+})//instead of this i am getting a new events and replace the existing event because to know how much other tickets are purchased
 
-// }
 export const startCancelBooking = (bookingId)=>{
     console.log(bookingId,"id")
     return async(dispatch)=>{

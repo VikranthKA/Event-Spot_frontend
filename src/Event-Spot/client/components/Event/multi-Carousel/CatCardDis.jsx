@@ -21,9 +21,10 @@ useEffect(()=>{
     }  
   })()
 },[categoryId])
+
   return (
-    <div style={{ marginBottom: "50px" ,backgroundColor:"#ffb703",borderRadius: "15px"}}>
-      <Container>
+    <div style={{ marginBottom: "50px",marginTop:"2%" ,backgroundColor:"",borderRadius: "15px" }}>
+      <Container style={{display:"flex",flexWrap:"wrap",justifyContent:"space-around"}}>
 
 
           {foundCatEvents.length > 0 && foundCatEvents.map(ele => <EventCard
@@ -32,6 +33,7 @@ useEffect(()=>{
             start={ele?.eventId?.eventStartDateTime}
             // categoryName={ele?.eventId.categoryId?.name}
             id={ele?.eventId?._id}
+            tickets={ele?.eventId.ticketType}
 
 
           />)}
