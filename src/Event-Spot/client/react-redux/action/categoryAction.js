@@ -1,5 +1,5 @@
 import axios from "../../components/Api_Resources/axios";
-import { config } from "../../components/Api_Resources/config";
+import { config, fileConfig } from "../../components/Api_Resources/config";
 
 export const addCategory = (categoryData) => ({
   type: "ADD_CATEGORY",
@@ -24,7 +24,7 @@ export const editCategory = (data) => ({
 export const addCategoryAsync = (category) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post("/api/category", category,config);
+      const response = await axios.post("/api/category", category,fileConfig)
       dispatch(addCategory(response.data));
     } catch (err) {
       console.log(err);
@@ -67,7 +67,7 @@ export const startEditCategory = (id, formData) => {
       return;
     }
     try {
-      const response = await axios.put(`/api/category/${id}`, formData,config);
+      const response = await axios.put(`/api/category/${id}`, formData,fileConfig)
       dispatch(editCategory(response.data));
     } catch (e) {
       console.log(e);
