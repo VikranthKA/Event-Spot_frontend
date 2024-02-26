@@ -12,7 +12,7 @@ function QrGenerator({QrData}) {
 
 
   return (
-    <div className='Componet-Container'>
+    <div className='Componet-Container' style={{width:"100%",height:"100%"}}>
         <div className="qrCode" style={{textAlign:"center"}}>
             <QRCode value={QrData} size={qrVar.size} fore={qrVar.fore} back={qrVar.back} />
         </div>

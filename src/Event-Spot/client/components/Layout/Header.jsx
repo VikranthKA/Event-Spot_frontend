@@ -10,7 +10,7 @@ import "./Header.css"
 
 function Header() {
   const [search,setSearch] = useState(" ")
-  const {searchQuery,setSearchQuery,userData,profileDispatch} = useContext(MyContext)
+  const {searchQuery,setSearchQuery,userData,profileDispatch,setUserData} = useContext(MyContext)
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
@@ -28,6 +28,7 @@ function Header() {
         localStorage.removeItem('token');
         //empty the profile state in the app
         profileDispatch({ type: 'CLEAR_PROFILE_DATA'})
+        setUserData("")
 
         navigate('/login')
 
@@ -142,4 +143,4 @@ function Header() {
   );
 }
 
-export default memo(Header);
+export default memo(Header)

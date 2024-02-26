@@ -128,7 +128,7 @@ const App = () => {
     <MyContext.Provider value={
                               {raduisEvents,handleGeoWithinEvents,//handling the radius events
                                 searchQuery,setSearchQuery,//handling the search query
-                                userData,//obj of the user info id,role,expriesIn
+                                userData,setUserData,//obj of the user info id,role,expriesIn
                                 profile,profileDispatch, //displaying user profile and its function
                                 cardSearch,setCardSearch,//these are the search for the card display
                               }
@@ -167,7 +167,7 @@ const App = () => {
           <Route path="/contact-us" element={<ContactUs/>}/>
           <Route path="/profile-canvas" element={<OffCanvasProfile/>}/>
           <Route path="/categry-events" element={<MultiCarousel/>}/>
-          <Route path="/category/:categoryId" element={<CatCardDis/>}/>
+          <Route path="/category/:categoryId/:name" element={<CatCardDis/>}/>
 
 
 

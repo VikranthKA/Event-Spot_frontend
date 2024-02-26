@@ -33,11 +33,14 @@ function EventInMap() {
   const filterRadius = searchQuery && raduisEvents.filter(item => item.title.toLowerCase().includes(searchQuery))
   const filterEvent = searchQuery && eventData.filter(item => item.title.toLowerCase().includes(searchQuery))
 
-
+useEffect(()=>{
+  console.log(lonlat,"In useEffect of the latlon")
+})
 
   useEffect(() => {
     const success = (position) => {
       const { latitude, longitude } = position.coords;
+      console.log(latitude,longitude,"in the eventInMap")
       setCenter([latitude, longitude]);
       setLonLat([latitude, longitude]);
     };
@@ -64,7 +67,7 @@ function EventInMap() {
 
   const user = {
     name: `Hello User`,
-    coordinates: lonlat.length > 0 && lonlat,
+    coordinates: lonlat?.length > 0 && lonlat,
   }
 
   const eventIcon = new Icon({
@@ -93,7 +96,7 @@ function EventInMap() {
 
       {center.length > 0 ? (
         <div>
-          <MapContainer center={lonlat} zoom={7} style={{ height: '400px' }}>
+          <MapContainer center={lonlat} zoom={10} style={{ height: '400px' }}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

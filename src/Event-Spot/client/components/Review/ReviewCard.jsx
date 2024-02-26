@@ -17,11 +17,12 @@ const ReviewCard = ({eventId,reviewinfo}) => {
     }
 
   return (
-    <div style={{width:"100%",marginTop:"10%",borderRadius:"5%"}}>
+    <div style={{width:"100%",marginTop:"10%",borderRadius: "20px"}}>
         <ListGroup.Item key={reviewinfo._id} as="li" className="d-flex justify-content-between align-items-start"  >
             {reviewToggle ?<ReviewForm eventId={eventId} updatingReview={reviewinfo} handleReviewToggle={handleReviewToggle} />:<div className="ms-2 me-auto">
                 <div>
-                Name:{reviewinfo?.userId?.username}
+                  <h3>Name:{reviewinfo?.userId?.username}</h3>
+                
               <div className="fw-bold">Title:{reviewinfo?.title}</div>
               Body:{reviewinfo.body}
             </div>
@@ -36,7 +37,7 @@ const ReviewCard = ({eventId,reviewinfo}) => {
               ) : (
                 <Button className='btn btn-warning' onClick={() => setReviewToggle(!reviewToggle)}>Edit</Button>
                 
-              )}{ }
+              )}
               <Button className='btn btn-danger' onClick={()=>dispatch(startDeleteReview(eventId,reviewinfo._id))}>Delete</Button>
 
             </div>}

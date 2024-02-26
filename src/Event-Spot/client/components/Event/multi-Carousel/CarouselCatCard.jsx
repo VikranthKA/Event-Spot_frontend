@@ -16,13 +16,13 @@ import "./Card.css"
   name
 }) {
   return (
-    <Link style={{marginTop:"10%"}} to={`/category/${categoryId}`}>
+    <Link style={{marginTop:"10%"}} to={`/category/${categoryId}/${name}`}>
     <Card
       className='Card'
     sx={{ borderRadius: '50%', height: 140, width: 140, margin: 'auto' }}>
     <CardMedia
         sx={{ height: 140}}
-        // image="https://imgs.search.brave.com/7B_Rw2oRq-eDjTBRVXv_BfL837_QifLp9xtgaybt_lE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudGVtcGxhdGUu/bmV0L3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDE3LzAxLzI1MTY0/MTEzL0Fic3RyYWN0/LUJsYWNrLWFuZC1X/aGl0ZS1Mb2dvLmpw/Zw"
+        image="https://imgs.search.brave.com/7B_Rw2oRq-eDjTBRVXv_BfL837_QifLp9xtgaybt_lE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudGVtcGxhdGUu/bmV0L3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDE3LzAxLzI1MTY0/MTEzL0Fic3RyYWN0/LUJsYWNrLWFuZC1X/aGl0ZS1Mb2dvLmpw/Zw"
 
     />
       <CardContent>

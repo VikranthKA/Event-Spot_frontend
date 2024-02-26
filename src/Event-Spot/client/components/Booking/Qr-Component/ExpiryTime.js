@@ -28,7 +28,7 @@ const ExpiryTime = ({ detailsInfo, expiryTime }) => {
   }, [detailsInfo, expiryTime]) // Include detailsInfo and expiryTime in the dependency array
 
   return (
-    <div>
+    <div style={{width:"100%",height:"100%"}}>
       {qrData && <QrGenerator QrData={qrData} />}
     </div>
   )

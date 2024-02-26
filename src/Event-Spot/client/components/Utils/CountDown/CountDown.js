@@ -5,7 +5,7 @@ import "./CountDown.css"
 
 const CountDown = ({ ticketSaleStartTime }) => {
 return (
-    <div className='countdown'>
+    <div style={{border: '2px solid #004777',borderRadius: '5px',padding: '10px',width:"40%",height:"10%"}} >
 
       <Countdown
         date={new Date(ticketSaleStartTime)}

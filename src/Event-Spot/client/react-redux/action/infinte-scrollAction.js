@@ -1,29 +1,39 @@
+import axios from "../../components/Api_Resources/axios";
+
+export const startGetNewEvents = (search, sortBy, order, page, limit, city) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`/api/ssp`, {
+        params: {
+          search,
+          sortBy,
+          order,
+          page,
+          limit,
+          city,
+        },
+      })
+      
+      console.log(response.data,"in action")
+
+      dispatch(setGetNewEvents(response.data));
+    } catch (error) {
+      console.error("Error fetching new events:", error);
+    } 
+  };
+};
 
 
-export const startGetNewEvents = async(search,sortBy,order,page,limit) => {
-    
-    console.log(search,sortBy,order,page,limit)
-      try {
-        const response = await axios.get(`/api/ssp
-                                            ?search=${search}
-                                            &sortBy=${sortBy}
-                                            &order=${order}
-                                            &page=${page}
-                                            &limit=${limit}
-        `)
-        console.log(response.data)
-        const { total,page,totalPages,data} = response.data
-        dispatch(retrun({
-            type:"ADD_NEW_DATA",
-            payload:{
-                data,
-                total,
-                page,
-                totalPages,
-            }
-        }))
-      } catch (e) {
-        console.log(e)
-      }
-    
-  }
+
+const setGetNewEvents = (sspData) => {
+  const { total, page, totalPages, data } = sspData;
+  return {
+    type: "ADD_NEW_DATA",
+    payload: {
+      data,
+      total,
+      page,
+      totalPages,
+    },
+  };
+};
