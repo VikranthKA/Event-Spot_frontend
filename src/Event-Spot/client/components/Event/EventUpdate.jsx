@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { MyContext } from '../../ContextApi/Context';
 import { toast } from 'react-toastify';
+import { startOragniserEvents } from '../../react-redux/action/organiserAction';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 
 function formatDateToTimeLocal(dateString){
@@ -37,7 +38,11 @@ const EventForm = () => {
     const [edit, setEdit] = useState(false)
 
 
-    const events = useSelector((state)=>state.organiserDetails.organiserEvents)
+    const events = useSelector((state)=>state?.organiserDetails.organiserEvents)
+    useEffect(() => {
+        dispatch(startOragniserEvents())
+      }, [])
+
 
 
     const [form, setForm] = useState({
@@ -69,22 +74,68 @@ const EventForm = () => {
         lonlat: ['', ''],
         city: ''
     });
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState([])
     const [selectedAddress, setSelectedAddress] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (events) {
-                console.log(events,"all")
-                console.log(eventId,"id")
-                const foundEvent = await events.find(event => event._id === eventId);
-                localStorage.setItem('eventData', JSON.stringify(foundEvent))
-                console.log(foundEvent)
-                setEvent(foundEvent)
-                setEdit(true)
-            }};
+        // console.log(events.length,"in useEffect")
+        // console.log(events,"organiserEvents")
+        if (events?.length > 0 ) {
+            console.log(events,"all")
+            console.log(eventId,"id")
+            
+            const foundEvent =  events.find((event)=>event._id===eventId)
+            const eventData = events.find((ele) => ele._id === eventId);
+            console.log(eventData)
+            // localStorage.setItem('eventData', JSON.stringify(foundEvent))
+            console.log(foundEvent)
+            setEvent(foundEvent)
+            setEdit(true)
+            setForm({
+                title: foundEvent?.title && foundEvent?.title,
+                 eventStartDateTime:foundEvent?.eventStartDateTime && formatDateToTimeLocal(foundEvent?.eventStartDateTime),
+                description:foundEvent?.description || "", 
+                categoryId:foundEvent?.categoryId || "", 
+                ticketType:foundEvent?.ticketType?.map(ticket => ({
+                  ticketName: ticket?.ticketName || "",
+                  ticketPrice: parseInt(ticket?.ticketPrice) || 0,
+                  ticketCount: parseInt(ticket?.ticketCount) || 0
+                })) || [],
+                venueName:foundEvent.venueName || "",
+                ticketSaleStartTime:foundEvent?.ticketSaleStartTime && formatDateToTimeLocal(foundEvent?.ticketSaleStartTime),
+                ticketSaleEndTime:foundEvent?.ticketSaleEndTime && formatDateToTimeLocal(foundEvent?.ticketSaleEndTime),
+              });
+        
+               setPoster({
+                Clip: { name:foundEvent?.posters?.ClipName
+                    , file: null },
+                Brochure: { name:foundEvent?.posters?.Brochure ,
+                     file: null },
+              });
+               setYouTube({
+                title:foundEvent?.youTube?.title,
+                url:foundEvent?.youTube?.url 
+              });
+        
+        
+               setLocObj(prevState => ({
+                ...prevState,
+                address: foundEvent?.addressInfo?.address || "",
+                city: foundEvent?.addressInfo?.city || ""
+              }));
 
-        fetchData();
+
+ 
+              setActors(foundEvent?.actors?.map(actor => ({
+                name: actor.name || "",
+
+              })) || [])
+      
+              console.log(edit,"in the edit useEffect")
+              console.log(youTube,poster)
+        }
+
+
     }, [events])
 
     useEffect(() => {
@@ -96,17 +147,16 @@ const EventForm = () => {
         // Check if event data exists in local storage
         // if (storedEventData ) {
         //     // Update state variables with stored event data
-        //     setForm(storedEventData.form);
-        //     setPoster(storedEventData.poster);
-        //     setYouTube(storedEventData.youTube);
-        //     setActors(storedEventData.actors);
-        //     setAllCategory(storedEventData.allCategory);
-        //     setSearchTerm(storedEventData.searchTerm);
-        //     setLocObj(storedEventData.locObj);
-        //     setSearchResults(storedEventData.searchResults);
-        //     setSelectedAddress(storedEventData.selectedAddress);
+        //     setForm(storedEventData?.form);
+        //     setPoster(storedEventData?.poster);
+        //     setYouTube(storedEventData?.youTube);
+        //     setActors(storedEventData?.actors);
+        //     setAllCategory(storedEventData?.allCategory);
+        //     setSearchTerm(storedEventData?.searchTerm);
+        //     setLocObj(storedEventData?.locObj);
+        //     setSearchResults(storedEventData?.searchResults);
+        //     setSelectedAddress(storedEventData?.selectedAddress);
         // }
-
         
         
         
@@ -160,6 +210,7 @@ const EventForm = () => {
     useEffect(() => {
         console.log(ticketErrors)
     }, [errors])
+    
     const handleAddressSelect = (selectedOption) => {
         setSelectedAddress(selectedOption);
 
@@ -328,7 +379,7 @@ const EventForm = () => {
                                     <Form.Label className="title">Title:</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        value={form.title}
+                                        value={form?.title}
                                         name="title"
                                         onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                                         isInvalid={!!errors.title}
@@ -343,7 +394,7 @@ const EventForm = () => {
                                     <Form.Label className="title">Event Start Time:</Form.Label>
                                     <Form.Control
                                         type="datetime-local"
-                                        value={form.eventStartDateTime}
+                                        value={form?.eventStartDateTime}
                                         name="eventStartDateTime"
                                         onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                                         isInvalid={!!errors.eventStartDateTime}
@@ -359,7 +410,7 @@ const EventForm = () => {
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                value={form.description}
+                                value={form?.description}
                                 name="description"
                                 onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                                 isInvalid={!!errors.description}
@@ -374,7 +425,7 @@ const EventForm = () => {
                                     <Form.Label className="title">Ticket Sale Start Time:</Form.Label>
                                     <Form.Control
                                         type="datetime-local"
-                                        value={form.ticketSaleStartTime}
+                                        value={form?.ticketSaleStartTime}
                                         name="ticketSaleStartTime"
                                         onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                                         isInvalid={!!errors.ticketSaleStartTime}
@@ -394,7 +445,7 @@ const EventForm = () => {
                                     <Form.Label className="title">Ticket Sale End Time:</Form.Label>
                                     <Form.Control
                                         type="datetime-local"
-                                        value={form.ticketSaleEndTime}
+                                        value={form?.ticketSaleEndTime}
                                         name="ticketSaleEndTime"
                                         onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                                         isInvalid={!!errors.ticketSaleEndTime}
@@ -405,7 +456,7 @@ const EventForm = () => {
                                         <span>Ticket Sale End Time where users cannot buy tickets for your event.</span>
                                     </Form.Text>}
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.ticketSaleEndTime && <div>{errors.ticketSaleEndTime}</div>}
+                                        {errors?.ticketSaleEndTime && <div>{errors.ticketSaleEndTime}</div>}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
@@ -416,7 +467,7 @@ const EventForm = () => {
                                     <Form.Label className="title">Venue Name:</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        value={form.venueName}
+                                        value={form?.venueName}
                                         name="venueName"
                                         onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                                         isInvalid={!!errors.venueName}
@@ -433,7 +484,7 @@ const EventForm = () => {
                                         id="category"
                                         name="category"
                                         options={allCategory}
-                                        value={allCategory.find((option) => option.value === form.categoryId)}
+                                        value={allCategory?.find((option) => option.value === form?.categoryId)}
                                         onChange={handleCategoryChange}
                                         isSearchable
                                         placeholder="Select Categories"
@@ -449,22 +500,22 @@ const EventForm = () => {
 
                         <Form.Group controlId="ticketInfo">
                             <Form.Label className="title">Ticket Info</Form.Label>
-                            {form.ticketType.map((ticket, index) => (
+                            {form?.ticketType?.map((ticket, index) => (
                                 <Row key={index} className="mb-3">
                                     <Col>
                                         <Form.Label>Name:</Form.Label>
-                                        <Form.Control type="text" value={ticket.ticketName} onChange={(e) => handleInputChange(index, 'ticketName', e)} />
+                                        <Form.Control type="text" value={ticket?.ticketName} onChange={(e) => handleInputChange(index, 'ticketName', e)} />
                                         {errors && errors.ticketType && errors.ticketType[index] && errors.ticketType[index].ticketName && <div className="errors">Ticket name cannot be empty</div>}
                                     </Col>
 
                                     <Col>
                                         <Form.Label>Price:</Form.Label>
-                                        <Form.Control type="text" value={ticket.ticketPrice} onChange={(e) => handleInputChange(index, 'ticketPrice', e)} />
+                                        <Form.Control type="text" value={ticket?.ticketPrice} onChange={(e) => handleInputChange(index, 'ticketPrice', e)} />
                                         {errors && errors.ticketType && errors.ticketType[index] && errors?.ticketType[index]?.ticketPrice && <div className="errors">Ticket Price cannot be empty</div>}
                                     </Col>
                                     <Col>
                                         <Form.Label>Total Seat:</Form.Label>
-                                        <Form.Control type="text" value={ticket.ticketCount} onChange={(e) => handleInputChange(index, 'ticketCount', e)} />
+                                        <Form.Control type="text" value={ticket?.ticketCount} onChange={(e) => handleInputChange(index, 'ticketCount', e)} />
                                         {errors && errors.ticketType && errors.ticketType[index] && errors?.ticketType[index]?.ticketCount && <div className="errors">Ticket seat cannot be empty</div>}
                                     </Col>
                                 </Row>
@@ -633,7 +684,7 @@ const EventForm = () => {
                                         <div className="actor" key={index}>
                                             <Form.Group controlId={`actorName${index}`}>
                                                 <Form.Label className="title">Enter the Actor name:</Form.Label>
-                                                <Form.Control type="text" value={actor.name} onChange={(e) => handleActorChange(index, "name", e.target.value)} isInvalid={!!errors[`actorName${index}`]} />
+                                                <Form.Control type="text" value={actor?.name} onChange={(e) => handleActorChange(index, "name", e.target.value)} isInvalid={!!errors[`actorName${index}`]} />
                                                 <Form.Control.Feedback type="invalid">
                                                     {errors[`actorName${index}`] && <div>{errors[`actorName${index}`]}</div>}
                                                 </Form.Control.Feedback>

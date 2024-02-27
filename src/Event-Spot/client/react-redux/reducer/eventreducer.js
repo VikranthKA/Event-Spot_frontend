@@ -7,16 +7,7 @@ const eventReducer = (state=eventInitialState,action)=>{
         case "CREATE_NEW_EVENT":
             return [action.payload,...state]
 
-        case "UPDATE_EVENT": 
-            const updatedEvent = state.map((ele) => {
-                    console.log(ele._id,action.payload._id)
-              if (ele._id ===  action.payload._id) {
-                return {...action.payload, ...ele}
-              } else {
-                return ele
-              }
-            })
-            return updatedEvent
+
         case "DELETE_EVENT":
             return state.filter((ele)=>ele._id !== action.payload)
              

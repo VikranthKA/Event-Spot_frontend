@@ -42,14 +42,14 @@ export const startCreateEvent = (eventFormData)=>{
             const response = await axios.post('/api/event', eventFormData, fileConfig)
             dispatch(setEventsToOrganise(response.data))
             toast.success( `${response.data.title} Event created successfully`)
-            // localStorage.removeItem('form');
-            // localStorage.removeItem('youTube');
-            // localStorage.removeItem('actors', );
-            // localStorage.removeItem('allCategory');
-            // localStorage.removeItem('searchTerm');
-            // localStorage.removeItem('locObj');
-            // localStorage.removeItem('searchResults')
-            // localStorage.removeItem('selectedAddress');
+            localStorage.removeItem('form');
+            localStorage.removeItem('youTube');
+            localStorage.removeItem('actors', );
+            localStorage.removeItem('allCategory');
+            localStorage.removeItem('searchTerm');
+            localStorage.removeItem('locObj');
+            localStorage.removeItem('searchResults')
+            localStorage.removeItem('selectedAddress');
 
         }catch(err){
             console.log(err)
@@ -70,8 +70,8 @@ const setCreateEvents =(data)=>{//because the event must be approved then only i
 export const startUpdateEvent = (eventFormData,eventId)=>{
     return async(dispatch)=>{
         try{
-            console.log(eventFormData)
-            const response = await axios.put(`/api/event/${eventId}`, eventFormData, fileConfig)
+            console.log(eventFormData,"in the update Action")
+            const response = await axios.put(`/api/event/${eventId}`, {eventFormData}, config)
             dispatch(setUpdateEvents(response.data))
 
         }catch(err){
