@@ -116,12 +116,11 @@ const AllEvents = () => {
         <Modal.Header closeButton>
           <Modal.Title>Event Details</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <h5>{selectedEvent?.title}</h5>
-          <p>Category: {selectedEvent?.categoryId?.name}</p>
-          <p>{selectedEvent?.description}</p>
-          {/* Add more details if needed */}
-        </Modal.Body>
+        <Modal.Body style={{ whiteSpace: 'pre-line', maxHeight: '400px', overflowY: 'auto' }}>
+  <h5>{selectedEvent?.title}</h5>
+  <p>Category: {selectedEvent?.categoryId?.name}</p>
+  <p>{selectedEvent?.description}</p>
+</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Close

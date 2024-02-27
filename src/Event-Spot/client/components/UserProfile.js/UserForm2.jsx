@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'; // Import SweetAlert
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import { config } from "../Api_Resources/config";
+import { config, fileConfig } from "../Api_Resources/config";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -85,13 +85,13 @@ const UserForm2 = () => {
       formData.append('city', locObj.city);
       dispatch({ type: "SHOW_TASK", payload: formData });
 
-      const response = await axios.post('/api/profile', formData, config);
+      const response = await axios.post('/api/profile', formData, fileConfig);
 
       console.log('Backend response:', response.data);
       navigate('/user-profile');
 
       // Show SweetAlert after successful submission
-      Swal.fire("SweetAlert2 is working!");
+      Swal.fire("profile created!");
     } catch (error) {
       console.error('Error sending data to the backend:', error);
     }
