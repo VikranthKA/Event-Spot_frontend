@@ -113,7 +113,7 @@ function EventInfo() {
                             </Carousel>
                             {/* Event Details */}
                             <Row>
-                                <Col>
+                                <Col style={{marginTop:"20px"}}> 
                                     <h1 className='fw-bold'>{event?.title}</h1>
                                     <h3>Organizer: {event?.organiserId?.username}</h3>
                                     <h5>Venue: {event?.venueName}</h5>
@@ -121,21 +121,22 @@ function EventInfo() {
                                     <p className='fw-bold' style={{ width: "700px" }}>Address : {event?.addressInfo?.address}<br />
                                         City : {event?.addressInfo?.city}</p>
                                 </Col>
-                                <Col>
+                                <Col style={{marginTop:"25px"}}>
                                     {/* Ticket Booking Button */}
                                     {new Date(event.ticketSaleStartTime) > new Date() ? (
                                         <div>
                                             <CountDown ticketSaleStartTime={event.ticketSaleStartTime} />
                                             {userData.role === "Organiser" && userData.id === event.organiserId._id && (
-                                                <Button onClick={() => navigate(`/event-form/${event._id}`)}>Edit</Button>
+                                                <Button style={{marginTop:"10px"}} onClick={() => navigate(`/event-form/${event._id}`)}>Edit</Button>
                                             )}
                                         </div>
                                     ) : (
                                         <div>
                                             {countRemainingTicket(event?.ticketType) >= 1 ?
-                                                <Button className='btn btn-dark' style={{ marginLeft: "150px", marginTop: "10px" }} onClick={handleBookTickets}>Book</Button>
+                                                <Button className='btn btn-dark' style={{ border: '2px solid #004777',borderRadius: '5px',padding: '10px',width:"40%",height:"10%"}} onClick={handleBookTickets}>Book</Button>
                                                 :
                                                 <h2>All Seats are Booked</h2>}
+
                                         </div>
                                     )}
                                 </Col>
@@ -161,7 +162,7 @@ function EventInfo() {
                 {/* Reviews */}
                 <ListGroup numbered className="my-4">
                     <h1 className="fw-bold" style={{ width: "40%" }}>Reviews</h1>
-                    <Button variant="warning" onClick={handleAddReview}>Add a Review</Button>
+                    <Button variant="warning" onClick={handleAddReview} style={{width:"20%",height:"10%"}}>Add a Review</Button>
                     {/* <ReviewForm eventId={event?._id} /> */}
                     <div style={{ width: "100%", display: "flex", flexWrap: "wrap", gap: "10px" }}>
                         {event?.reviews?.length > 0 && event?.reviews?.map((review) => (
@@ -169,7 +170,7 @@ function EventInfo() {
                                 <ReviewCard
                                     eventId={event._id}
                                     reviewinfo={review.reviewId}
-                                    style={{ width: "100%", marginBottom: "10px" }} // Adjust margin as needed
+                                    style={{ width: "100%", marginBottom: "10px"}} // Adjust margin as needed
                                 />
                             </div>
                         ))}

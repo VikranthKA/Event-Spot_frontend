@@ -10,6 +10,7 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { fileConfig } from "../Api_Resources/config";
+import { MyContext } from "../../ContextApi/Context";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -18,7 +19,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const UserForm = () => {
   const navigate = useNavigate()
-  // const {profileId} = useParams()
+  const { profile } = useContext(MyContext)
   const [searchTerm, setSearchTerm] = useState('');
   const [locObj, setLocObj] = useState({
     address: '',
@@ -30,7 +31,8 @@ const UserForm = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [description, setDescription] = useState('');
   const [filePondFiles, setFilePondFiles] = useState([]);
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
+  console.log("profile",profile)
   useEffect(() => {
     fetchAddresses(); // Call fetchAddresses when the component mounts
   }, []);
@@ -83,19 +85,19 @@ const UserForm = () => {
   const updateForm = async () => {
     try {
       const formData = new FormData();
-      formData.append('profilePic', filePondFiles[0]);
-      formData.append('description', description);
-      formData.append('address', locObj.address);
-      formData.append('place_id', locObj.place_id);
-      formData.append('lonlat[lon]', locObj.lonlat[0]);
+      formData.append('profilePic', filePondFiles[0])
+      formData.append('description', description)
+      formData.append('address', locObj.address)
+      formData.append('place_id', locObj.place_id)
+      formData.append('lonlat[lon]', locObj.lonlat[0])
       formData.append('lonlat[lat]', locObj.lonlat[1])
       formData.append('city', locObj.city);
-      dispatch({ type: "SHOW_TASK", payload: formData });
+      dispatch({ type: "SHOW_TASK", payload: formData })
       // const profileId = "65bcdb6560b7e035c0987dc6"
       const response = await axios.put(`/api/profile`, formData, fileConfig);
 
       console.log('Backend response:', response.data)
-      
+
       navigate('/user-profile')
 
       // Handle additional actions based on the response if needed
@@ -109,18 +111,18 @@ const UserForm = () => {
     <div className="container mt-5">
 
       <form encType="multipart/form-data">
-      <div className="mb-3">
-  <label htmlFor="profilePic" className="form-label">
-    Change Profile Picture
-  </label>
-  <FilePond
-    files={filePondFiles}
-    allowMultiple={false} // Set to true if you want to allow multiple files
-    onupdatefiles={(fileItems) => {
-      setFilePondFiles(fileItems.map((fileItem) => fileItem.file));
-    }}
-  />
-</div>
+        <div className="mb-3">
+          <label htmlFor="profilePic" className="form-label">
+            Change Profile Picture
+          </label>
+          <FilePond
+            files={filePondFiles}
+            allowMultiple={false} // Set to true if you want to allow multiple files
+            onupdatefiles={(fileItems) => {
+              setFilePondFiles(fileItems.map((fileItem) => fileItem.file));
+            }}
+          />
+        </div>
 
         <div className="mb-3">
           <label htmlFor="description" className="form-label">

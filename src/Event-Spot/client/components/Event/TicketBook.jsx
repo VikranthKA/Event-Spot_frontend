@@ -195,8 +195,8 @@ const TicketBook = () => {
           <Modal.Header closeButton>
             <Modal.Title>Seats are Confirmed</Modal.Title>
           </Modal.Header>
-            <Card.Text><h3>{eventDetails?.title}</h3></Card.Text>
-            <Card.Text>{eventDetails?.eventStartDateTime}</Card.Text>
+            <Card.Text style={{margin:"5px 0 0 5%"}}><h3>{eventDetails?.title}</h3></Card.Text>
+            {/* <Card.Text>{eventDetails?.eventStartDateTime}</Card.Text> */}
           <Modal.Body>
             {checkObject >= 0 ? (
               <Card style={{ width: "95%" }}>

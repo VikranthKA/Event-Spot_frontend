@@ -2,9 +2,10 @@ import React,{useEffect} from 'react'
 import { Button, ToastContainer } from 'react-bootstrap'
 import { config } from '../../components/Api_Resources/config'
 import axios from '../../components/Api_Resources/axios'
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 function Success() {
+  const navigate = useNavigate()
   useEffect(()=>{
     (async()=>{
       try{
@@ -21,6 +22,9 @@ function Success() {
       }
     })()
   },[])
+  setTimeout(()=>{
+    navigate("/user-profile")
+  },3000)
   return (
     <div style={{backgroundImage:"url(https://eventpot.s3.ap-south-1.amazonaws.com/success-gif.gif)"}}>
       <div style={{display:"flex",justifyContent:"space-around",backgroundImage:"url(https://eventpot.s3.ap-south-1.amazonaws.com/success-gif.gif)"}} >
