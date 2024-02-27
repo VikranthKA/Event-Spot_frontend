@@ -1,5 +1,5 @@
 import './EventInMap.css';
-import React, { useContext, useEffect, useState,memo } from 'react';
+import React, { useContext, useEffect, useState,memo } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,19 +23,24 @@ function reverseLatLon(arr) {
 
 function EventInMap() {
   const eventData = useSelector((state) => state.events)
-  const [radius, setRadius] = useState(1);
+  const [radius, setRadius] = useState(10);
   const [lonlat, setLonLat] = useState([]);
   const [center, setCenter] = useState([]);
-  const { raduisEvents, handleGeoWithinEvents, searchQuery } = useContext(MyContext)
+  const { raduisEvents, handleGeoWithinEvents, searchQuery,profile } = useContext(MyContext)
   const dispatch = useDispatch();
   const { userData } = useContext(MyContext)
+  console.log(profile,"profile")
 
   const filterRadius = searchQuery && raduisEvents.filter(item => item.title.toLowerCase().includes(searchQuery))
   const filterEvent = searchQuery && eventData.filter(item => item.title.toLowerCase().includes(searchQuery))
 
 useEffect(()=>{
-  console.log(lonlat,"In useEffect of the latlon")
-})
+  const profileCo = profile?.location?.coordinates
+  if(lonlat.length===0 && userData.role==="Customer" && profileCo?.length > 0 ){
+    setLonLat(reverseLatLon(profileCo))
+    setCenter(reverseLatLon(profileCo))
+  }
+},[profile])
 
   useEffect(() => {
     const success = (position) => {
@@ -101,7 +106,7 @@ useEffect(()=>{
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Circle center={lonlat} radius={(parseInt(radius) + 1) * 650} /> {/* Convert to meters */}
+            <Circle center={lonlat} radius={(parseInt(radius) + 1) * 870} /> {/* convert to meters */}
 
             <Marker position={lonlat} icon={userIcon}>
               <Popup >{user.name}</Popup>
@@ -169,7 +174,7 @@ useEffect(()=>{
 
       ) : (
         <p><SpinnerComponent/>
-          Loading map...</p>
+          Allow Location</p>
       )}
       <div>
         <div>

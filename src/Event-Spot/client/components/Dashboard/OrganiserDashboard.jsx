@@ -8,7 +8,7 @@ const OrganiserDashboard = ({ event }) => {
   console.log(ticketNames, ticketsSold);
 
   const renderTicketTypes = () => (
-    <Table striped bordered hover>
+    <Table striped bordered hover style={{width:"100%"}}>
       <thead>
         <tr>
           <th>Ticket Name</th>
@@ -56,13 +56,11 @@ const OrganiserDashboard = ({ event }) => {
 
   return (
     <div>
-      <Chart options={options} series={series} type="bar" height={350} />
+      {totalRevenue!==0 && <Chart options={options} series={series} type="bar" height={350} />}
       <Container>
         {renderTicketTypes()}
         <tfoot>
           <tr>
-            <td colSpan="5">Total Revenue:</td>
-            <td>{totalRevenue}</td>
           </tr>
         </tfoot>
       </Container>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useContext,useEffect } from 'react'
 import axios from '../Api_Resources/axios';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -9,6 +9,8 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import './register.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MyContext } from '../../ContextApi/Context';
+import { jwtDecode} from 'jwt-decode';
 
 const loginValidationSchema = yup.object({
   email: yup.string().required().email(),
@@ -16,6 +18,15 @@ const loginValidationSchema = yup.object({
 });
 
 export default function Login() {
+  const {setUserData} = useContext(MyContext)
+  const tokenData = localStorage.getItem('token')
+
+  useEffect(()=>{
+    if(tokenData){
+      setUserData(jwtDecode(tokenData))
+    }
+
+  },[tokenData])
   const navigate = useNavigate();
   const [serverErrors, setServerErrors] = useState('');
   const snackbarRef = useRef(null);

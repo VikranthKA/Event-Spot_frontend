@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, memo } from 'react';
 import moment from 'moment';
 import CountDown from '../Utils/CountDown/CountDown';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Carousel, Spinner, Row, Col, Card, ListGroup, Badge, Button, Form, CardText, Modal } from 'react-bootstrap';
+import { Container, Carousel, Spinner, Row, Col, Card, ListGroup, Badge, Button, Form, CardText, Modal, CardBody } from 'react-bootstrap';
 import axios from '../Api_Resources/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { startGetEvents, startRaduisEvents } from '../../react-redux/action/eventAction';
@@ -13,7 +13,8 @@ import { MyContext } from '../../ContextApi/Context';
 import ReviewCard from '../Review/ReviewCard';
 import { toast } from 'react-toastify';
 import OrganiserDashboard from '../Dashboard/OrganiserDashboard';
-import { startOragniserEvents } from '../../react-redux/action/organiserAction';
+import { startOragniserEvents } from '../../react-redux/action/organiserAction'
+import "./EventInfo.css"
 
 function countRemainingTicket(tickets) {
     const totalRemainingTickets = tickets?.reduce((total, ticket) => total + ticket?.remainingTickets, 0);
@@ -80,7 +81,7 @@ function EventInfo() {
             <Container className="my-5">
                 {/* Event Details */}
                 {event ? (
-                    <Card style={{ width: "1100px", marginRight: "400px" }}>
+                    <Card style={{ width: "98%" }} className='event-details-container'>
                         <Card.Body>
                             {/* Carousel */}
                             <Carousel style={{ height: "400px", width: "100%", margin: "auto" }}>
@@ -113,27 +114,31 @@ function EventInfo() {
                             </Carousel>
                             {/* Event Details */}
                             <Row>
-                                <Col style={{marginTop:"20px"}}> 
-                                    <h1 className='fw-bold'>{event?.title}</h1>
-                                    <h3>Organizer: {event?.organiserId?.username}</h3>
-                                    <h5>Venue: {event?.venueName}</h5>
-                                    <h5>Starts At: {readableDate(event?.eventStartDateTime)}</h5>
-                                    <p className='fw-bold' style={{ width: "700px" }}>Address : {event?.addressInfo?.address}<br />
-                                        City : {event?.addressInfo?.city}</p>
+                                <Col style={{ marginTop: "20px" }}>
+                                    <Card style={{ width: "100%" }}>
+                                        <Card.Body className="card-body" style={{ fontFamily: "Arial, sans-serif" }}>
+                                            <Card.Title style={{ fontWeight: "bold" }}>{event?.title}</Card.Title>
+                                            <Card.Subtitle className="mb-2 text-muted">Created By: {event?.organiserId?.username}</Card.Subtitle>
+                                            <Card.Text>Venue: {event?.venueName}</Card.Text>
+                                            <Card.Text>Starts At: {readableDate(event?.eventStartDateTime)}</Card.Text>
+                                            <Card.Text style={{ width: "100%", fontWeight: "bold" }}>Address: {event?.addressInfo?.address}<br />
+                                                City: {event?.addressInfo?.city}</Card.Text>
+                                        </Card.Body>
+                                    </Card>
                                 </Col>
-                                <Col style={{marginTop:"25px"}}>
+                                <Col style={{ marginTop: "25px" }}>
                                     {/* Ticket Booking Button */}
                                     {new Date(event.ticketSaleStartTime) > new Date() ? (
-                                        <div>
+                                        <div style={{margin:"40px 0 0 25%"}}>
                                             <CountDown ticketSaleStartTime={event.ticketSaleStartTime} />
                                             {userData.role === "Organiser" && userData.id === event.organiserId._id && (
-                                                <Button style={{marginTop:"10px"}} onClick={() => navigate(`/event-form/${event._id}`)}>Edit</Button>
+                                                <Button style={{ marginTop: "20px" ,width:"40%"}} onClick={() => navigate(`/event-form/${event._id}`)}>Edit</Button>
                                             )}
                                         </div>
                                     ) : (
                                         <div>
                                             {countRemainingTicket(event?.ticketType) >= 1 ?
-                                                <Button className='btn btn-dark' style={{ border: '2px solid #004777',borderRadius: '5px',padding: '10px',width:"40%",height:"10%"}} onClick={handleBookTickets}>Book</Button>
+                                                (userData.role !== "Organiser" && userData.role !== "Admin" && <Button className='btn btn-dark' style={{ border: '2px solid #004777', borderRadius: '5px', padding: '10px', width: "40%", height: "10%" }} onClick={handleBookTickets}>Book</Button>)
                                                 :
                                                 <h2>All Seats are Booked</h2>}
 
@@ -142,9 +147,11 @@ function EventInfo() {
                                 </Col>
                             </Row>
                             {/* Actors & Description */}
-                            <Row className="my-4">
+                            <Row className="my-4" style={{marginLeft:"5%"}}>
                                 <Col>
                                     <Card.Text className='fw-bold'>Actors : {event?.actors?.map((actor) => actor?.name)}</Card.Text>
+                                </Col>
+                                <Col>
                                     <Card.Text className='fw-bold'>Description : {event?.description}</Card.Text>
                                 </Col>
                             </Row>
@@ -162,7 +169,7 @@ function EventInfo() {
                 {/* Reviews */}
                 <ListGroup numbered className="my-4">
                     <h1 className="fw-bold" style={{ width: "40%" }}>Reviews</h1>
-                    <Button variant="warning" onClick={handleAddReview} style={{width:"20%",height:"10%"}}>Add a Review</Button>
+                    <Button variant="warning" onClick={handleAddReview} style={{ width: "20%", height: "10%" }}>Add a Review</Button>
                     {/* <ReviewForm eventId={event?._id} /> */}
                     <div style={{ width: "100%", display: "flex", flexWrap: "wrap", gap: "10px" }}>
                         {event?.reviews?.length > 0 && event?.reviews?.map((review) => (
@@ -170,7 +177,7 @@ function EventInfo() {
                                 <ReviewCard
                                     eventId={event._id}
                                     reviewinfo={review.reviewId}
-                                    style={{ width: "100%", marginBottom: "10px"}} // Adjust margin as needed
+                                    style={{ width: "100%", marginBottom: "10px" }} // Adjust margin as needed
                                 />
                             </div>
                         ))}
@@ -182,8 +189,8 @@ function EventInfo() {
                     <Modal.Header closeButton>
                         <Modal.Title>Add a Review</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body style={{width:"500px"}}>
-                        <ReviewForm   eventId={event?._id} />
+                    <Modal.Body style={{ width: "500px" }}>
+                        <ReviewForm eventId={event?._id} />
                     </Modal.Body>
                 </Modal>
             </Container>

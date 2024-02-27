@@ -1,4 +1,4 @@
-import React, { useState,useContext,memo } from 'react';
+import React, { useState,useContext,memo,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,7 @@ import "./Header.css"
 
 function Header() {
   const [search,setSearch] = useState(" ")
-  const {searchQuery,setSearchQuery,userData,profileDispatch,setUserData} = useContext(MyContext)
+  const {searchQuery,setSearchQuery,userData,profileDispatch,setUserData,setToken} = useContext(MyContext)
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
@@ -29,7 +29,7 @@ function Header() {
         //empty the profile state in the app
         profileDispatch({ type: 'CLEAR_PROFILE_DATA'})
         setUserData("")
-
+        setToken("")
         navigate('/login')
 
         
@@ -44,7 +44,10 @@ function Header() {
 
   const handleSearch = () => {
     setSearchQuery(search.toLowerCase())
-  };
+  }
+  useEffect(()=>{
+    console.log(userData,"in headers")
+  },[userData])
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
@@ -73,9 +76,10 @@ function Header() {
             {localStorage.getItem("token") && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link active" aria-current="page" to="/" >
-                    {userData.role === "Customer" ? <h4 style={{    marginTop: "10px"}}>M A P</h4> : <h4 style={{    marginTop: "10px"}}>DASHBOARD</h4>}
-                  </Link> 
+                <Link className="nav-link active" aria-current="page" to="/">
+                  {console.log(userData.role)}
+                {(userData.role === "Organiser" || userData.role === "Admin") ? <h2>DASHBOARD</h2> : <h2>MAP</h2>}
+                </Link> 
                 </li>
               </>
             )}

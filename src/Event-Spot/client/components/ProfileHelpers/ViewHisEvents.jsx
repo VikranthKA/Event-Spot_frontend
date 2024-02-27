@@ -31,7 +31,7 @@ const ViewHisEvents = () => {
   return (
     <div className="container">
       <div className="heading">
-        <h2>Created Events :{organizerEvents?.length}</h2>
+        <h2 style={{textAlign:"center",margin:"20px 0 20px 0 "}}>Created Events :{organizerEvents?.length}</h2>
       </div>
       <div className='cards-display'>
         {organizerEvents?.length > 0 ? userData?.id && (searchEvents ? searchEvents : organizerEvents)?.map(ele => <EventCard

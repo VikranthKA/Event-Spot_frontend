@@ -55,7 +55,7 @@ function profileFunction (state, action){
       return action.payload
     case "CLEAR_PROFILE_DATA":
       console.log("In App")
-      return {}
+      return " "
       default:
         return { ...state }
   }
@@ -68,7 +68,12 @@ const App = () => {
   const [userData,setUserData] = useState("")
   const [profile, profileDispatch] = useReducer(profileFunction,"")
   const [cardSearch,setCardSearch] =  useState("")
+  const [token,setToken] = useState("")
 
+
+  useEffect(()=>{
+    console.log(userData,"userData")
+  },[userData])
   const handleGeoWithinEvents =useCallback( async(radius,lon,lat) =>{
     try{
       console.log(radius,lon,lat)
@@ -87,23 +92,27 @@ const App = () => {
     }
   },[radiusDispatch,raduisEvents])
 
-
   useEffect(()=>{
-    if(localStorage.getItem('token')){
-    const userObj = jwtDecode(localStorage.getItem('token'))
-    if(userObj) setUserData(userObj)
+    const tokenData = localStorage.getItem('token')
+    if(tokenData){
+    const userObj = jwtDecode(tokenData)
+    setToken(tokenData)
+    if(token) setUserData(userObj)
     }
 
     console.log(raduisEvents,"inside the contextAPI")
-  },[raduisEvents])
+  },[token,localStorage.getItem("token")])
 
   useEffect(() => {
+    if(userData?.id){
+
     const fetchProfileData = async () => {
       try {
         const response = await axios.get(`api/profile`, config);
 
-        if (response.data) {
-          console.log(response.data);
+        if (response.data && userData.role) {
+          // ==response?.data?.userId?.role
+          console.log( userData.role,response?.data?.userId?.role)
           profileDispatch({ type: 'SET_PROFILE_DATA', payload: response.data });
         } else {
           // setError('User profile not found');
@@ -113,8 +122,10 @@ const App = () => {
         // setError('Error fetching user profile');
       }
     };
-
     fetchProfileData();
+  }
+
+
   }, [userData])
 
   useEffect(()=>{console.log(profile,raduisEvents)},[profile,raduisEvents])
@@ -129,6 +140,7 @@ const App = () => {
                               {raduisEvents,handleGeoWithinEvents,//handling the radius events
                                 searchQuery,setSearchQuery,//handling the search query
                                 userData,setUserData,//obj of the user info id,role,expriesIn
+                                setToken,
                                 profile,profileDispatch, //displaying user profile and its function
                                 cardSearch,setCardSearch,//these are the search for the card display
                               }

@@ -1,11 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext,useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './ActualProfile.css';
 import ViewHisBookings from '../ProfileHelpers/ViewHisBookings';
 import { MyContext } from '../../ContextApi/Context';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Profile() {
-  const { profile, error } = useContext(MyContext);
+  const { profile, setUserData} = useContext(MyContext)
+  const tokenData = localStorage.getItem('token')
+
+  useEffect(()=>{
+    if(tokenData){
+      setUserData(jwtDecode(tokenData))
+    }
+
+  },[tokenData])
 
   
 

@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Carousel, Spinner, ProgressBar, Row, Col, Form, Card, ListGroup, Badge, Button, InputGroup, CardText, Alert } from 'react-bootstrap';
 
 import "./EventForm.css"
-import NotFound from '../Utils/NotFound/NotFound';
+import NotFound from '../Utils/NotFound/NotFound'
 import { startCreateEvent, startUpdateEvent } from "../../react-redux/action/eventAction"
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -22,6 +22,7 @@ function formatDateToTimeLocal(dateString){
     return formattedDate
   
   }
+  console.log("In the event")
   
 const EventForm = () => {
     const { userData } = useContext(MyContext)
@@ -35,9 +36,9 @@ const EventForm = () => {
     const [ticketEndHelp, setTicketEndHelp] = useState(false)
     const [edit, setEdit] = useState(false)
 
-    const events = useSelector((state) => {
-        return state.events
-    })
+
+    const events = useSelector((state)=>state.organiserDetails.organiserEvents)
+
 
     const [form, setForm] = useState({
         eventStartDateTime: "",
@@ -73,9 +74,13 @@ const EventForm = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (events.length > 0) {
-                const foundEvent = await events.find(ele => ele._id === eventId);
-                setEvent(foundEvent);
+            if (events) {
+                console.log(events,"all")
+                console.log(eventId,"id")
+                const foundEvent = await events.find(event => event._id === eventId);
+                localStorage.setItem('eventData', JSON.stringify(foundEvent))
+                console.log(foundEvent)
+                setEvent(foundEvent)
                 setEdit(true)
             }};
 
@@ -83,58 +88,27 @@ const EventForm = () => {
     }, [events])
 
     useEffect(() => {
-        (async()=>{
-        if (
-            eventId &&
-            userData.role === "Organiser" &&
-            event
-        ) {
+
             console.log("Inside the useEffect")
             console.log(event,"Event")
-             setForm({
-                title:  event.title && event.title,
-                 eventStartDateTime: event.eventStartDateTime && formatDateToTimeLocal(event.eventStartDateTime),
-                description: event.description || "", 
-                categoryId: event.categoryId || "", 
-                ticketType: event.ticketType?.map(ticket => ({
-                  ticketName: ticket.ticketName || "",
-                  ticketPrice: parseInt(ticket.ticketPrice) || 0,
-                  ticketCount: parseInt(ticket.ticketCount) || 0
-                })) || [],
-                venueName: event.venueName || "",
-                ticketSaleStartTime: event.ticketSaleStartTime && formatDateToTimeLocal(event.ticketSaleStartTime),
-                ticketSaleEndTime: event.ticketSaleEndTime && formatDateToTimeLocal(event.ticketSaleEndTime),
-              });
-        
-               setPoster({
-                Clip: { name: event.posters?.ClipName
-                    , file: null },
-                Brochure: { name: event.posters?.Brochure ,
-                     file: null },
-              });
-               setYouTube({
-                title: event.youTube.title,
-                url: event.youTube?.url 
-              });
+            // const storedEventData = JSON.parse(localStorage.getItem('eventData'))
+
+        // Check if event data exists in local storage
+        // if (storedEventData ) {
+        //     // Update state variables with stored event data
+        //     setForm(storedEventData.form);
+        //     setPoster(storedEventData.poster);
+        //     setYouTube(storedEventData.youTube);
+        //     setActors(storedEventData.actors);
+        //     setAllCategory(storedEventData.allCategory);
+        //     setSearchTerm(storedEventData.searchTerm);
+        //     setLocObj(storedEventData.locObj);
+        //     setSearchResults(storedEventData.searchResults);
+        //     setSelectedAddress(storedEventData.selectedAddress);
+        // }
+
         
         
-               setLocObj(prevState => ({
-                ...prevState,
-                address: event.addressInfo.address || "",
-                city: event.addressInfo.city || ""
-              }));
-
-
- 
-              setActors(await event.actors.map(actor => ({
-                name: actor.name || "",
-
-              })) || [])
-      
-              console.log(edit,"in the edit useEffect")
-              console.log(youTube,poster)
-            }
-        })()
         
     
         
@@ -160,7 +134,7 @@ const EventForm = () => {
                 }));
                 setAllCategory(modifiedCategory);
             } catch (err) {
-                console.log('Error fetching the Category', err);
+                console.log('Error fetching the Category', err)
             }
         };
 
@@ -180,7 +154,7 @@ const EventForm = () => {
                 ]);
             }
         } catch (error) {
-            console.error('Error fetching addresses:', error);
+            console.error('Error fetching addresses:', error)
         }
     };
     useEffect(() => {
