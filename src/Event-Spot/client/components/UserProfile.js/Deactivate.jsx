@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useDispatch, useSelector} from 'react-redux'
 import { startGetProfile } from '../../react-redux/action/profileAction';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserAstronaut} from '@fortawesome/free-solid-svg-icons';
 
 export default function Deactivate() {
     const [users, setUsers] = useState([])
@@ -52,13 +54,14 @@ export default function Deactivate() {
                         <div className="card" style={{width:"100%",margin:"5% 0 1% 0"}}>
                             <div className="card-body">
                                 <h4 className="card-title">Username: {profile.userId?.username}</h4>
-                                <img
+                                {profile?.profilePic ? <img
                   className="rounded-circle mb-3"
                   src={`${process.env.REACT_APP_IMAGE_URL}${profile.profilePic}`}
                   alt="Profile"
                   width="150"
                   height="150"
-                />
+                /> :  <FontAwesomeIcon icon={faUserAstronaut} style={{ marginTop:"10px",marginRight:"10px"}}/>
+            }
                                 <h5 className="card-title">{profile.userId?.email}</h5>
                                 <p className="card-text">Role: {profile.userId?.role}</p>
                                 <p className="card-text">Address: {profile.addressInfo.address}</p>

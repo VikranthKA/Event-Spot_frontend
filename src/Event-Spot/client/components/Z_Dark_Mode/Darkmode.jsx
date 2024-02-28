@@ -30,6 +30,8 @@ const Darkmode = () => {
       {console.log("in dark")}
       <button className="btn text-white" onClick={toggleDarkMode}>
         <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
+        {/* <FontAwesomeIcon icon={isDarkMode ? <img width="64" height="64" src="https://img.icons8.com/glyph-neue/64/superman.png" alt="superman"/> :  <img width="64" height="64" src="https://img.icons8.com/glyph-neue/64/batman-new.png" alt="batman-new"/>} /> */}
+
       </button>
     </div>
   );

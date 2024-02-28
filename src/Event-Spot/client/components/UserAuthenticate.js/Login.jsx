@@ -43,7 +43,7 @@ export default function Login() {
         setServerErrors('');
         const response = await axios.post('api/user/login', values);
         localStorage.setItem('token', response.data.token);
-        console.log(response.data.token);
+        console.log(response.data.token,"in login");
         setTimeout(() => {
           navigate('/user-profile');
         }, 2000);

@@ -1,7 +1,7 @@
 import React, { useState,useContext,memo,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faUser ,faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faSearch,faUserAstronaut, faPlus} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
 import { MyContext } from '../../ContextApi/Context';
@@ -10,7 +10,7 @@ import "./Header.css"
 
 function Header() {
   const [search,setSearch] = useState(" ")
-  const {searchQuery,setSearchQuery,userData,profileDispatch,setUserData,setToken} = useContext(MyContext)
+  const {searchQuery,setSearchQuery,userData,profileDispatch,setUserData,setToken,profile} = useContext(MyContext)
   const navigate = useNavigate();
 
   const handleChangeLogout = () => {
@@ -78,13 +78,13 @@ function Header() {
                 <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="/">
                   {console.log(userData.role)}
-                {(userData.role === "Organiser" || userData.role === "Admin") ? <h2>DASHBOARD</h2> : <h2>MAP</h2>}
+                {(userData.role === "Organiser" || userData.role === "Admin") ? <h4 style={{marginTop:"10px"}}>DASHBOARD</h4> : <h2 style={{marginTop:"10px"}}>MAP</h2>}
                 </Link> 
                 </li>
               </>
             )}
           </ul>
-          <form className="d-flex mx-auto justify-content-start">
+          {/* <form className="d-flex mx-auto justify-content-start">
             <input
               className="form-control me-2 "
               type="search"
@@ -101,7 +101,7 @@ function Header() {
             >
               <FontAwesomeIcon icon={faSearch} />
             </button>
-          </form>
+          </form> */}
           <ul className="navbar-nav ml-auto" style={{ display:"flex"}}>
             {localStorage.getItem("token") ? (
               <>
@@ -109,15 +109,24 @@ function Header() {
                   <Link to="/user-profile" >
                   {/* <Link to="/profile-canvas" > */}
 
-                    <FontAwesomeIcon icon={faUser} style={{ marginTop:"10px",marginRight:"10px"}}/>
+                    {profile?.profilePic ?  <img
+                  className="rounded-circle mb-3"
+                  src={`${process.env.REACT_APP_IMAGE_URL}${profile.profilePic}`}
+                  alt="Profile"
+                  width="30"
+                  height="30"
+                  style={{ marginTop:"10px",marginRight:"10px"}}
+                /> :                     <FontAwesomeIcon icon={faUserAstronaut} style={{ marginTop:"15px",marginRight:"10px",width:"20",height:"20"}}/>
+              }
+
                   </Link>
                 </li>
-                <li className="nav-item" style={{marginRight:"10px"}}>
+                <li className="nav-item" style={{marginRight:"10px",marginTop:"5px"}}>
                 <Darkmode/>
 
                 </li>
                 <li className="nav-item">
-                  <button className="btn btn-outline-danger" onClick={handleChangeLogout}>
+                  <button className="btn btn-outline-danger" onClick={handleChangeLogout} style={{marginRight:"10px",marginTop:"5px"}}>
                     Logout
                   </button>
                 </li>

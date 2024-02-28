@@ -138,9 +138,10 @@ function EventInfo() {
                                     ) : (
                                         <div>
                                             {countRemainingTicket(event?.ticketType) >= 1 ?
-                                                (userData.role !== "Organiser" && userData.role !== "Admin" && <Button className='btn btn-dark' style={{ border: '2px solid #004777', borderRadius: '5px', padding: '10px', width: "40%", height: "10%" }} onClick={handleBookTickets}>Book</Button>)
+                                                (userData.role !== "Organiser" && userData.role !== "Admin" && <Button className='btn btn-dark' style={{ border: '2px solid #004777', borderRadius: '5px', padding: '10px', width: "40%", height: "10%",marginLeft:"30%" ,marginTop:"100px"}} onClick={handleBookTickets}>Book</Button>)
                                                 :
-                                                <h2>All Seats are Booked</h2>}
+                                                <h2>All Seats are Booked</h2>
+                                            }
 
                                         </div>
                                     )}

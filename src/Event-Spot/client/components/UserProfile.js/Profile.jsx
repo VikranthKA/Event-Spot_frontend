@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import './ActualProfile.css';
 import ViewHisBookings from '../ProfileHelpers/ViewHisBookings';
 import { MyContext } from '../../ContextApi/Context';
-import { jwtDecode } from 'jwt-decode';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch,faUserAstronaut, faPlus} from '@fortawesome/free-solid-svg-icons'
 
 export default function Profile() {
   const { profile, error,fetchProfileData,userData ,token} = useContext(MyContext);
@@ -59,13 +60,14 @@ export default function Profile() {
           <div className="card-body">
             <div className="row">
               <div className="col-md-4 text-center" style={{ marginTop: '20px' }}>
-                <img
+                {profile.profilePic ? <img
                   className="rounded-circle mb-3"
                   src={`${process.env.REACT_APP_IMAGE_URL}${profile.profilePic}`}
                   alt="Profile"
-                  width="150"
-                  height="150"
-                />
+                  width="75%"
+                  height="80%"
+                /> : <FontAwesomeIcon icon={faUserAstronaut} style={{color:"black",width:"75%",height:"80%"}}/>
+              }
                 {console.log(`${process.env.REACT_APP_IMAGE_URL}`)}
               </div>
               <div className="col-md-8">

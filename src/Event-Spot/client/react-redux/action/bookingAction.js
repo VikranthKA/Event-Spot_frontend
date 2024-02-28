@@ -10,6 +10,8 @@ export const startCreateBooking = (eventId,tickets)=>{
             dispatch(setTicketBooked(response.data.booking))
             dispatch(updateEventsAfterBooking(response.data.updatedEvents))
         }catch(err){
+            console.log(localStorage.getItem("token"),"ask")
+            console.log(config)
             console.log(err)
             toast.info(err.map((ele)=>ele.msg))
             return{

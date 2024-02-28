@@ -141,18 +141,18 @@ export default function Register() {
                 <ToastContainer />
               </div>
 
-              <div >
+              
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', }}>
-                <h5>Already have an account?</h5>
-                <h6 style={{marginRight:"12%"}}><Link to='/login' >Login</Link></h6>
+
+                <h5>Already have an account?<Link to='/login' >Login</Link></h5>
                   
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end',marginTop:"20px" }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end',marginRight:"10%" }}>
   <button type='submit' className='btn btn-dark sign-up'>
     Signup
   </button>
 </div>
+                
 
 
               </div>
