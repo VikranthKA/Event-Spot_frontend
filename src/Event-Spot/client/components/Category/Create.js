@@ -5,6 +5,8 @@ import { startRemoveCategory, addCategoryAsync, startGetCategory, startEditCateg
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
 import { Modal, Button } from 'react-bootstrap'; // Import React Bootstrap components
 import Swal from 'sweetalert2';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit,faRemove,faDashboard} from '@fortawesome/free-solid-svg-icons';
 
 
 function Create() {
@@ -110,11 +112,12 @@ function Create() {
               <li className="list-group-item d-flex justify-content-between align-items-center" key={category._id}>
                 <span className="fw-bold">{category.name}</span>
                 <div>
+                  {category.events.length==0 && <button className="btn btn-danger ms-2" onClick={() => handleCategoryDelete(category._id)}>
+                  <FontAwesomeIcon icon={faRemove} />
+                  </button>}
                   <button className="btn btn-warning ms-2" onClick={() => handleCategoryEdit(category._id, category.name)}>
-                    Edit
-                  </button>
-                  <button className="btn btn-danger ms-2" onClick={() => handleCategoryDelete(category._id)}>
-                    Delete
+                  <FontAwesomeIcon icon={faEdit } />
+
                   </button>
                 </div>
               </li>

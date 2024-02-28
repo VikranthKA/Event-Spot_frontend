@@ -19,6 +19,7 @@ export default function Deactivate() {
     }, [search, dispatch]);
 
     const handleToggleActivation = async (userId, isActive) => {
+
         try {
             const response = await axios.put(`/api/users/${userId}`, { isActive: !isActive }, fileConfig);
             const updatedUser = response.data;
@@ -26,7 +27,8 @@ export default function Deactivate() {
             // Update the profiles state immediately after deactivation
             const updatedProfiles = profiles.map(profile =>
                 profile.userId._id === updatedUser._id ? { ...profile, userId: { ...profile.userId, isActive: updatedUser.isActive } } : profile
-            );
+            )
+            console.log(updatedProfiles,"in deactivate")
             dispatch({ type: 'SET_PROFILES', payload: updatedProfiles }); // Assuming you have a reducer to update the profiles state
             
             toast.success(`${updatedUser.username} account ${updatedUser.isActive ? 'activated' : 'deactivated'}!!`, {
@@ -36,6 +38,7 @@ export default function Deactivate() {
         } catch (err) {
             console.log(err);
         }
+    
     };
     
     

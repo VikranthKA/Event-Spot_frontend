@@ -13,7 +13,7 @@ export const startGetProfile = (search)=>{
                 // toast.error(err.response.data.err)
             }
         
-    }
+    } 
 }
 
 
