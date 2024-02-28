@@ -12,6 +12,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 // https://www.dhiwise.com/post/zod-and-react-a-perfect-match-for-robust-validation
 
+function getCurrentDateTime(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
 const EventForm = () => {
 
   const { eventId } = useParams()
@@ -32,7 +42,9 @@ const EventForm = () => {
   const [step, setStep] = useState(1)
 
   const [form, setForm] = useState({
-    eventStartDateTime: event && event.title ? event.title : "" ,
+    eventStartDateTime:"" ,
+    eventEndDateTime:"" ,
+
     title: " ",
     description: " ",
     categoryId: null,
@@ -76,9 +88,6 @@ const EventForm = () => {
 
     fetchData();
   }, [events])
-
-
-  
 
   const dispatch = useDispatch()
 
@@ -323,6 +332,16 @@ const EventForm = () => {
         if (!form.title?.trim()) {
           step1Errors.title = "Title is required";
         }
+        if (!form.eventEndDateTime?.trim()) {
+          step1Errors.eventEndDateTime = "eventEndDateTime is required"
+        }
+
+        if (form.eventEndDateTime && form.eventStartDateTime) {
+          if(form.eventStartDateTime>form.eventEndDateTime ){
+
+            step1Errors.eventStartDateTime = "Event Start should be less than EventEnd Date Time"
+          }
+        }
         if (!form.description?.trim()) {
           step1Errors.description = "Description is required";
         }
@@ -421,6 +440,9 @@ const EventForm = () => {
         return true;
     };
   }
+  // useEffect(()=>{
+  //   validateStep()
+  // },[form,poster,youTube,actors,locObj])
 
   const nextStep = async () => {
     const isValid = await validateStep()
@@ -447,6 +469,7 @@ const EventForm = () => {
       eventFormData.append('venueName', form.venueName)
       eventFormData.append('ticketSaleStartTime', form.ticketSaleStartTime)
       eventFormData.append('ticketSaleEndTime', form.ticketSaleEndTime)
+      eventFormData.append('eventEndDateTime',form.eventEndDateTime)
 
       eventFormData.append('categoryId', form.categoryId)
       // Append ticketType array
@@ -510,39 +533,56 @@ const EventForm = () => {
             <Container>
               <Form>
 
+              <Row>
+    <Form.Group as={Col} className="mb-3" controlId="title">
+        <Form.Label>Title:</Form.Label>
+        <Form.Control
+            type="text"
+            value={form.title}
+            name="title"
+            onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
+            isInvalid={!!errors.title}
+        />
+        <Form.Control.Feedback type="invalid">
+            {errors.title && <div>{errors.title}</div>}
+        </Form.Control.Feedback>
+    </Form.Group>
+</Row>
+<Row>
+    <Col>
+        <Form.Group className="mb-3" controlId="eventStartDateTime">
+            <Form.Label>Event Start Time:</Form.Label>
+            <Form.Control
+                type="datetime-local"
+                value={form.eventStartDateTime}
+                name="eventStartDateTime"
+                min={getCurrentDateTime()}
+                onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
+                isInvalid={!!errors.eventStartDateTime}
+            />
+            <Form.Control.Feedback type="invalid">
+                {errors.eventStartDateTime && <div>{errors.eventStartDateTime}</div>}
+            </Form.Control.Feedback>
+        </Form.Group>
+    </Col>
+    <Col>
+        <Form.Group className="mb-3" controlId="eventEndDateTime">
+            <Form.Label>Event End Time:</Form.Label>
+            <Form.Control
+                type="datetime-local"
+                value={form.eventEndDateTime}
+                name="eventEndDateTime"
+                min={getCurrentDateTime()}
 
-                <Row>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="title">
-                      <Form.Label>Title:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        value={form.title}
-                        name="title"
-                        onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
-                        isInvalid={!!errors.title}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.title && <div>{errors.title}</div>}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col><Form.Group className="mb-3" controlId="eventStartDateTime">
-                    <Form.Label>Event Start Time:</Form.Label>
-                    <Form.Control
-                      type="datetime-local"
-                      value={form.eventStartDateTime}
-                      name="eventStartDateTime"
-                      onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
-                      isInvalid={!!errors.eventStartDateTime}
-
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.eventStartDateTime && <div>{errors.eventStartDateTime}</div>}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  </Col>
-                </Row>
+                onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
+                isInvalid={!!errors.eventEndDateTime}
+            />
+            <Form.Control.Feedback type="invalid">
+                {errors.eventEndDateTime && <div>{errors.eventEndDateTime}</div>}
+            </Form.Control.Feedback>
+        </Form.Group>
+    </Col>
+</Row>
 
 
 
@@ -570,6 +610,8 @@ const EventForm = () => {
                       type="datetime-local"
                       value={form.ticketSaleStartTime}
                       name="ticketSaleStartTime"
+                      min={getCurrentDateTime()}
+
                       onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                       isInvalid={!!errors.ticketSaleStartTime}
                       onFocus={() => setTicketStartHelp(true)}
@@ -589,6 +631,8 @@ const EventForm = () => {
                       type="datetime-local"
                       value={form.ticketSaleEndTime}
                       name="ticketSaleEndTime"
+                      min={getCurrentDateTime()}
+
                       onChange={(e) => handleNameValueChange(e.target.name, e.target.value)}
                       isInvalid={!!errors.ticketSaleEndTime}
                       onFocus={() => setTicketEndHelp(true)}
@@ -620,7 +664,7 @@ const EventForm = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
+                  <Button variant="primary" style={{ height: "2%", width: "8%" }} onClick={async () => await nextStep()}>
                     Next
                   </Button></div>
               </Form>
@@ -710,14 +754,14 @@ const EventForm = () => {
                   <Col>
                     <div style={{ display: "flex", justifyContent: "flex-start" }}>
 
-                      <Button variant="secondary" style={{ height: "40px", width: "90px" }} onClick={() => prevStep()}>
+                      <Button variant="secondary" style={{ height: "2%", width: "15%" }} onClick={() => prevStep()}>
                         Previous
                       </Button>
                     </div>
                   </Col>
                   <Col>
                     <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                      <Button variant="primary" style={{ height: "40px", width: "90px" }} onClick={async () => await nextStep()}>
+                      <Button variant="primary" style={{height: "2%", width: "14%" }} onClick={async () => await nextStep()}>
                         Next
                       </Button></div>
                   </Col>

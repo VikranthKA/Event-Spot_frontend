@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 import axios from '../../Api_Resources/axios'
 import { config } from '../../Api_Resources/config'
 import SpinnerComponent from '../../Utils/Spinner/SpinnerComponent'
-import { Card } from 'react-bootstrap'
 
 const BookedUserInfo = ({ eventId }) => {
   const [bookingsInfo, setBookingInfo] = useState(false)
@@ -12,13 +10,12 @@ const BookedUserInfo = ({ eventId }) => {
     fetchDataFromApi(eventId)
   }, [eventId])
   const fetchDataFromApi = async (eventId) => {
-    console.log(eventId, "adsf")
+    // console.log(eventId, "adsf")
     try {
       const response = await axios.get(`/api/booked-users?eventId=${eventId}`, config)
-      console.log(response.data, "ds")
       setBookingInfo(response.data)
     } catch (err) {
-      console.log(err)
+    //   console.log(err)
       setBookingInfo(false)
     }
   }
