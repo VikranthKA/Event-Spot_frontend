@@ -30,10 +30,10 @@ export default function Deactivate() {
             const response = await axios.put(`/api/users/${userId}`, { isActive: !isActive }, fileConfig);
             const updatedUser = response.data;
             const updatedUsers = users.map(user =>
-                user._id === updatedUser._id ? updatedUser : user
+                user?._id === updatedUser._id ? updatedUser : user
             );
             setUsers(updatedUsers);
-            toast.success(`${updatedUser.username} account ${updatedUser.isActive ? 'activated' : 'deactivated'}!!`, {
+            toast.success(`${updatedUser?.username} account ${updatedUser?.isActive ? 'activated' : 'deactivated'}!!`, {
                 position: 'top-center',
                 autoClose: 5000
             });
@@ -58,13 +58,13 @@ export default function Deactivate() {
                   className="rounded-circle mb-3"
                   src={`${process.env.REACT_APP_IMAGE_URL}${profile.profilePic}`}
                   alt="Profile"
-                  width="150"
-                  height="150"
-                /> :  <FontAwesomeIcon icon={faUserAstronaut} style={{ marginTop:"10px",marginRight:"10px"}}/>
+                  width="20%"
+                  height="20%"
+                /> :  <FontAwesomeIcon icon={faUserAstronaut} style={{ marginTop:"10px",marginRight:"10px",width:"20%",height:"20   %"}}/>
             }
                                 <h5 className="card-title">{profile.userId?.email}</h5>
                                 <p className="card-text">Role: {profile.userId?.role}</p>
-                                <p className="card-text">Address: {profile.addressInfo.address}</p>
+                                <p className="card-text">Address: {profile.addressInfo?.address}</p>
                                 {profile.userId?.isActive ? (
                                     <button className="btn btn-danger" onClick={() => handleToggleActivation(profile.userId?._id, true)}>Deactivate</button>
                                 ) : (

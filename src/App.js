@@ -95,9 +95,10 @@ const App = () => {
     const userObj = jwtDecode(tokenData)
     setToken(tokenData)
     if(token) setUserData(userObj)
+    console.log(userData,"in app")
     }
 
-  },[])
+  },[localStorage.getItem("token"),token])
 
   const fetchProfileData = async () => {
     try {

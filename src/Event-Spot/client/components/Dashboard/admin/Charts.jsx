@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
-import axios from '../Api_Resources/axios';
-import { config } from '../Api_Resources/config';
+import axios from '../../Api_Resources/axios';
+import { config } from '../../Api_Resources/config';
 import { Typography, Grid, Container } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRefresh} from '@fortawesome/free-solid-svg-icons';
-import SpinnerComponent from '../Utils/Spinner/SpinnerComponent';
+import SpinnerComponent from '../../Utils/Spinner/SpinnerComponent';
 
 
 
