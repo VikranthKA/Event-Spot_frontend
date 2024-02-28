@@ -89,7 +89,7 @@ function Create() {
     <div className="container mt-4">
       <div className="row">
         <div className="col-md-6">
-          <strong className="mb-3">Create category</strong>
+          <h2 className="fw-bold">Create category here</h2>
           <form onSubmit={handleCreateCategory}>
             <div className="input-group mb-3">
               <input
