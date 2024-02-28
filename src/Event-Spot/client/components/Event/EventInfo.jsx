@@ -12,7 +12,7 @@ import ViewHisEvents from '../ProfileHelpers/ViewHisEvents';
 import { MyContext } from '../../ContextApi/Context';
 import ReviewCard from '../Review/ReviewCard';
 import { toast } from 'react-toastify';
-import OrganiserDashboard from '../Dashboard/OrganiserDashboard';
+import OrganiserDashboard from '../Dashboard/organiser/OrganiserDashboard';
 import { startOragniserEvents } from '../../react-redux/action/organiserAction'
 import "./EventInfo.css"
 

@@ -1,7 +1,8 @@
 import React ,{useContext, useEffect} from 'react'
-import ViewHisEvents from '../ProfileHelpers/ViewHisEvents'
-import { MyContext } from '../../ContextApi/Context'
+import ViewHisEvents from '../../ProfileHelpers/ViewHisEvents'
+import { MyContext } from '../../../ContextApi/Context'
 import OrganiseHomeCharts from './OrganiseHomeCharts'
+import BookedUserInfo from './BookedUserInfo'
 
 const OrganiserHomeDashboard = () => {
   const {userData} = useContext(MyContext)
@@ -12,7 +13,8 @@ const OrganiserHomeDashboard = () => {
       {userData.role == "Organiser" &&  
       <div>
         <OrganiseHomeCharts/>
-        <ViewHisEvents /></div>}
+        <ViewHisEvents />
+        </div>}
     </div>
   )
 }

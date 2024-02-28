@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Chart from 'chart.js/auto'; // Import Chart for Chart.js 3 support
 import { useDispatch, useSelector } from 'react-redux';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import { startOragniserEvents } from '../../react-redux/action/organiserAction';
+import { startOragniserEvents } from '../../../react-redux/action/organiserAction';
 
 const OrganiseHomeCharts = () => {
   const orgEvents = useSelector(state => state.organiserDetails.organiserEvents)

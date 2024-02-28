@@ -1,6 +1,7 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { Container, Table } from 'react-bootstrap';
+import BookedUserInfo from './BookedUserInfo';
 
 const OrganiserDashboard = ({ event }) => {
   const ticketNames = Array.isArray(event.ticketType) ? event.ticketType.map(ticket => ticket.ticketName) : [];
@@ -63,6 +64,8 @@ const OrganiserDashboard = ({ event }) => {
           <tr>
           </tr>
         </tfoot>
+        <BookedUserInfo   eventId={event._id}/>
+
       </Container>
     </div>
   );
