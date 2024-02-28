@@ -54,8 +54,9 @@ function profileFunction (state, action){
     case "SET_PROFILE_DATA":
       return action.payload
     case "CLEAR_PROFILE_DATA":
-      console.log("In App")
-      return " "
+      console.log("In App",state)
+      return {}
+      
       default:
         return { ...state }
   }
@@ -70,10 +71,6 @@ const App = () => {
   const [cardSearch,setCardSearch] =  useState("")
   const [token,setToken] = useState("")
 
-
-  useEffect(()=>{
-    console.log(userData,"userData")
-  },[userData])
   const handleGeoWithinEvents =useCallback( async(radius,lon,lat) =>{
     try{
       console.log(radius,lon,lat)
@@ -88,7 +85,7 @@ const App = () => {
         
     }catch(err){
       console.log(err)
-        // toast.error(JSON.stringify(err))
+      toast.error(JSON.stringify(err))
     }
   },[radiusDispatch,raduisEvents])
 
@@ -100,35 +97,39 @@ const App = () => {
     if(token) setUserData(userObj)
     }
 
-    console.log(raduisEvents,"inside the contextAPI")
-  },[token,localStorage.getItem("token")])
+  },[])
 
-  useEffect(() => {
-    if(userData?.id){
-
-    const fetchProfileData = async () => {
-      try {
-        const response = await axios.get(`api/profile`, config);
-
-        if (response.data && userData.role) {
-          // ==response?.data?.userId?.role
-          console.log( userData.role,response?.data?.userId?.role)
-          profileDispatch({ type: 'SET_PROFILE_DATA', payload: response.data });
-        } else {
-          // setError('User profile not found');
+  const fetchProfileData = async () => {
+    try {
+      const response = await axios.get(`api/profile`, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          
+          "Content-Type":"application/json"
         }
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-        // setError('Error fetching user profile');
-      }
-    };
-    fetchProfileData();
+      });
+
+        // ==response?.data?.userId?.role
+        
+        console.log("Calling the new API in app for profile",console.log(            localStorage.getItem("token")
+        ))
+        profileDispatch({ type: 'SET_PROFILE_DATA', payload: response.data })
+
+    } catch (error) {
+      console.error('Error fetching user profile:', error)
+      // setError('Error fetching user profile');
+    }
+  
   }
 
+  useEffect(() => {
+    
+    fetchProfileData();
 
-  }, [userData])
 
-  useEffect(()=>{console.log(profile,raduisEvents)},[profile,raduisEvents])
+  }, [token])
+
+  useEffect(()=>{console.log("profile :",profile,"radius :",raduisEvents)},[profile,raduisEvents])
 
 
 
@@ -140,8 +141,8 @@ const App = () => {
                               {raduisEvents,handleGeoWithinEvents,//handling the radius events
                                 searchQuery,setSearchQuery,//handling the search query
                                 userData,setUserData,//obj of the user info id,role,expriesIn
-                                setToken,
-                                profile,profileDispatch, //displaying user profile and its function
+                                token,setToken,
+                                profile,profileDispatch,fetchProfileData, //displaying user profile and its function
                                 cardSearch,setCardSearch,//these are the search for the card display
                               }
     }>

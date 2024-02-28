@@ -6,15 +6,21 @@ import { MyContext } from '../../ContextApi/Context';
 import { jwtDecode } from 'jwt-decode';
 
 export default function Profile() {
-  const { profile, error } = useContext(MyContext);
-  const [loading, setLoading] = useState(true); // State to track loading state
+  const { profile, error,fetchProfileData,userData ,token} = useContext(MyContext);
+  const [loading, setLoading] = useState(true)
+
+  useEffect(()=>{
+    fetchProfileData()
+
+  },[token])
 
   useEffect(() => {
-    // Update loading state once profile data is available or when it changes
     if (profile) {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [profile]);
+  }, [profile])
+
+
 
   if (!profile) {
     return (
@@ -87,5 +93,5 @@ export default function Profile() {
         <ViewHisBookings profileData={profile} />
       </div>
     </div>
-  );
+  )
 }
