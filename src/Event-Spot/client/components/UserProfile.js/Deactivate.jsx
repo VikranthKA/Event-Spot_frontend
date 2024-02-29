@@ -16,7 +16,7 @@ export default function Deactivate() {
 
     useEffect(() => {
         dispatch(startGetProfile(search));
-    }, [search, dispatch]);
+    }, [search]);
 
     const handleToggleActivation = async (userId, isActive) => {
 

@@ -1,50 +1,56 @@
-import { useState, memo } from 'react'
-import Box from '@mui/material/Box';
+import React,{useState} from 'react';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
-import moment from 'moment'
-import ExpiryTime from '../Booking/Qr-Component/ExpiryTime';
+import {CardContent,Typography,Button} from '@mui/material';
 
-function TicketCard({ eventInfo, quantity, ticketPrice, ticketType, totalAmount, id, createdAt }) {
+import moment from 'moment'
+import QrGenerator from "../Booking/Qr-Component/QrGenerator" 
+
+
+function readableDate(inputDateString) {
+  const momentObject = moment(inputDateString);
+  return momentObject.format('L');
+}
+
+
+function TicketCard({ eventInfo, id, quantity, ticketPrice, ticketType, totalAmount, createdAt }) {
   const [qrToggle, setQrToggle] = useState(false)
-  const expiryTime = 2
-  const detailsInfo = {
-    quantity, ticketPrice, ticketType, totalAmount, id
-  }
-  function readableDate(inputDateString) {
-    const momentObject = moment(inputDateString);
-    return momentObject.format('L');
-  }
 
   return (
-    <div style={{ margin: "0 0 10% 25%", width: "100%", height: "100%" }}>
-      <h4 style={{ display: "inline-block", marginBottom: "3%" }}>Tickets you have booked at - {readableDate(createdAt)}</h4>
+    <Card style={{width:"100%",height:"100%"}} key={id}>
+      <CardContent style={{marginLeft:"-10px"}}>
+        <Typography variant="body2" component="div">
+          {eventInfo?.title}<br/>
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
 
-      {qrToggle ? <Button onClick={() => setQrToggle(false)}>Hide</Button> : <Button onClick={() => setQrToggle(true)}>Show</Button>}
-      {qrToggle && <Card key={id} sx={{ display: 'flex', border: "2px solid black", marginTop: "2%", width: "45%" }}>
-        <Box sx={{ display: 'flex', justifyContent:"space-between"}}>
-          <CardContent sx={{ flex: '1 0 auto' }}>
-            <Typography component="div" variant="h5" key={eventInfo._id}>
-              Event:{eventInfo.title} <br />Starts At:{readableDate(eventInfo.eventStartDateTime)}
-            </Typography>
-            <Typography component="div" variant="h5">
-              Class:{ticketType}
-            </Typography>
-            <Typography component="div" variant="h5">
-              Quantity:{quantity}
-            </Typography>
-          </CardContent>
-          <Box sx={{ display: 'flex', alignItems: 'center', width: "100%", height: "100%", marginTop: "25px" }}>
-            <ExpiryTime detailsInfo={detailsInfo} expiryTime={expiryTime} />
+          StartsOn :{readableDate(eventInfo?.eventStartDateTime)}
+          </Typography>
+ 
+        <Typography variant="body2" color="text.secondary">
 
-          </Box>
-        </Box>
+          EndsOn:{eventInfo?.eventEndDateTime && readableDate(new Date(eventInfo?.eventStartDateTime))}         
+          </Typography>
 
-      </Card>}
-    </div>
+        <Typography variant="body2" color="text.secondary">
+          Type: {ticketType}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Q: {quantity}₹
+        </Typography>
+
+        <Typography variant="body2" color="text.secondary">
+          Paid: {totalAmount}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          On: {createdAt.toLocaleDateString('en-GB')}
+        </Typography>
+        {qrToggle ? <Button onClick={() => setQrToggle(false)}>Hide</Button> : <Button onClick={() => setQrToggle(true)}>Show</Button>}
+
+        {qrToggle &&<QrGenerator QrData={{ eventInfo, id, quantity, ticketPrice, ticketType, totalAmount, createdAt }} />}
+
+      </CardContent>
+    </Card>
   );
 }
 
-export default memo(TicketCard)
+export default TicketCard;

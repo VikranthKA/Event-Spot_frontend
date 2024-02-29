@@ -1,6 +1,11 @@
-const profileInitialState  = {
+const profileInitialState={
+
     allProfile:[]
+    
 }
+
+
+
 const profileReducer = (state=profileInitialState,action)=>{
     switch(action.type){
         
@@ -9,9 +14,10 @@ const profileReducer = (state=profileInitialState,action)=>{
         
         case "SET_PROFILES":
             return {...state,allProfile:action.payload}
-        default:{
+
+        default:
             return {...state}
-        }
+        
     } 
 }
 
