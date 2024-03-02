@@ -47,4 +47,4 @@ function QrGenerator({ QrData }) {
   );
 }
 
-export default memo(QrGenerator);
+export default memo(QrGenerator)
