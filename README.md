@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+<h2>Event Spot – Online Event Finding App </h2>
+<h2>https://event-spot-frontend.vercel.app/</h2>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3>Event Spot is an online event-finding app that helps users discover events happening near them using their location coordinates and a specified radius. It offers features for booking tickets, viewing event details, and managing user accounts.</h3>
 
-## Available Scripts
+Frontend Technologies
+<ul>
+<li>Geo-Spatial Search : Finds events within user's radius using their location & radius (converted to radians)
+                    EventModel.find({
+                              location: {
+                                  $geoWithin: {
+                                      $centerSphere: [[userlon, userlat], radiusInRadians]}}}) </li>
 
-In the project directory, you can run:
+<li>  
+Icons: @fortawesome/free-solid-svg-icons - Provides vector icons for various purposes.</li>
+<li>
+Calendar and Events: @fullcalendar/react - Facilitates displaying bookings and events in a calendar format.</li>
 
-### `npm start`
+<li>Dashboards: @mui/material, apexcharts, react-chartjs-2 - Create visually appealing and interactive dashboards for displaying data like event statistics.</li>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<li>Data Fetching: axios - Enables communication with the backend API to retrieve and send data.</li>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<li>UI Framework and Components: bootstrap, react-bootstrap, @mui/material - Provide building blocks for creating responsive and visually appealing user interfaces.</li>
 
-### `npm test`
+<li>Form Management: formik, yup - Offer tools for building efficient and user-friendly forms with validation.</li>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<li>Authentication and Authorization: jwt-decode - Decodes JWT tokens for user data to enable role-based access control.</li>
 
-### `npm run build`
+<li>Date Formatting: moment - Allows converting and formatting date objects for user-friendliness.</li>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<li>Reviews and Ratings: react-awesome-stars-rating, react-rating-stars-component - Facilitate user reviews and ratings for events.</li>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<li>Timing: react-countdown - Displays a countdown timer for events with limited time availability.</li>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<li>Image Uploads: react-filepond - Enables users to upload images for event profiles.</li>
 
-### `npm run eject`
+<li>Maps: react-leaflet - Integrates interactive maps for visualizing event locations.</li>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<li>Carousel: react-multi-carousel - Presents a carousel component for showcasing events based on categories.</li>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<li>QR Codes: react-qr-code - Generates QR codes for secure access or displaying ticket details.</li>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<li>State Management: react-redux, Context API, useReducer - Manage complex application state effectively.</li>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<li>Routing: react-router-dom - Enables navigation between different sections of the app.</li>
 
-## Learn More
+<li>Dropdowns and Selects: react-select - Provides dropdown menus and selection options for categories, addresses, etc.</li>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<li>Notifications: react-toastify, sweetalert2 - Display user notifications like success messages, warnings, or errors.</li>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+</ul>
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Backend Technologies:
 
-### Analyzing the Bundle Size
+<ul>
+<li>Server Framework: express - Provides the foundation for building the backend API that handles user requests and interacts with the database.</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+<li>Authentication and Authorization: bcryptjs, jsonwebtoken - Implement secure authentication using password hashing and JWT tokens for user authorization.</li>
 
-### Making a Progressive Web App
+<li>Security: express-validator, joi, morgan - Validate user input, prevent vulnerabilities, and log HTTP requests and responses for monitoring.</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+<li>File Storage: @aws-sdk/client-s3, multer, multer-s3 - Integrate with Amazon S3 cloud storage for uploading and managing event images.</li>
 
-### Advanced Configuration
+<li>Email Management: nodemailer - Sends emails for functionalities like password reset or notifications.</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+<li>Location and Distance: geolib - Calculates distances between user location and event locations for radius search.</li>
 
-### Deployment
+<li>Payments: stripe - Integrates Stripe for secure payment processing of event tickets.</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+<li>Scheduling Tasks: node-cron - Enables scheduling automated tasks like sending reminder emails or updating event statuses.</li>
+</ul>
 
-### `npm run build` fails to minify
+Overall, Event Spot leverages a comprehensive set of technologies to deliver a user-friendly and feature-rich online event-finding experience.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Additional Notes:
+
+You can further enhance the project by adding documentation, deployment instructions, and unit tests for better maintainability and scalability.
+Consider incorporating accessibility best practices to ensure your application is usable by a wider audience.
