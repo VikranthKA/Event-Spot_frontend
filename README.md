@@ -9,7 +9,7 @@ Frontend Technologies
                     EventModel.find({
                               location: {
                                   $geoWithin: {
-                                      $centerSphere: [[userlon, userlat], radiusInRadians]}}}) </li>
+                                      $centerSphere: [[userlon, userlat], radiusInRadians]}}) </li>
 
 <li>Maps: react-leaflet - Integrates interactive maps for visualizing event locations.</li>
 
@@ -80,7 +80,4 @@ Backend Technologies
 
 Overall, Event Spot leverages a comprehensive set of technologies to deliver a user-friendly and feature-rich online event-finding experience.
 
-Additional Notes:
 
-You can further enhance the project by adding documentation, deployment instructions, and unit tests for better maintainability and scalability.
-Consider incorporating accessibility best practices to ensure your application is usable by a wider audience.

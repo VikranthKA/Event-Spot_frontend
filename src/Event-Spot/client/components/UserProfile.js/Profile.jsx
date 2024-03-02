@@ -91,9 +91,9 @@ export default function Profile() {
           </div>
         </div>
       )}
-      <div style={{ marginTop: '50px' }}>
+      {profile?.bookings?.length > 0 && <div style={{ marginTop: '50px' }}>
         <ViewHisBookings profileData={profile} />
-      </div>
+      </div>}
     </div>
   )
 }
