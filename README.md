@@ -80,4 +80,6 @@ Backend Technologies
 
 Overall, Event Spot leverages a comprehensive set of technologies to deliver a user-friendly and feature-rich online event-finding experience.
 
+BACKEND API
+
 
