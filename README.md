@@ -81,5 +81,73 @@ Backend Technologies
 Overall, Event Spot leverages a comprehensive set of technologies to deliver a user-friendly and feature-rich online event-finding experience.
 
 BACKEND API
+<ol>
+
+<li>User Management:</li>
+
+/api/user/register: Register a new user.
+/api/user/login: User login.
+/api/user/updatepassword: Update user password.
+/api/users: Get all users (for admins).
+/api/users/:userId: Deactivate a user account (for admins).
+
+<li>Password Management:</li>
+
+/api/user/forgot-password: Request to reset forgotten password.
+/api/reset-password/:id/:token: Reset password using a reset token.
+
+<li>Profile Management:</li>
+
+/api/profile: Create a user profile.
+/api/profile: Get user profile.
+/api/profile: Update user profile.
+/api/profile-all: Get all profiles (for admins).
+
+<li>Event Management:</li>
+
+/api/event: Create an event.
+/api/event/:eventId: Get details of a specific event.
+/api/event/:eventId: Update an event.
+/api/event/approve/:eventId: Approve an event.
+/api/event/cancel-approve/:eventId: Cancel approval for an event.
+/api/event: Get all events.
+/api/org-stats: Get statistics on most popular events.
+/api/event/:radius/:userlon/:userlat: Get events within a certain radius of a user's location.
+/api/event/:userId/:eventId: Get distance between a user and an event.
+/api/organiser-events: Get all events organized by a user.
+
+<li>Booking Management:</li>
+
+/api/event/:eventId/booking: Create a booking for an event.
+/api/ticket/:bookedId: Get information about a ticket.
+/api/booking/:bookingId: Cancel a booking (for admins).
+/api/get/false/bookings: Get all bookings that are not confirmed.
+
+<li>Payment Management</li>
+
+/api/booking/:bookingId/payment: Initiate a payment checkout session.
+/api/booking/update-payment: Update payment information.
+/api/delete-payment/:paymentId: Delete a payment.
+
+<li>Review Management:</li>
+
+/api/event/:eventId/review: Create a review for an event.
+/api/event/:eventId/review/:reviewId: Update a review.
+/api/event/:eventId/review/:reviewId: Delete a review.
+
+<li>Category Management:</li>
+
+/api/category: Create a new category (for admins).
+/api/categoryall: Get all categories.
+/api/category/:categoryId: Get details of a specific category.
+/api/category/:categoryId: Update a category (for admins).
+/api/category/:categoryId: Delete a category (for admins).
+/api/category: Get all categories along with associated events.
+/api/category/:categoryId: Get events associated with a specific category.
+
+<li>Admin Dashboard:</li>
+
+/api/dashboard: Get aggregated data for admin dashboard.
+</ol>
 
 
