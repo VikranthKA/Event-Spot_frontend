@@ -216,6 +216,55 @@ BACKEND API
     <img width="842" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/16560aa3-9424-49ce-9069-1878c7374550">
 
   </li>
+  
+</ul>
+
+<ul>
+    Admin Dashboard
+  <li>
+    Event Approval List <img width="288" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/f6283ffe-4aeb-46d7-8584-43e44d5815cc">
+    <img width="911" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/106a2fa3-8ffc-4ce7-b2ca-fecba75809dc">
+
+
+  </li>
+  <li>
+    Activate and Deactivate the Users 
+    <img width="849" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/4c863f29-fd08-476d-a52b-83cca02984e4">
+
+  </li>
+  <li>
+    Admin Dashboard
+    <img width="936" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/33df0953-6eac-4c91-9595-a860e511fc3f">
+
+  </li>
+  <li>
+    Categoty List
+    <img width="416" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/24bd0fd4-e012-44d8-b58d-39ba825312c8">
+
+  </li>
+</ul>
+
+<ul>
+  Forgot password
+  <img width="723" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/e6316475-64cd-49f7-a38a-841792705c39">
+  <img width="323" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/fdb2227e-3d95-4a7c-a740-9ce5eaa8b010">
+
+
+</ul>
+
+<ul>
+  <li><img width="244" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/068d3456-eb62-4d4d-b02b-d56cd33dad9e">
+  <img width="254" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/1e13f22c-7ffa-4109-9b04-91089a4a7353">
+  <img width="272" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/70219da1-a2f2-4798-a5a4-2b3c5b26986e">
+<img width="395" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/d5ecf555-6882-45f0-903b-29053bea40c5">
+
+
+
+
+  
+  </li>
+
+
 </ul>
 
   
