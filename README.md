@@ -151,3 +151,73 @@ BACKEND API
 </ol>
 
 
+<div>
+<ul>
+
+  <li>
+    Home 
+    <img width="949" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/706dafc5-ce8e-4838-b090-4cf193d3807e">
+
+  </li>
+  <li>
+    All Events
+    <img width="856" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/8be1a8fd-845a-4f19-ad42-5707915056d1">
+
+  </li>
+  <li>
+    Login Page
+    <img width="945" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/3f472bbf-f68d-4194-b770-8816c2eb303b">
+
+  </li>
+  <li>
+    Register page
+    <img width="937" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/43830066-e15e-44a5-8cb7-0fb76161b2cd">
+
+  </li>
+
+  <li>
+    User Profile Page After Login 
+    <img width="944" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/9441f717-056e-4d88-97b6-0d6e9d58b5c3">
+
+  </li>
+  <li>
+    Single Event Display
+    <img width="877" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/3789e580-1891-4561-90aa-379286abf67d">
+    <img width="853" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/5717e38a-a775-4cba-b751-1ba288d9bd0e">
+    
+
+  </li>
+  <li>
+    Ticket Booking
+    <img width="849" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/728b32bb-d301-496c-8309-ee14b34bfc35">
+
+  </li>
+  <li>
+    Review 
+    <img width="830" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/120dc1c5-a5e8-4aea-beb6-d947ae606079">
+
+  </li>
+
+  <li>
+    Booked Tickets in the calender
+    <img width="856" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/f5a8a136-b0db-49f3-b635-a06cc571c7f2">
+
+  </li>
+</ul>
+
+<ul>
+  <li>
+    Organiser Dashboard
+    <img width="886" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/5588992b-c151-4240-9dcb-365a9cd13eeb">
+
+  </li>
+  <li>
+    Ticket Sold For Single Event
+    <img width="842" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/16560aa3-9424-49ce-9069-1878c7374550">
+
+  </li>
+</ul>
+
+  
+</div>
+
