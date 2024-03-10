@@ -24,7 +24,7 @@ function EventCardsDisplay() {
       <Container>
 
         <div >
-          <img style={{ width: "100%", height: "100px", borderRadius: "5px",marginTop:"20px" }} src={`https://eventpot.s3.ap-south-1.amazonaws.com/glowing-stage-light-illuminates-cheering-rock-fans-generated-by-ai.jpg`} />
+          <img style={{ width: "100%", height: "100px", borderRadius: "10px",marginTop:"20px" }} src={`https://eventpot.s3.ap-south-1.amazonaws.com/glowing-stage-light-illuminates-cheering-rock-fans-generated-by-ai.jpg`} />
         </div>
 
         <div style={{ bottom: 20, right: 20, textAlign: 'right', marginBottom: "20px", marginTop: "20px" }}>

@@ -85,7 +85,7 @@ const App = () => {
         
     }catch(err){
       console.log(err)
-      toast.error(JSON.stringify(err))
+      toast.error("Error Getting the Events")
     }
   },[radiusDispatch,raduisEvents])
 

@@ -6,7 +6,8 @@ import Swal from 'sweetalert2';
 import Darkmode from '../Z_Dark_Mode/Darkmode';
 import { MyContext } from '../../ContextApi/Context';
 import eventLogo from "../../Z_images/EVENT_LOGO_FINAL.png"
-import "./Header.css"
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function Header() {
   const [search,setSearch] = useState(" ")
@@ -50,10 +51,10 @@ function Header() {
   },[userData])
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" >
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img style={{height:"50px",width:"150px",border:"4px solid orange",borderRadius:"10px"}}  src={eventLogo}/>
+          <img style={{height:"50px",width:"150px",border:"2px solid orange",borderRadius:"10px"}}  src={eventLogo}/>
         </Link>
         
         {userData.role==="Organiser"&&<Link className=" nav-link navbar-brand" to="/event-form">
@@ -139,9 +140,10 @@ function Header() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">
+                <a class="dropdown-item" href="/login"><Link className="nav-link" to="/login">
                     Login
                   </Link>
+                  </a>
                 </li>
                 <li className="nav-item">
                 <Darkmode/>

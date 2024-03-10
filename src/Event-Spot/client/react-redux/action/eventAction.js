@@ -11,7 +11,7 @@ export const startGetEvents = ()=>{
                 console.log(response.data,"data action")
             }catch(err){
                 console.log(err)
-                alert(err)
+                toast.error("Network error")
             }
         
     }
@@ -53,7 +53,10 @@ export const startCreateEvent = (eventFormData)=>{
 
         }catch(err){
             console.log(err)
-            alert(err,"Cannot create a Event")
+            if(err.response.data.err.length>0){
+
+                toast.error(err.response.data.err.map((ele)=>ele.msg))
+            }
         }
     }
 }
