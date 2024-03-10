@@ -188,7 +188,7 @@ BACKEND API
   <li>
     Single Event Display
     <img width="877" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/3789e580-1891-4561-90aa-379286abf67d">
-    <img width="853" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/5717e38a-a775-4cba-b751-1ba288d9bd0e">
+    <img width="840" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/5717e38a-a775-4cba-b751-1ba288d9bd0e">
     
 
   </li>
