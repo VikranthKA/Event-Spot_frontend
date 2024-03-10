@@ -176,7 +176,7 @@ useEffect(()=>{
       ) : (
        <div> {lonlat.length > 0  ? <SpinnerComponent/> : <span>Allow Location</span>}</div>
       )}
-     {eventData.length>0 || raduisEvents.length>0 && <div>
+     {eventData.length>0 && <div>
         <div>
           <div style={{}}>
             <Container style={{ backgroundColor: "lightblue", borderRadius: "15px 15px 0 15px ", marginBottom: "40px" }}>
