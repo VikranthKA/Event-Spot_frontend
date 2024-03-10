@@ -37,6 +37,7 @@ import OffCanvasProfile from './Event-Spot/client/components/ProfileHelpers/OffC
 import MultiCarousel from './Event-Spot/client/components/Event/multi-Carousel/MultiCarousel';
 import "./App.css"
 import CatCardDis from './Event-Spot/client/components/Event/multi-Carousel/CatCardDis';
+import NotFound from './Event-Spot/client/components/Utils/NotFound/NotFound';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -182,6 +183,7 @@ const App = () => {
           <Route path="/profile-canvas" element={<OffCanvasProfile/>}/>
           <Route path="/categry-events" element={<MultiCarousel/>}/>
           <Route path="/category/:categoryId/:name" element={<CatCardDis/>}/>
+          <Route path="*" element={<NotFound/>}/>
 
 
 
