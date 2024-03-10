@@ -203,12 +203,35 @@ BACKEND API
     <img width="856" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/f5a8a136-b0db-49f3-b635-a06cc571c7f2">
 
   </li>
+  <li>
+    Home Loading page
+    <img width="872" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/4052f3a0-76b4-4f36-99f1-95104456fe64">
+
+  </li>
 </ul>
 
 <ul>
   <li>
     Organiser Dashboard
     <img width="886" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/5588992b-c151-4240-9dcb-365a9cd13eeb">
+
+  </li>
+  <li>
+    Event Create
+    <img width="867" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/4b835d1e-9617-4d91-89c4-eb67e7aec7c0">
+    <img width="849" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/d54fcb6d-a821-451e-826a-3315a15e16ab">
+    <img width="737" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/9fe5f709-07a5-42ea-9cdf-07342fe817ef">
+    <img width="339" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/498c508a-d6af-4b49-82be-87e193ee038c">
+
+
+
+
+  </li>
+  <li>
+    Event Update
+    <img width="900" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/d8a87167-3efc-4b25-a685-00a33fde4928">
+    <img width="850" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/77aeb01a-d4aa-46a5-bcc9-23eb7826b42b">
+
 
   </li>
   <li>
