@@ -26,6 +26,7 @@ function EventInMap() {
   const [radius, setRadius] = useState(10);
   const [lonlat, setLonLat] = useState([]);
   const [center, setCenter] = useState([]);
+
   const { raduisEvents, handleGeoWithinEvents, searchQuery,profile } = useContext(MyContext)
   const dispatch = useDispatch();
   const { userData } = useContext(MyContext)
@@ -99,7 +100,7 @@ useEffect(()=>{
     <div className="div-container">
 
 
-      {center.length > 0 ? (
+      {(center.length > 0 && eventData.length> 0) ? (
         <div>
           <MapContainer center={lonlat} zoom={10} style={{ height: '400px' }}>
             <TileLayer
@@ -173,10 +174,9 @@ useEffect(()=>{
         </div>
 
       ) : (
-        <p><SpinnerComponent/>
-          Allow Location</p>
+       <div> {lonlat.length > 0  ? <SpinnerComponent/> : <span>Allow Location</span>}</div>
       )}
-      <div>
+     {eventData.length>0 || raduisEvents.length>0 && <div>
         <div>
           <div style={{}}>
             <Container style={{ backgroundColor: "lightblue", borderRadius: "15px 15px 0 15px ", marginBottom: "40px" }}>
@@ -198,7 +198,7 @@ useEffect(()=>{
 
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

@@ -32,7 +32,10 @@ function EventCard({ title, image, start, categoryName, id,tickets }) {
   return (
     <Link to={`/event-info/${id}`} style={{ textDecoration: 'none'}} >
       <Card style={{ width: '18rem', border: '1px solid black' }}>
-        <Card.Img src={`${process.env.REACT_APP_IMAGE_URL}${image}`} style={{width:"100%",height:"100%"}} />
+        <div style={{width:"100%",height:"150px"}} >
+
+        <Card.Img src={`${process.env.REACT_APP_IMAGE_URL}${image}`} /> 
+        </div>
         <Card.Body style={{ border: '2px solid white', marginTop: '10px' }}>
           <Card.Title style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' }}>{title}</Card.Title>
           <Card.Text style={{ fontSize: '0.9rem', marginBottom: '5px' }}>

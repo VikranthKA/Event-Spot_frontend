@@ -5,7 +5,7 @@ import "./EventCardsDisplay.css"
 import { MyContext } from '../../ContextApi/Context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { Container } from '@mui/material'
+import { Container, Skeleton } from '@mui/material'
 import MultiCarousel from './multi-Carousel/MultiCarousel'
 
 function EventCardsDisplay() {
@@ -21,7 +21,7 @@ function EventCardsDisplay() {
   };
   return (
     <div style={{ marginBottom: "50px" ,backgroundColor:"#ffb703",borderRadius: "15px"}}>
-      <Container>
+      {(filterEvent.length > 0 || events.length > 0) && <Container>
 
         <div >
           <img style={{ width: "100%", height: "100px", borderRadius: "10px",marginTop:"20px" }} src={`https://eventpot.s3.ap-south-1.amazonaws.com/glowing-stage-light-illuminates-cheering-rock-fans-generated-by-ai.jpg`} />
@@ -45,7 +45,7 @@ function EventCardsDisplay() {
 
           />)}
         </div>
-      </Container>
+      </Container> }
     </div>
   )
 }

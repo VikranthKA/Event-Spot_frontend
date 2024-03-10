@@ -6,9 +6,13 @@ import Dashboard from "../components/Dashboard/admin/Dashboard"
 import { MyContext } from "../ContextApi/Context";
 import "./Home.css"
 import OrganiserHomeDashboard from "../components/Dashboard/organiser/OrganiserHomeDashboard"
+import { useSelector } from "react-redux";
+import SkeletonLoading from "../components/Location/SkeletonLoading";
+import NotFound from "../components/Utils/NotFound/NotFound";
 
 export default function Home() {
 const {userData} = useContext(MyContext)
+const eventData = useSelector((state)=>state.events)
 
   return (
     <div>
@@ -18,7 +22,7 @@ const {userData} = useContext(MyContext)
           {console.log(userData,"asdfas")}
           {userData.role === "Admin" ? <Dashboard />
           : userData.role === "Organiser" ? <OrganiserHomeDashboard />
-          : <EventInMap />
+          : <> {(eventData.length > 0 )? <EventInMap /> : <SkeletonLoading/>}</>
       }
       
  
