@@ -11,6 +11,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MyContext } from '../../ContextApi/Context';
 import { jwtDecode} from 'jwt-decode';
+import MaterialUISpinner from '../Utils/Spinner/MaterialUISpinner';
+
 
 const loginValidationSchema = yup.object({
   email: yup.string().required().email(),
@@ -20,6 +22,7 @@ const loginValidationSchema = yup.object({
 export default function Login() {
   const {setUserData} = useContext(MyContext)
   const tokenData = localStorage.getItem('token')
+  const [isLoading,setIsLoading] = useState(false)
 
   useEffect(()=>{
     if(tokenData){
@@ -41,6 +44,7 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         setServerErrors('');
+        setIsLoading(true)
         const response = await axios.post('api/user/login', values);
         localStorage.setItem('token', response.data.token);
         console.log(response.data.token,"in login");
@@ -48,7 +52,9 @@ export default function Login() {
           navigate('/user-profile');
         }, 2000);
         snackbarRef.current.show("Login Successful!", "success");
+        setIsLoading(false)
       } catch (e) {
+        setIsLoading(true)
         setServerErrors(e.response.data);
         snackbarRef.current.show("Login Failed. Check your credentials and try again.", "fail");
         toast.error(e.response.data);
@@ -107,11 +113,16 @@ export default function Login() {
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end",margin:"5% 20% 0 0 " }}>
+                  <div>{
+                    isLoading && <MaterialUISpinner/>
+                    }
                   <button type='submit' className='btn btn-dark'>
 
 
-                    Login
-                  </button>
+Login
+</button>
+                    
+                    </div>
                 </div>
 
 
