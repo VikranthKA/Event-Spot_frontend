@@ -160,6 +160,11 @@ BACKEND API
 
   </li>
   <li>
+    Category
+    <img width="911" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/26db287b-00e8-4d9a-9a1f-c4b5b98ca0ba">
+
+  </li>
+  <li>
     All Events
     <img width="856" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/8be1a8fd-845a-4f19-ad42-5707915056d1">
 
@@ -183,7 +188,7 @@ BACKEND API
   <li>
     Single Event Display
     <img width="877" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/3789e580-1891-4561-90aa-379286abf67d">
-    <img width="853" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/5717e38a-a775-4cba-b751-1ba288d9bd0e">
+    <img width="840" alt="image" src="https://github.com/VikranthKA/Event-Spot_frontend/assets/130019579/5717e38a-a775-4cba-b751-1ba288d9bd0e">
     
 
   </li>
