@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import './register.css';
+import MaterialUISpinner from '../Utils/Spinner/MaterialUISpinner';
 
 const registerValidationSchema = yup.object({
   email: yup.string().required().email(),
@@ -20,7 +21,7 @@ const registerValidationSchema = yup.object({
 export default function Register() {
   const [serverErrors, setServerErrors] = useState('');
   const navigate = useNavigate();
-
+  const [isLoading,setIsLoading] = useState(false)
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -32,6 +33,7 @@ export default function Register() {
     validateOnChange: false,
     validationSchema: registerValidationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true)
       try {
         setServerErrors('');
         const response = await axios.post('/api/user/register', values);
@@ -39,7 +41,11 @@ export default function Register() {
         setTimeout(() => {
           navigate('/login');
         }, 2000);
+        setIsLoading(false)
+
       } catch (err) {
+        setIsLoading(true)
+
         console.error(err);
         setServerErrors(err.response.data.error);
         toast.error(err.response.data.error[0].msg);
@@ -148,9 +154,11 @@ export default function Register() {
                 <h5>Already have an account?<Link to='/login' >Login</Link></h5>
                   
                 <div style={{ display: 'flex', justifyContent: 'flex-end',marginRight:"10%" }}>
-  <button type='submit' className='btn btn-dark sign-up'>
+ <div>{
+  isLoading && <MaterialUISpinner/>
+ }<button type='submit' className='btn btn-dark sign-up'>
     Signup
-  </button>
+  </button></div>
 </div>
                 
 
