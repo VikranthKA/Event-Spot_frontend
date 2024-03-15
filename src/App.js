@@ -148,7 +148,9 @@ const App = () => {
                                 cardSearch,setCardSearch,//these are the search for the card display
                               }
     }>
-      <Header/>
+      <div style={{}}>
+        <Header/>
+        </div>
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/register' element={<Register/>}/>
