@@ -5,6 +5,7 @@ import { config, paymentConfig } from "../../components/Api_Resources/config"
 export const startCreateBooking = (eventId,tickets)=>{
     return async(dispatch)=>{
         try{
+       
             const response = await axios.post(`/api/event/${eventId}/booking`,{ tickets} ,config)
             console.log(response.data,"i action")
             dispatch(setTicketBooked(response.data.booking))
@@ -12,8 +13,8 @@ export const startCreateBooking = (eventId,tickets)=>{
         }catch(err){
             console.log(localStorage.getItem("token"),"ask")
             console.log(config)
-            console.log(err)
-            toast.info(err.map((ele)=>ele.msg))
+            console.log(err,"error")
+            // toast.info(err.map((ele)=>ele.msg))
             return{
                 type:"CLEAR_BOOKING_IN_STATE"
             }

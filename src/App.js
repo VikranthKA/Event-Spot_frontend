@@ -38,6 +38,7 @@ import MultiCarousel from './Event-Spot/client/components/Event/multi-Carousel/M
 import "./App.css"
 import CatCardDis from './Event-Spot/client/components/Event/multi-Carousel/CatCardDis';
 import NotFound from './Event-Spot/client/components/Utils/NotFound/NotFound';
+import Vikranth from './Event-Spot/client/components/Utils/Resume/Vikranth';
 
 function geoWithin(state,action){
   switch(action.type){
@@ -186,6 +187,7 @@ const App = () => {
           <Route path="/categry-events" element={<MultiCarousel/>}/>
           <Route path="/category/:categoryId/:name" element={<CatCardDis/>}/>
           <Route path="*" element={<NotFound/>}/>
+          <Route path="resume" element={<Vikranth/>} exact="true"/>
 
 
 
